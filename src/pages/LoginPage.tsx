@@ -1,6 +1,6 @@
 "use client";
 
-import { useRegisterUser } from "@/apis/auth.api";
+import { useLoginUser } from "@/apis/auth.api";
 import FormInput, { FormPasswordInput } from "@/components/FormInput";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,30 +13,27 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
 import {
-    registerUserSchema,
-    type RegisterUserInput,
+    loginUserSchema,
+    type LoginUserInput,
 } from "@/validations/auth.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 
-const RegisterPage = () => {
+const LoginPage = () => {
     const navigate = useNavigate();
-    const form = useForm<RegisterUserInput>({
-        resolver: zodResolver(registerUserSchema),
+    const form = useForm<LoginUserInput>({
+        resolver: zodResolver(loginUserSchema),
         defaultValues: {
-            name: "",
             email: "",
             password: "",
-            confirmPassword: "",
         },
     });
-    const { registerUserMutation, isLoading } = useRegisterUser();
+    const { loginUserMutation, isLoading } = useLoginUser();
 
-    async function onSubmit(data: RegisterUserInput) {
-        await registerUserMutation(data);
-        form.reset();
-        navigate("/login");
+    async function onSubmit(data: LoginUserInput) {
+        await loginUserMutation(data);
+        navigate("/events");
     }
 
     return (
@@ -44,35 +41,28 @@ const RegisterPage = () => {
             <Card className="w-full sm:max-w-md">
                 <CardHeader>
                     <CardTitle className="text-md">
-                        <h4 className="font-normal">New Account</h4>
-                        <h1 className="text-2xl">Join Gather</h1>
+                        <h1 className="text-2xl">Login</h1>
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
                     <form
-                        id="form-register"
+                        id="form-login"
                         onSubmit={form.handleSubmit(onSubmit)}
                         className="space-y-5"
                     >
                         <FieldGroup>
-                            <FormInput form={form} name="name" label="Name" />
                             <FormInput form={form} name="email" label="Email" />
                             <FormPasswordInput
                                 form={form}
                                 name="password"
                                 label="Password"
                             />
-                            <FormPasswordInput
-                                form={form}
-                                name="confirmPassword"
-                                label="Confirm Password"
-                            />
                         </FieldGroup>
 
                         <Field>
                             <Button
                                 type="submit"
-                                form="form-register"
+                                form="form-login"
                                 disabled={isLoading}
                             >
                                 {isLoading ? <Spinner /> : "Submit"}
@@ -82,12 +72,12 @@ const RegisterPage = () => {
                 </CardContent>
                 <CardFooter>
                     <p className="mt-6 text-center text-sm text-[#1B1D23]/60">
-                        Already have an account?{" "}
+                        Don't have an account?{" "}
                         <Link
-                            to="/login"
+                            to="/register"
                             className="font-medium text-[#1B1D23] underline underline-offset-4"
                         >
-                            Log in
+                            Register
                         </Link>
                     </p>
                 </CardFooter>
@@ -96,4 +86,4 @@ const RegisterPage = () => {
     );
 };
 
-export default RegisterPage;
+export default LoginPage;
