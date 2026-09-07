@@ -1,5 +1,6 @@
 "use client";
 
+import { useRegisterUser } from "@/apis/auth.api";
 import FormInput, { FormPasswordInput } from "@/components/FormInput";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,15 +11,17 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Field, FieldGroup } from "@/components/ui/field";
+import { Spinner } from "@/components/ui/spinner";
 import {
     registerSchema,
     type RegisterFormFields,
 } from "@/validations/auth.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const RegisterPage = () => {
+    const navigate = useNavigate();
     const form = useForm<RegisterFormFields>({
         resolver: zodResolver(registerSchema),
         defaultValues: {
@@ -28,9 +31,13 @@ const RegisterPage = () => {
             confirmPassword: "",
         },
     });
+    const { registerUserMutation, isLoading } = useRegisterUser();
 
-    function onSubmit(data: RegisterFormFields) {
+    async function onSubmit(data: RegisterFormFields) {
         console.log(data);
+        await registerUserMutation(data);
+        form.reset();
+        navigate("/login");
     }
 
     return (
@@ -64,8 +71,12 @@ const RegisterPage = () => {
                         </FieldGroup>
 
                         <Field>
-                            <Button type="submit" form="form-register">
-                                Submit
+                            <Button
+                                type="submit"
+                                form="form-register"
+                                disabled={isLoading}
+                            >
+                                {isLoading ? <Spinner /> : "Submit"}
                             </Button>
                         </Field>
                     </form>

@@ -56,13 +56,13 @@ const LandingPage = () => {
                     <Button
                         variant="ghost"
                         className="text-[#1B1D23] hover:bg-[#1B1D23]/5"
-                        onClick={() => navigate("/sign-in")}
+                        onClick={() => navigate("/login")}
                     >
                         Sign in
                     </Button>
                     <Button
                         className="bg-[#1B1D23] text-[#F2F4F1] hover:bg-[#1B1D23]/90"
-                        onClick={() => navigate("/sign-up")}
+                        onClick={() => navigate("/register")}
                     >
                         Create an event
                     </Button>
@@ -85,7 +85,7 @@ const LandingPage = () => {
                         <Button
                             size="lg"
                             className="bg-[#C0392B] text-white hover:bg-[#C0392B]/90"
-                            onClick={() => navigate("/sign-up")}
+                            onClick={() => navigate("/register")}
                         >
                             Create an event
                         </Button>
