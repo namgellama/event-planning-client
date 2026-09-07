@@ -1,7 +1,5 @@
-"use client";
-
 import { useLoginUser } from "@/apis/auth.api";
-import FormInput, { FormPasswordInput } from "@/components/form-input";
+import { FormInput, FormPasswordInput } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import {
     Card,

@@ -4,8 +4,8 @@ import {
     type FieldValues,
     type UseFormReturn,
 } from "react-hook-form";
-import { Field, FieldError, FieldLabel } from "./ui/field";
-import { Input } from "./ui/input";
+import { Field, FieldError, FieldLabel } from "../ui/field";
+import { Input } from "../ui/input";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
