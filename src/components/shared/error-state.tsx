@@ -1,13 +1,22 @@
+import type { ApiError } from "@/apis";
 import { AlertTriangle } from "lucide-react";
 import { Button } from "../ui/button";
 
 interface Props {
     title: string;
-    message?: string;
+    error: ApiError;
     onRetry?: () => void;
 }
 
-const ErrorState = ({ title, message, onRetry }: Props) => {
+const ErrorState = ({ title, error, onRetry }: Props) => {
+    const status = error.response?.status;
+
+    const errorMessage =
+        status && status >= 400 && status < 500
+            ? (error.response?.data.message ??
+              "Something went wrong. Please try again.")
+            : "Something went wrong. Please try again.";
+
     return (
         <div
             role="alert"
@@ -18,9 +27,7 @@ const ErrorState = ({ title, message, onRetry }: Props) => {
             </div>
             <div className="space-y-1">
                 <p className="font-medium">{title}</p>
-                <p className="text-sm text-muted-foreground">
-                    {message ?? "Something went wrong. Please try again."}
-                </p>
+                <p className="text-sm text-muted-foreground">{errorMessage}</p>
             </div>
             {onRetry && (
                 <Button variant="outline" size="sm" onClick={onRetry}>

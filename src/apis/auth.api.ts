@@ -6,7 +6,7 @@ import type {
 } from "@/validations/auth.validation";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { api, type ApiError } from ".";
+import { api, handleApiError, type ApiError } from ".";
 
 export const useRegisterUser = () => {
     const registerUser = async (data: RegisterUserInput) => {
@@ -21,15 +21,10 @@ export const useRegisterUser = () => {
                 toast.success("User registered successfully");
             },
             onError: (error) => {
-                const status = error.response?.status || error.status;
-                const message = error.response?.data?.message;
-
-                if (status === 409) {
-                    toast.error(message ?? "Email already exists");
-                    return;
-                }
-
-                toast.error(message ?? "Unexpected error occurred");
+                handleApiError(
+                    error,
+                    "Unable to create your account. Please try again",
+                );
             },
         });
 
@@ -53,8 +48,10 @@ export const useLoginUser = () => {
                 toast.success("User logged in successfully");
             },
             onError: (error) => {
-                const message = error.response?.data?.message;
-                toast.error(message ?? "Unexpected error occurred");
+                handleApiError(
+                    error,
+                    "Unable to create your account. Please try again",
+                );
             },
         });
 
@@ -80,8 +77,10 @@ export const useLogoutUser = () => {
                 setAccessToken(null);
                 setUser(null);
 
-                const message = error.response?.data?.message;
-                toast.error(message ?? "Unexpected error occurred");
+                handleApiError(
+                    error,
+                    "Unable to create your account. Please try again",
+                );
             },
         });
 

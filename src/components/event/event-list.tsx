@@ -18,7 +18,13 @@ const EventList = () => {
     }
 
     if (error && !events) {
-        return <ErrorState title="Couldn't load events" onRetry={refetch} />;
+        return (
+            <ErrorState
+                title="Couldn't load events"
+                error={error}
+                onRetry={refetch}
+            />
+        );
     }
 
     if (events && events.items.length === 0) {
