@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         initializeAuth();
     }, []);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const authInterceptor = api.interceptors.request.use((config) => {
             if (accessToken) {
                 config.headers.Authorization = `Bearer ${accessToken}`;
@@ -71,13 +71,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
     }, [accessToken]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const refreshInterceptor = api.interceptors.response.use(
             (response) => response,
             async (error) => {
                 const originalRequest =
                     error.config as InternalAxiosRequestConfigWithRetry;
-
                 const isRefreshTokenRequest = originalRequest.url?.includes(
                     `${BASE_URL}/auth/refresh-token`,
                 );
@@ -110,7 +109,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     }
                 }
 
-                throw error();
+                throw error;
             },
         );
 
