@@ -1,11 +1,11 @@
-import { useAuth } from "@/contexts/AuthContext";
+import EventList from "@/components/EventList";
 
 const EventPage = () => {
-    const { isAuthenticated, user } = useAuth();
-    console.log("🚀 ~ EventPage ~ user:", user);
-    console.log("🚀 ~ EventPage ~ isAuthenticated:", isAuthenticated);
-
-    return <div>EventPage</div>;
+    return (
+        <div>
+            <EventList />
+        </div>
+    );
 };
 
 export default EventPage;

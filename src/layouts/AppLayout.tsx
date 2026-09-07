@@ -7,14 +7,12 @@ const AppLayout = () => {
     const { user } = useAuth();
 
     return (
-        <div>
-            <SidebarProvider>
-                <AppSidebar user={user!} onLogout={() => {}} />
-                <main>
-                    <Outlet />
-                </main>
-            </SidebarProvider>
-        </div>
+        <SidebarProvider>
+            <AppSidebar user={user!} onLogout={() => {}} />
+            <main className="w-full p-10">
+                <Outlet />
+            </main>
+        </SidebarProvider>
     );
 };
 
