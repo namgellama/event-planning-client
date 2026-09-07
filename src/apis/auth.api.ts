@@ -1,3 +1,4 @@
+import { useAuth } from "@/contexts/AuthContext";
 import type { User } from "@/types/user";
 import type {
     LoginUserInput,
@@ -36,15 +37,19 @@ export const useRegisterUser = () => {
 };
 
 export const useLoginUser = () => {
+    const { setAccessToken, fetchMe } = useAuth();
+
     const loginUser = async (data: LoginUserInput) => {
         const response = await api.post("/auth/login", data);
         return response.data.data;
     };
 
     const { mutateAsync: loginUserMutation, isPending: isLoading } =
-        useMutation<User, ApiError, LoginUserInput>({
+        useMutation<{ accessToken: string }, ApiError, LoginUserInput>({
             mutationFn: loginUser,
-            onSuccess: () => {
+            onSuccess: async (data) => {
+                setAccessToken(data.accessToken);
+                await fetchMe();
                 toast.success("User logged in successfully");
             },
             onError: (error) => {
