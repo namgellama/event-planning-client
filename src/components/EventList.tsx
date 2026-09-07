@@ -1,7 +1,7 @@
 import { useFetchAllEvents } from "@/apis/event.api";
-import { AlertTriangle, CalendarX } from "lucide-react";
+import { CalendarX } from "lucide-react";
+import ErrorState from "./ErrorState";
 import EventCard from "./EventCard";
-import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
 
 const EventList = () => {
@@ -18,29 +18,10 @@ const EventList = () => {
     }
 
     if (error && !events) {
-        return (
-            <div
-                role="alert"
-                className="flex flex-col items-center justify-center gap-3 py-16 text-center"
-            >
-                <div className="flex size-12 items-center justify-center rounded-full bg-destructive/10">
-                    <AlertTriangle className="size-6 text-destructive" />
-                </div>
-                <div className="space-y-1">
-                    <p className="font-medium">Couldn't load events</p>
-                    <p className="text-sm text-muted-foreground">
-                        {error?.message ??
-                            "Something went wrong. Please try again."}
-                    </p>
-                </div>
-                <Button variant="outline" size="sm" onClick={() => refetch()}>
-                    Try again
-                </Button>
-            </div>
-        );
+        return <ErrorState title="Couldn't load events" onRetry={refetch} />;
     }
 
-    if (true) {
+    if (events && events.items.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
                 <div className="flex size-12 items-center justify-center rounded-full bg-muted">
