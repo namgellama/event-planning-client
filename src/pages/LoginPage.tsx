@@ -10,15 +10,18 @@ import {
 } from "@/components/ui/card";
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
+import { useAuth } from "@/contexts/AuthContext";
 import {
     loginUserSchema,
     type LoginUserInput,
 } from "@/validations/auth.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 
 const LoginPage = () => {
+    const { isAuthenticated } = useAuth();
     const navigate = useNavigate();
     const form = useForm<LoginUserInput>({
         resolver: zodResolver(loginUserSchema),
@@ -28,6 +31,10 @@ const LoginPage = () => {
         },
     });
     const { loginUserMutation, isLoading } = useLoginUser();
+
+    useEffect(() => {
+        if (isAuthenticated) navigate("/events");
+    }, [isAuthenticated, navigate]);
 
     async function onSubmit(data: LoginUserInput) {
         await loginUserMutation(data);
