@@ -60,3 +60,30 @@ export const useLoginUser = () => {
 
     return { loginUserMutation, isLoading };
 };
+
+export const useLogoutUser = () => {
+    const { setAccessToken, setUser } = useAuth();
+
+    const logoutUser = async () => {
+        await api.post("/auth/logout", null);
+    };
+
+    const { mutateAsync: logoutUserMutation, isPending: isLoading } =
+        useMutation<void, ApiError, void>({
+            mutationFn: logoutUser,
+            onSuccess: () => {
+                setAccessToken(null);
+                setUser(null);
+                toast.success("User logged out successfully");
+            },
+            onError: (error) => {
+                setAccessToken(null);
+                setUser(null);
+
+                const message = error.response?.data?.message;
+                toast.error(message ?? "Unexpected error occurred");
+            },
+        });
+
+    return { logoutUserMutation, isLoading };
+};
