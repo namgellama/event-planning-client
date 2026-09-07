@@ -1,8 +1,8 @@
 import { useFetchAllEvents } from "@/apis/event.api";
 import { CalendarX } from "lucide-react";
-import EmptyState from "./EmptyState";
-import ErrorState from "./ErrorState";
-import EventCard from "./EventCard";
+import EmptyState from "./empty-state";
+import ErrorState from "./error-state";
+import EventCard from "./event-card";
 import { Skeleton } from "./ui/skeleton";
 
 const EventList = () => {
