@@ -7,6 +7,7 @@ import { Toaster } from "sonner";
 import App from "./App";
 import { AuthProvider } from "./contexts/AuthContext";
 import "./index.css";
+import { TooltipProvider } from "./components/ui/tooltip";
 
 const queryClient = new QueryClient();
 
@@ -15,8 +16,10 @@ createRoot(document.getElementById("root")!).render(
         <QueryClientProvider client={queryClient}>
             <BrowserRouter>
                 <AuthProvider>
-                    <App />
-                    <Toaster />
+                    <TooltipProvider>
+                        <App />
+                        <Toaster />
+                    </TooltipProvider>
                 </AuthProvider>
             </BrowserRouter>
             <ReactQueryDevtools />

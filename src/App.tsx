@@ -1,6 +1,8 @@
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router";
 import { Spinner } from "./components/ui/spinner";
+import AppLayout from "./layouts/AppLayout";
+import ProtectedRoute from "./layouts/ProtectedRoute";
 
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
@@ -20,7 +22,11 @@ function App() {
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/events" element={<EventPage />} />
+                <Route element={<ProtectedRoute />}>
+                    <Route element={<AppLayout />}>
+                        <Route path="/events" element={<EventPage />} />
+                    </Route>
+                </Route>
             </Routes>
         </Suspense>
     );

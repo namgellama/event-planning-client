@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         initializeAuth();
     }, []);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         const authInterceptor = api.interceptors.request.use((config) => {
             if (accessToken) {
                 config.headers.Authorization = `Bearer ${accessToken}`;
@@ -71,7 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
     }, [accessToken]);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         const refreshInterceptor = api.interceptors.response.use(
             (response) => response,
             async (error) => {
