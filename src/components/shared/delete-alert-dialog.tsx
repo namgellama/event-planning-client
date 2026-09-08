@@ -33,7 +33,7 @@ const DeleteAlertDialog = ({
                     </AlertDialogTitle>
                     <AlertDialogDescription>
                         This action cannot be undone. This will permanently
-                        delete your account from our servers.
+                        delete the item from our servers.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

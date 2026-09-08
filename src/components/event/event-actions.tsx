@@ -1,9 +1,17 @@
 import { useDeleteEvent } from "@/apis/event.api";
+import { Button } from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import type { Event } from "@/types/event";
+import { EllipsisVertical } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { DeleteAlertDialog } from "../shared";
-import { Button } from "../ui/button";
 
 const EventActions = ({ event }: { event: Event }) => {
     const navigate = useNavigate();
@@ -17,18 +25,27 @@ const EventActions = ({ event }: { event: Event }) => {
     };
 
     return (
-        <div className="self-end space-x-2">
-            <Button size="lg" className="bg-primary px-4 cursor-pointer">
-                Update
-            </Button>
-            <Button
-                size="lg"
-                variant="destructive"
-                className="px-4 cursor-pointer"
-                onClick={() => setIsDeleteOpen(true)}
-            >
-                Delete
-            </Button>
+        <>
+            <DropdownMenu>
+                <DropdownMenuTrigger
+                    render={
+                        <Button
+                            variant="ghost"
+                            className="cursor-pointer rounded-full hover:bg-inherit"
+                        />
+                    }
+                >
+                    <EllipsisVertical className="size-5" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem>Update</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setIsDeleteOpen(true)}>
+                            Delete
+                        </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                </DropdownMenuContent>
+            </DropdownMenu>
 
             <DeleteAlertDialog
                 isOpen={isDeleteOpen}
@@ -36,7 +53,7 @@ const EventActions = ({ event }: { event: Event }) => {
                 isLoading={isLoading}
                 onDelete={onDelete}
             />
-        </div>
+        </>
     );
 };
 
