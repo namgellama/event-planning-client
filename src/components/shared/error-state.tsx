@@ -1,15 +1,33 @@
 import type { ApiError } from "@/apis";
 import { AlertTriangle } from "lucide-react";
-import { Button } from "../ui/button";
+import NotFoundState from "./not-found-state";
+import StatusState from "./status-state";
 
 interface Props {
     title: string;
     error: ApiError;
     onRetry?: () => void;
+    notFound?: {
+        title?: string;
+        description?: string;
+    };
 }
 
-const ErrorState = ({ title, error, onRetry }: Props) => {
+const ErrorState = ({ title, error, onRetry, notFound }: Props) => {
     const status = error.response?.status;
+
+    if (status === 404) {
+        return (
+            <NotFoundState
+                title={notFound?.title ?? "Not found"}
+                description={
+                    notFound?.description ??
+                    error.response?.data.message ??
+                    "This item may have been moved or deleted."
+                }
+            />
+        );
+    }
 
     const errorMessage =
         status && status >= 400 && status < 500
@@ -18,23 +36,15 @@ const ErrorState = ({ title, error, onRetry }: Props) => {
             : "Something went wrong. Please try again.";
 
     return (
-        <div
-            role="alert"
-            className="flex flex-col items-center justify-center gap-3 py-16 text-center"
-        >
-            <div className="flex size-12 items-center justify-center rounded-full bg-destructive/10">
-                <AlertTriangle className="size-6 text-destructive" />
-            </div>
-            <div className="space-y-1">
-                <p className="font-medium">{title}</p>
-                <p className="text-sm text-muted-foreground">{errorMessage}</p>
-            </div>
-            {onRetry && (
-                <Button variant="outline" size="sm" onClick={onRetry}>
-                    Try again
-                </Button>
-            )}
-        </div>
+        <StatusState
+            icon={AlertTriangle}
+            title={title}
+            description={errorMessage}
+            iconClassName="bg-destructive/10 text-destructive"
+            action={
+                onRetry ? { label: "Try again", onClick: onRetry } : undefined
+            }
+        />
     );
 };
 
