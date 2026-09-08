@@ -2,6 +2,7 @@ import type { TypeValue } from "@/components/event/event-tabs";
 import type { Event } from "@/types/event";
 import type { PaginatedResponse } from "@/types/pagination";
 import type { ApiResponse } from "@/types/response";
+import type { CreateEventInput } from "@/validations/event.validation";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseAsStringEnum, useQueryState } from "nuqs";
 import { toast } from "sonner";
@@ -65,6 +66,29 @@ export const useFetchEvent = (eventId: string) => {
     });
 
     return { event, isLoading, error, refetch };
+};
+
+export const useCreateEvent = () => {
+    const createEvent = async (data: CreateEventInput) => {
+        const response = await api.post<ApiResponse<Event>>(`/events/`, data);
+        return response.data;
+    };
+
+    const { mutateAsync: createEventMutation, isPending: isLoading } =
+        useMutation<ApiResponse<Event>, ApiError, CreateEventInput>({
+            mutationFn: createEvent,
+            onSuccess: ({ message }) => {
+                toast.success(message ?? "Event created successfully");
+            },
+            onError: (error) => {
+                handleApiError(
+                    error,
+                    "Unable to create event. Please try again",
+                );
+            },
+        });
+
+    return { createEventMutation, isLoading };
 };
 
 export const useDeleteEvent = () => {

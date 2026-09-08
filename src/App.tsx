@@ -9,6 +9,7 @@ const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
 const EventsPage = lazy(() => import("./pages/EventsPage"));
 const EventDetailPage = lazy(() => import("./pages/EventDetailPage"));
+const NewEventPage = lazy(() => import("./pages/NewEventPage"));
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                             path="/events/:id"
                             element={<EventDetailPage />}
                         />
+                        <Route path="/events/new" element={<NewEventPage />} />
                     </Route>
                 </Route>
             </Routes>

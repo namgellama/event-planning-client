@@ -18,6 +18,7 @@ interface Props<T extends FieldValues> {
     name: FieldPath<T>;
     label: string;
     data: { label: string; value: string }[];
+    orientation?: "vertical" | "horizontal" | "responsive";
 }
 
 const FormSelect = <T extends FieldValues>({
@@ -25,6 +26,7 @@ const FormSelect = <T extends FieldValues>({
     name,
     label,
     data,
+    orientation = "responsive",
 }: Props<T>) => {
     return (
         <Controller
@@ -32,7 +34,7 @@ const FormSelect = <T extends FieldValues>({
             control={form.control}
             render={({ field, fieldState }) => (
                 <Field
-                    orientation="responsive"
+                    orientation={orientation}
                     data-invalid={fieldState.invalid}
                 >
                     <FieldContent>
