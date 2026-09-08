@@ -6,7 +6,7 @@ import type {
     CreateEventInput,
     UpdateEventInput,
 } from "@/validations/event.validation";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { parseAsStringEnum, useQueryState } from "nuqs";
 import { toast } from "sonner";
 import api, { handleApiError, type ApiError } from ".";
@@ -73,6 +73,8 @@ export const useFetchEvent = (eventId: string) => {
 };
 
 export const useCreateEvent = () => {
+    const queryClient = useQueryClient();
+
     const createEvent = async (data: CreateEventInput) => {
         const response = await api.post<ApiResponse<Event>>(`/events/`, data);
         return response.data;
@@ -83,6 +85,7 @@ export const useCreateEvent = () => {
             mutationFn: createEvent,
             onSuccess: ({ message }) => {
                 toast.success(message ?? "Event created successfully");
+                queryClient.invalidateQueries({ queryKey: ["events"] });
             },
             onError: (error) => {
                 handleApiError(
@@ -96,6 +99,8 @@ export const useCreateEvent = () => {
 };
 
 export const useUpdatevent = () => {
+    const queryClient = useQueryClient();
+
     const updateEvent = async ({
         data,
         eventId,
@@ -117,8 +122,10 @@ export const useUpdatevent = () => {
             { data: UpdateEventInput; eventId: string }
         >({
             mutationFn: updateEvent,
-            onSuccess: ({ message }) => {
+            onSuccess: ({ message, data }) => {
                 toast.success(message ?? "Event updated successfully");
+                queryClient.setQueryData(["events", data.id], data);
+                queryClient.invalidateQueries({ queryKey: ["events"] });
             },
             onError: (error) => {
                 handleApiError(
@@ -132,6 +139,8 @@ export const useUpdatevent = () => {
 };
 
 export const useDeleteEvent = () => {
+    const queryClient = useQueryClient();
+
     const deleteEvent = async (eventId: string) => {
         await api.delete(`/events/${eventId}`);
     };
@@ -141,6 +150,7 @@ export const useDeleteEvent = () => {
             mutationFn: deleteEvent,
             onSuccess: () => {
                 toast.success("Event deleted successfully");
+                queryClient.invalidateQueries({ queryKey: ["events"] });
             },
             onError: (error) => {
                 handleApiError(
