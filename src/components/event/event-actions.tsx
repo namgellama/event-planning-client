@@ -8,7 +8,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { Event } from "@/types/event";
-import { EllipsisVertical } from "lucide-react";
+import { Edit, EllipsisVertical, Trash } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { DeleteAlertDialog } from "../shared";
@@ -39,9 +39,17 @@ const EventActions = ({ event }: { event: Event }) => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <DropdownMenuGroup>
-                        <DropdownMenuItem>Update</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => setIsDeleteOpen(true)}>
-                            Delete
+                        <DropdownMenuItem
+                            className="flex items-center cursor-pointer"
+                            onClick={() => navigate(`/events/${event.id}/edit`)}
+                        >
+                            <Edit className="size-3 text-blue-500" /> Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() => setIsDeleteOpen(true)}
+                            className="flex items-center cursor-pointer"
+                        >
+                            <Trash className="size-3 text-destructive" /> Delete
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
