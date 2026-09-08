@@ -13,7 +13,7 @@ interface Props<T extends FieldValues> extends Omit<
     React.ComponentProps<"input">,
     "name" | "defaultValue" | "form"
 > {
-    form: UseFormReturn<T>;
+    form: UseFormReturn<T, any, any>;
     name: FieldPath<T>;
     label: string;
 }

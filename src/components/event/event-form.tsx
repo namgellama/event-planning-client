@@ -1,11 +1,12 @@
 import { useFetchAllTags } from "@/apis/tag.api";
-import type {
-    CreateEventInput,
-    createEventSchema,
-} from "@/validations/event.validation";
 import { Tags } from "lucide-react";
-import type { UseFormReturn } from "react-hook-form";
-import type z from "zod";
+import type {
+    FieldValues,
+    Path,
+    SubmitHandler,
+    UseFormReturn,
+} from "react-hook-form";
+import { useNavigate } from "react-router";
 import {
     FormDateTimePicker,
     FormInput,
@@ -18,28 +19,40 @@ import { FieldGroup } from "../ui/field";
 import { Separator } from "../ui/separator";
 import { Spinner } from "../ui/spinner";
 
-interface Props {
-    form: UseFormReturn<
-        z.input<typeof createEventSchema>,
-        any,
-        z.output<typeof createEventSchema>
-    >;
-    onSubmit: (data: CreateEventInput) => void;
+interface EventFormFields {
+    title?: unknown;
+    description?: unknown;
+    date?: unknown;
+    location?: unknown;
+    type?: unknown;
+    tags?: unknown;
+}
+
+interface Props<
+    TFieldValues extends FieldValues & EventFormFields,
+    TContext = any,
+    TTransformedValues extends FieldValues = TFieldValues,
+> {
+    form: UseFormReturn<TFieldValues, TContext, TTransformedValues>;
+    onSubmit: SubmitHandler<TTransformedValues>;
     isLoading: boolean;
-    onCancel: () => void;
     buttonText: string;
 }
 
 const eventTypes = ["Public", "Private"];
 
-const EventForm = ({
+const EventForm = <
+    TFieldValues extends FieldValues & EventFormFields,
+    TContext = any,
+    TTransformedValues extends FieldValues = TFieldValues,
+>({
     form,
     onSubmit,
     isLoading,
-    onCancel,
     buttonText,
-}: Props) => {
+}: Props<TFieldValues, TContext, TTransformedValues>) => {
     const { tags } = useFetchAllTags();
+    const navigate = useNavigate();
 
     const data =
         tags?.items.map((item) => ({
@@ -66,11 +79,15 @@ const EventForm = ({
                 </div>
 
                 <FieldGroup className="gap-5">
-                    <FormInput form={form} name="title" label="Title" />
+                    <FormInput
+                        form={form}
+                        name={"title" as Path<TFieldValues>}
+                        label="Title"
+                    />
 
                     <FormMarkdownEditor
                         form={form}
-                        name="description"
+                        name={"description" as Path<TFieldValues>}
                         label="Description"
                     />
                 </FieldGroup>
@@ -90,23 +107,21 @@ const EventForm = ({
                 <FieldGroup className="gap-5">
                     <FormDateTimePicker
                         form={form}
-                        name="date"
+                        name={"date" as Path<TFieldValues>}
                         label="Date"
                         disabled={{ before: today }}
                     />
 
                     <div className="grid gap-5 sm:grid-cols-2">
-                        <div className="pl-0 sm:pl-0">
-                            <FormInput
-                                form={form}
-                                name="location"
-                                label="Location"
-                            />
-                        </div>
+                        <FormInput
+                            form={form}
+                            name={"location" as Path<TFieldValues>}
+                            label="Location"
+                        />
 
                         <FormSelect
                             form={form}
-                            name="type"
+                            name={"type" as Path<TFieldValues>}
                             label="Visibility"
                             orientation="vertical"
                             data={eventTypes.map((type) => ({
@@ -138,7 +153,7 @@ const EventForm = ({
 
                 <FormMultipleCombobox
                     form={form}
-                    name="tags"
+                    name={"tags" as Path<TFieldValues>}
                     label="Event tags"
                     data={data}
                 />
@@ -149,7 +164,7 @@ const EventForm = ({
                     type="button"
                     variant="outline"
                     size="lg"
-                    onClick={onCancel}
+                    onClick={() => navigate(-1)}
                     disabled={isLoading}
                 >
                     Cancel

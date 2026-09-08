@@ -14,7 +14,7 @@ import {
 } from "../ui/select";
 
 interface Props<T extends FieldValues> {
-    form: UseFormReturn<T>;
+    form: UseFormReturn<T, any, any>;
     name: FieldPath<T>;
     label: string;
     data: { label: string; value: string }[];

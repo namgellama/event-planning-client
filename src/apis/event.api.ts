@@ -2,7 +2,10 @@ import type { TypeValue } from "@/components/event/event-tabs";
 import type { Event } from "@/types/event";
 import type { PaginatedResponse } from "@/types/pagination";
 import type { ApiResponse } from "@/types/response";
-import type { CreateEventInput } from "@/validations/event.validation";
+import type {
+    CreateEventInput,
+    UpdateEventInput,
+} from "@/validations/event.validation";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseAsStringEnum, useQueryState } from "nuqs";
 import { toast } from "sonner";
@@ -63,6 +66,7 @@ export const useFetchEvent = (eventId: string) => {
         queryFn: fetchEvent,
         queryKey: ["events", eventId],
         select: ({ data }) => data,
+        enabled: !!eventId,
     });
 
     return { event, isLoading, error, refetch };
@@ -89,6 +93,42 @@ export const useCreateEvent = () => {
         });
 
     return { createEventMutation, isLoading };
+};
+
+export const useUpdatevent = () => {
+    const updateEvent = async ({
+        data,
+        eventId,
+    }: {
+        data: UpdateEventInput;
+        eventId: string;
+    }) => {
+        const response = await api.patch<ApiResponse<Event>>(
+            `/events/${eventId}`,
+            data,
+        );
+        return response.data;
+    };
+
+    const { mutateAsync: updateEventMutation, isPending: isLoading } =
+        useMutation<
+            ApiResponse<Event>,
+            ApiError,
+            { data: UpdateEventInput; eventId: string }
+        >({
+            mutationFn: updateEvent,
+            onSuccess: ({ message }) => {
+                toast.success(message ?? "Event updated successfully");
+            },
+            onError: (error) => {
+                handleApiError(
+                    error,
+                    "Unable to update event. Please try again",
+                );
+            },
+        });
+
+    return { updateEventMutation, isLoading };
 };
 
 export const useDeleteEvent = () => {

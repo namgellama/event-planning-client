@@ -8,7 +8,7 @@ import {
 import { Field, FieldError, FieldLabel } from "../ui/field";
 
 interface Props<T extends FieldValues> {
-    form: UseFormReturn<T>;
+    form: UseFormReturn<T, any, any>;
     name: FieldPath<T>;
     label: string;
 }

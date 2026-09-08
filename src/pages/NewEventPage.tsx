@@ -45,7 +45,6 @@ const NewEventPage = () => {
                 form={form}
                 onSubmit={onSubmit}
                 isLoading={isLoading}
-                onCancel={() => navigate("/events")}
                 buttonText="Create event"
             />
         </EventFormLayout>

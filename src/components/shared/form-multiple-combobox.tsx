@@ -23,7 +23,7 @@ type Option = {
 };
 
 interface Props<T extends FieldValues, N extends FieldPath<T>> {
-    form: UseFormReturn<T>;
+    form: UseFormReturn<T, any, any>;
     name: N;
     label: string;
     data: Option[];

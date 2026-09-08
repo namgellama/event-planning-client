@@ -25,7 +25,7 @@ import {
 } from "react-hook-form";
 
 interface Props<T extends FieldValues> {
-    form: UseFormReturn<T>;
+    form: UseFormReturn<T, any, any>;
     name: FieldPath<T>;
     label: string;
     disabled?: Matcher | Matcher[];
