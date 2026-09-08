@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router";
-import { Spinner } from "./components/ui/spinner";
+import { CenteredSpinner } from "./components/shared";
 import AppLayout from "./layouts/AppLayout";
 import ProtectedRoute from "./layouts/ProtectedRoute";
 
@@ -12,13 +12,7 @@ const EventDetailPage = lazy(() => import("./pages/EventDetailPage"));
 
 function App() {
     return (
-        <Suspense
-            fallback={
-                <div className="w-full h-screen flex items-center justify-center">
-                    <Spinner className="size-6" />
-                </div>
-            }
-        >
+        <Suspense fallback={<CenteredSpinner />}>
             <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/register" element={<RegisterPage />} />
