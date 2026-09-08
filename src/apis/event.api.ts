@@ -1,6 +1,7 @@
 import type { TypeValue } from "@/components/event/event-tabs";
 import type { Event } from "@/types/event";
 import type { PaginatedResponse } from "@/types/pagination";
+import type { ApiResponse } from "@/types/response";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseAsStringEnum, useQueryState } from "nuqs";
 import { toast } from "sonner";
@@ -15,12 +16,15 @@ export const useFetchAllEvents = () => {
     );
 
     const fetchAllEvents = async () => {
-        const response = await api.get("/events", {
-            params: {
-                type: type === "all" ? undefined : type,
+        const response = await api.get<ApiResponse<PaginatedResponse<Event>>>(
+            "/events",
+            {
+                params: {
+                    type: type === "all" ? undefined : type,
+                },
             },
-        });
-        return response.data.data;
+        );
+        return response.data;
     };
 
     const {
@@ -28,9 +32,14 @@ export const useFetchAllEvents = () => {
         isLoading,
         error,
         refetch,
-    } = useQuery<PaginatedResponse<Event>, ApiError>({
+    } = useQuery<
+        ApiResponse<PaginatedResponse<Event>>,
+        ApiError,
+        PaginatedResponse<Event>
+    >({
         queryFn: fetchAllEvents,
         queryKey: ["events", type],
+        select: ({ data }) => data,
     });
 
     return { events, isLoading, error, refetch };
@@ -38,8 +47,10 @@ export const useFetchAllEvents = () => {
 
 export const useFetchEvent = (eventId: string) => {
     const fetchEvent = async () => {
-        const response = await api.get(`/events/${eventId}`);
-        return response.data.data;
+        const response = await api.get<ApiResponse<Event>>(
+            `/events/${eventId}`,
+        );
+        return response.data;
     };
 
     const {
@@ -47,9 +58,10 @@ export const useFetchEvent = (eventId: string) => {
         isLoading,
         error,
         refetch,
-    } = useQuery<Event, ApiError>({
+    } = useQuery<ApiResponse<Event>, ApiError, Event>({
         queryFn: fetchEvent,
         queryKey: ["events", eventId],
+        select: ({ data }) => data,
     });
 
     return { event, isLoading, error, refetch };
