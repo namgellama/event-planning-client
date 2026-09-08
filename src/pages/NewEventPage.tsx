@@ -3,6 +3,7 @@ import { useFetchAllTags } from "@/apis/tag.api";
 import {
     FormDateTimePicker,
     FormInput,
+    FormMarkdownEditor,
     FormMultipleCombobox,
     FormSelect,
 } from "@/components/shared";
@@ -102,10 +103,10 @@ const NewEventPage = () => {
                                 <FormInput
                                     form={form}
                                     name="title"
-                                    label="Event title"
+                                    label="Title"
                                 />
 
-                                <FormInput
+                                <FormMarkdownEditor
                                     form={form}
                                     name="description"
                                     label="Description"
@@ -130,7 +131,7 @@ const NewEventPage = () => {
                                 <FormDateTimePicker
                                     form={form}
                                     name="date"
-                                    label="Date & time"
+                                    label="Date"
                                     disabled={{ before: today }}
                                 />
 

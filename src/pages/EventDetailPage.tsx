@@ -3,6 +3,7 @@ import { EventActions } from "@/components/event";
 import {
     CenteredSpinner,
     ErrorState,
+    Markdown,
     NotFoundState,
 } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
@@ -89,9 +90,7 @@ const EventDetailPage = () => {
                     <div className="grid grid-cols-1 md:grid-cols-[1fr_260px] gap-10">
                         <div>
                             {event.description ? (
-                                <p className="text-[15px] leading-7 text-[#3D4650] max-w-[62ch]">
-                                    {event.description}
-                                </p>
+                                <Markdown body={event.description} />
                             ) : (
                                 <p className="text-[15px] leading-7 text-[#8B8378] italic">
                                     No description has been added for this event
