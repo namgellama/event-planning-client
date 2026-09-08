@@ -1,56 +1,59 @@
+import { useFetchEvent } from "@/apis/event.api";
+import {
+    CenteredSpinner,
+    ErrorState,
+    NotFoundState,
+} from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import type { Event } from "@/types/event";
-import {
-    CalendarDays,
-    Clock,
-    Globe2,
-    Lock,
-    MapPin,
-    Share2,
-} from "lucide-react";
-
-function formatDate(iso: string) {
-    const d = new Date(iso);
-    if (Number.isNaN(d.getTime()))
-        return { day: "--", month: "---", full: iso, time: "" };
-    return {
-        day: d.getDate().toString().padStart(2, "0"),
-        month: d.toLocaleString("en-US", { month: "short" }),
-        full: d.toLocaleDateString("en-US", {
-            weekday: "long",
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-        }),
-        time: d.toLocaleTimeString("en-US", {
-            hour: "numeric",
-            minute: "2-digit",
-        }),
-    };
-}
+import { formatDate } from "@/utils/format-date";
+import { CalendarDays, Clock, Globe2, Lock, MapPin } from "lucide-react";
+import { useNavigate, useParams } from "react-router";
 
 const EventDetailPage = () => {
-    const event: Event = {
-        id: "evt_1",
-        title: "Autumn Founders Dinner",
-        date: "2026-10-14T19:30:00",
-        location: "The Glasshouse, 14 Birch Lane, Portland",
-        type: "private",
-        description:
-            "An intimate dinner bringing together the founders in this year's cohort for an evening of conversation, plated by a local chef using produce from the surrounding valley.",
-        tags: [
-            { id: "t1", title: "Founders" },
-            { id: "t2", title: "Dinner" },
-            { id: "t3", title: "Cohort 12" },
-        ],
-        createdAt: new Date("2026-08-01"),
-        updatedAt: new Date("2026-09-02"),
-        userId: "u_1",
-    };
+    const { id } = useParams();
+    const navigate = useNavigate();
+
+    if (!id) {
+        return (
+            <NotFoundState
+                title="Event not found"
+                description="No event was specified in the URL."
+                action={{
+                    label: "Back to events",
+                    onClick: () => navigate("/events"),
+                }}
+            />
+        );
+    }
+
+    const { event, isLoading, error, refetch } = useFetchEvent(id);
+
+    if (isLoading && !event) {
+        return <CenteredSpinner />;
+    }
+
+    if (error && !event) {
+        return (
+            <ErrorState
+                title="Couldn't load event"
+                error={error}
+                onRetry={refetch}
+                notFound={{
+                    title: "Event not found",
+                    description:
+                        "This event may have been deleted or the link is incorrect.",
+                }}
+            />
+        );
+    }
+
+    if (!event) {
+        return <CenteredSpinner />;
+    }
 
     const { day, month, full, time } = formatDate(event.date);
-    const isPublic = event.type === "public";
+    const isPublic = event?.type === "public";
 
     return (
         <div className="min-h-screen bg-[#F7F3EA] text-[#1F2933] px-6 py-12">
@@ -80,7 +83,6 @@ const EventDetailPage = () => {
                 <Separator className="my-8 bg-[#D8CFBC]" />
 
                 <div className="grid grid-cols-1 md:grid-cols-[1fr_260px] gap-10">
-                    {/* Main content */}
                     <div>
                         {event.description ? (
                             <p className="text-[15px] leading-7 text-[#3D4650] max-w-[62ch]">

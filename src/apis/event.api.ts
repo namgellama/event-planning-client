@@ -27,10 +27,29 @@ export const useFetchAllEvents = () => {
         isLoading,
         error,
         refetch,
-    } = useQuery<void, ApiError, PaginatedResponse<Event>>({
+    } = useQuery<PaginatedResponse<Event>, ApiError>({
         queryFn: fetchAllEvents,
         queryKey: ["events", type],
     });
 
     return { events, isLoading, error, refetch };
+};
+
+export const useFetchEvent = (eventId: string) => {
+    const fetchEvent = async () => {
+        const response = await api.get(`/events/${eventId}`);
+        return response.data.data;
+    };
+
+    const {
+        data: event,
+        isLoading,
+        error,
+        refetch,
+    } = useQuery<Event, ApiError>({
+        queryFn: fetchEvent,
+        queryKey: ["events", eventId],
+    });
+
+    return { event, isLoading, error, refetch };
 };
