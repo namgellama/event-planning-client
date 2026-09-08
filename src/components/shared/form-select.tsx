@@ -52,7 +52,7 @@ const FormSelect = <T extends FieldValues>({
                             aria-invalid={fieldState.invalid}
                             className="min-w-30"
                         >
-                            <SelectValue placeholder="Select" />
+                            <SelectValue className="capitalize" />
                         </SelectTrigger>
                         <SelectContent>
                             {data.map(({ label, value }) => (
