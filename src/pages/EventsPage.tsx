@@ -1,6 +1,6 @@
 import { EventList } from "@/components/event";
 
-const EventPage = () => {
+const EventsPage = () => {
     return (
         <div>
             <EventList />
@@ -8,4 +8,4 @@ const EventPage = () => {
     );
 };
 
-export default EventPage;
+export default EventsPage;

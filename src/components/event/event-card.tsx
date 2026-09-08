@@ -2,8 +2,11 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { Event } from "@/types/event";
 import { Calendar, Clock, Globe, Lock, MapPin } from "lucide-react";
+import { useNavigate } from "react-router";
 
 export default function EventCard({ event }: { event: Event }) {
+    const navigate = useNavigate();
+
     const d = new Date(event.date);
     const dateLabel = d.toLocaleDateString(undefined, {
         weekday: "short",
@@ -17,7 +20,10 @@ export default function EventCard({ event }: { event: Event }) {
     const isPublic = event.type === "public";
 
     return (
-        <Card className="w-full max-w-md h-36">
+        <Card
+            className="w-full max-w-md h-36"
+            onClick={() => navigate(`/events/${event.id}`)}
+        >
             <CardHeader className="flex flex-row items-start justify-between gap-3 space-y-0">
                 <div className="space-y-1">
                     <h3 className="font-semibold leading-tight text-slate-900">

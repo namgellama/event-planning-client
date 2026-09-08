@@ -7,7 +7,8 @@ import ProtectedRoute from "./layouts/ProtectedRoute";
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
-const EventPage = lazy(() => import("./pages/EventPage"));
+const EventsPage = lazy(() => import("./pages/EventsPage"));
+const EventDetailPage = lazy(() => import("./pages/EventDetailPage"));
 
 function App() {
     return (
@@ -24,7 +25,11 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route element={<ProtectedRoute />}>
                     <Route element={<AppLayout />}>
-                        <Route path="/events" element={<EventPage />} />
+                        <Route path="/events" element={<EventsPage />} />
+                        <Route
+                            path="/events/:id"
+                            element={<EventDetailPage />}
+                        />
                     </Route>
                 </Route>
             </Routes>
