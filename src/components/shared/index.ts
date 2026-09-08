@@ -1,4 +1,5 @@
 export { default as CenteredSpinner } from "./centered-spinner";
+export { default as DeleteAlertDialog } from "./delete-alert-dialog";
 export { default as EmptyState } from "./empty-state";
 export { default as ErrorState } from "./error-state";
 export { default as FormInput, FormPasswordInput } from "./form-input";

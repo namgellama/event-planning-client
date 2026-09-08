@@ -1,9 +1,10 @@
 import type { TypeValue } from "@/components/event/event-tabs";
 import type { Event } from "@/types/event";
 import type { PaginatedResponse } from "@/types/pagination";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseAsStringEnum, useQueryState } from "nuqs";
-import api, { type ApiError } from ".";
+import { toast } from "sonner";
+import api, { handleApiError, type ApiError } from ".";
 
 export const useFetchAllEvents = () => {
     const [type] = useQueryState(
@@ -52,4 +53,26 @@ export const useFetchEvent = (eventId: string) => {
     });
 
     return { event, isLoading, error, refetch };
+};
+
+export const useDeleteEvent = () => {
+    const deleteEvent = async (eventId: string) => {
+        await api.delete(`/events/${eventId}`);
+    };
+
+    const { mutateAsync: deleteEventMutation, isPending: isLoading } =
+        useMutation<void, ApiError, string>({
+            mutationFn: deleteEvent,
+            onSuccess: () => {
+                toast.success("Event deleted successfully");
+            },
+            onError: (error) => {
+                handleApiError(
+                    error,
+                    "Unable to delete event. Please try again",
+                );
+            },
+        });
+
+    return { deleteEventMutation, isLoading };
 };
