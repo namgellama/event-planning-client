@@ -9,4 +9,5 @@ export { default as FormMultipleCombobox } from "./form-multiple-combobox";
 export { default as FormSelect } from "./form-select";
 export { default as Markdown } from "./markdown";
 export { default as NotFoundState } from "./not-found-state";
+export { default as Pagination } from "./pagination";
 export { default as StatusState } from "./status-state";

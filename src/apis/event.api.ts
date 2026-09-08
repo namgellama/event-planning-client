@@ -7,23 +7,28 @@ import type {
     UpdateEventInput,
 } from "@/validations/event.validation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { parseAsStringEnum, useQueryState } from "nuqs";
+import { parseAsInteger, parseAsStringEnum, useQueryStates } from "nuqs";
 import { toast } from "sonner";
 import api, { handleApiError, type ApiError } from ".";
 
 export const useFetchAllEvents = () => {
-    const [type] = useQueryState(
-        "type",
-        parseAsStringEnum<TypeValue>(["all", "public", "private"]).withDefault(
+    const [{ page, limit, type }] = useQueryStates({
+        page: parseAsInteger.withDefault(1),
+        limit: parseAsInteger.withDefault(10),
+        type: parseAsStringEnum<TypeValue>([
             "all",
-        ),
-    );
+            "public",
+            "private",
+        ]).withDefault("all"),
+    });
 
     const fetchAllEvents = async () => {
         const response = await api.get<ApiResponse<PaginatedResponse<Event>>>(
             "/events",
             {
                 params: {
+                    page,
+                    limit,
                     type: type === "all" ? undefined : type,
                 },
             },
@@ -42,7 +47,7 @@ export const useFetchAllEvents = () => {
         PaginatedResponse<Event>
     >({
         queryFn: fetchAllEvents,
-        queryKey: ["events", type],
+        queryKey: ["events", page, limit, type],
         select: ({ data }) => data,
     });
 

@@ -1,5 +1,5 @@
 import { useFetchAllEvents } from "@/apis/event.api";
-import { EmptyState, ErrorState } from "@/components/shared";
+import { EmptyState, ErrorState, Pagination } from "@/components/shared";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CalendarX, Plus } from "lucide-react";
 import { useNavigate } from "react-router";
@@ -59,6 +59,8 @@ const EventList = () => {
                     <EventCard key={event.id} event={event} />
                 ))}
             </div>
+
+            {events && <Pagination totalPages={events.pagination.totalPages} />}
         </div>
     );
 };
