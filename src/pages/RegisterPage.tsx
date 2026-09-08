@@ -1,7 +1,5 @@
-"use client";
-
 import { useRegisterUser } from "@/apis/auth.api";
-import FormInput, { FormPasswordInput } from "@/components/FormInput";
+import FormInput, { FormPasswordInput } from "@/components/shared/form-input";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -12,15 +10,18 @@ import {
 } from "@/components/ui/card";
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
+import { useAuth } from "@/contexts/AuthContext";
 import {
     registerUserSchema,
     type RegisterUserInput,
 } from "@/validations/auth.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 
 const RegisterPage = () => {
+    const { isAuthenticated } = useAuth();
     const navigate = useNavigate();
     const form = useForm<RegisterUserInput>({
         resolver: zodResolver(registerUserSchema),
@@ -32,6 +33,10 @@ const RegisterPage = () => {
         },
     });
     const { registerUserMutation, isLoading } = useRegisterUser();
+
+    useEffect(() => {
+        if (isAuthenticated) navigate("/events");
+    }, [isAuthenticated, navigate]);
 
     async function onSubmit(data: RegisterUserInput) {
         await registerUserMutation(data);

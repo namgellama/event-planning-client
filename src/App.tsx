@@ -1,26 +1,33 @@
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router";
-import { Spinner } from "./components/ui/spinner";
+import { CenteredSpinner } from "./components/shared";
+import AppLayout from "./layouts/AppLayout";
+import ProtectedRoute from "./layouts/ProtectedRoute";
 
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
-const EventPage = lazy(() => import("./pages/EventPage"));
+const EventsPage = lazy(() => import("./pages/EventsPage"));
+const EventDetailPage = lazy(() => import("./pages/EventDetailPage"));
+const NewEventPage = lazy(() => import("./pages/NewEventPage"));
 
 function App() {
     return (
-        <Suspense
-            fallback={
-                <div className="w-full h-screen flex items-center justify-center">
-                    <Spinner className="size-6" />
-                </div>
-            }
-        >
+        <Suspense fallback={<CenteredSpinner />}>
             <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/events" element={<EventPage />} />
+                <Route element={<ProtectedRoute />}>
+                    <Route element={<AppLayout />}>
+                        <Route path="/events" element={<EventsPage />} />
+                        <Route
+                            path="/events/:id"
+                            element={<EventDetailPage />}
+                        />
+                        <Route path="/events/new" element={<NewEventPage />} />
+                    </Route>
+                </Route>
             </Routes>
         </Suspense>
     );

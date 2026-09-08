@@ -77,7 +77,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             async (error) => {
                 const originalRequest =
                     error.config as InternalAxiosRequestConfigWithRetry;
-
                 const isRefreshTokenRequest = originalRequest.url?.includes(
                     `${BASE_URL}/auth/refresh-token`,
                 );
@@ -110,7 +109,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     }
                 }
 
-                throw error();
+                throw error;
             },
         );
 
