@@ -56,7 +56,7 @@ const EventListContent = () => {
         return (
             <div className="w-full grid grid-cols-3 gap-6">
                 {Array.from({ length: 8 }).map((_, i) => (
-                    <Skeleton key={i} className="w-full h-36" />
+                    <Skeleton key={i} className="w-full h-47 bg-gray-200" />
                 ))}
             </div>
         );

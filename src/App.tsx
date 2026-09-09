@@ -12,6 +12,7 @@ const EventsPage = lazy(() => import("./pages/EventsPage"));
 const EventDetailPage = lazy(() => import("./pages/EventDetailPage"));
 const NewEventPage = lazy(() => import("./pages/NewEventPage"));
 const EditEventPage = lazy(() => import("./pages/EditEventPage"));
+const TagsPage = lazy(() => import("./pages/TagsPage"));
 
 function App() {
     return (
@@ -28,11 +29,11 @@ function App() {
                             element={<EventDetailPage />}
                         />
                         <Route path="/events/new" element={<NewEventPage />} />
-                        <Route path="/tags" element={<>Hello</>} />
                         <Route
                             path="/events/:id/edit"
                             element={<EditEventPage />}
                         />
+                        <Route path="/tags" element={<TagsPage />} />
                     </Route>
                 </Route>
             </Routes>
