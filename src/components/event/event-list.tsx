@@ -1,17 +1,3 @@
-import {
-    useFetchAllEvents,
-    type EventSortBy,
-    type EventType,
-} from "@/apis/event.api";
-import { useFetchAllTags } from "@/apis/tag.api";
-import {
-    EmptyState,
-    ErrorState,
-    Pagination,
-    SearchInput,
-} from "@/components/shared";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useDebounce } from "@/hooks/useDebounce";
 import { CalendarX, Plus } from "lucide-react";
 import {
     parseAsArrayOf,
@@ -21,37 +7,49 @@ import {
     useQueryStates,
 } from "nuqs";
 import { useNavigate } from "react-router";
-import { Button } from "../ui/button";
-import { MultiSelect } from "../ui/multi-select";
-import EventCard from "./event-card";
-import EventSorting from "./event-sorting";
-import EventTabs from "./event-tabs";
+
+import {
+    useFetchAllEvents,
+    type EventSortBy,
+    type EventType,
+} from "@/apis/event.api";
+import { EmptyState, ErrorState, Pagination } from "@/components/shared";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useDebounce } from "@/hooks/useDebounce";
 import type { SortOrder } from "@/types/request";
+import {
+    EventCard,
+    EventSearch,
+    EventSorting,
+    EventTagsFilter,
+    EventTypeFilter,
+} from ".";
+
+export const queryState = {
+    page: parseAsInteger.withDefault(1),
+    limit: parseAsInteger.withDefault(10),
+    type: parseAsStringEnum<EventType>([
+        "all",
+        "public",
+        "private",
+    ]).withDefault("all"),
+    search: parseAsString.withDefault(""),
+    tags: parseAsArrayOf(parseAsString).withDefault([]),
+    sortBy: parseAsStringEnum<EventSortBy>(["createdAt", "date"]).withDefault(
+        "createdAt",
+    ),
+    sortOrder: parseAsStringEnum<SortOrder>(["asc", "desc"]).withDefault(
+        "desc",
+    ),
+};
 
 const EventList = () => {
     const navigate = useNavigate();
 
-    const [{ page, limit, type, search, tags, sortBy, sortOrder }, setQuery] =
-        useQueryStates({
-            page: parseAsInteger.withDefault(1),
-            limit: parseAsInteger.withDefault(10),
-            type: parseAsStringEnum<EventType>([
-                "all",
-                "public",
-                "private",
-            ]).withDefault("all"),
-            search: parseAsString.withDefault(""),
-            tags: parseAsArrayOf(parseAsString).withDefault([]),
-            sortBy: parseAsStringEnum<EventSortBy>([
-                "createdAt",
-                "date",
-            ]).withDefault("createdAt"),
-            sortOrder: parseAsStringEnum<SortOrder>([
-                "asc",
-                "desc",
-            ]).withDefault("desc"),
-        });
-    const { tags: tagsData, isLoading: isTagsLoading } = useFetchAllTags();
+    const [{ page, limit, type, search, tags, sortBy, sortOrder }] =
+        useQueryStates(queryState);
 
     const debouncedSearch = useDebounce(search);
 
@@ -85,80 +83,27 @@ const EventList = () => {
         );
     }
 
-    const handleSortBy = (value: string | null) => {
-        if (!value) return;
-        setQuery({ sortBy: value as EventSortBy });
-    };
-
-    const handleSortOrder = () => {
-        const value: SortOrder = sortOrder === "asc" ? "desc" : "asc";
-        setQuery({ sortOrder: value });
-    };
-
     return (
         <div className="space-y-5">
-            <div className="flex items-center justify-between">
-                <EventTabs />
-                <Button
-                    size="lg"
-                    className="px-4 cursor-pointer"
-                    onClick={() => navigate("/events/new")}
-                >
-                    <Plus /> Create New
-                </Button>
-            </div>
-
-            <div className="flex items-end justify-between">
-                <div className="w-fit flex items-center gap-4">
-                    <SearchInput
-                        value={search}
-                        onChange={(e) =>
-                            setQuery({
-                                search: e.target.value,
-                                page: 1,
-                            })
-                        }
-                        className="min-w-md h-10"
-                    />
-                </div>
-
-                {events && events.pagination.total > 0 && (
-                    <p className="italic text-gray-400">
-                        {events.pagination.total}{" "}
-                        {events.pagination.total > 1 ? "results" : "result"}{" "}
-                        found
-                    </p>
-                )}
-            </div>
-
-            <div>
-                {isTagsLoading ? (
-                    <Skeleton className="w-md h-10" />
-                ) : (
-                    tagsData && (
-                        <MultiSelect
-                            defaultValue={tags}
-                            options={
-                                tagsData.items.map((item) => ({
-                                    label: item.title,
-                                    value: item.id,
-                                })) ?? []
-                            }
-                            onValueChange={(value) => {
-                                setQuery({ tags: value });
-                            }}
-                            placeholder="Filter by tags"
-                            className="w-md!"
-                        />
-                    )
-                )}
-                <EventSorting
-                    sortByValue={sortBy}
-                    handleSortBy={handleSortBy}
-                    sortOrderValue={sortOrder}
-                    handleSortOrder={handleSortOrder}
-                />
-            </div>
+            <Card>
+                <CardContent className="flex flex-col gap-4">
+                    <div className="flex items-center justify-between">
+                        <EventTypeFilter />
+                        <Button
+                            size="lg"
+                            className="px-4 cursor-pointer"
+                            onClick={() => navigate("/events/new")}
+                        >
+                            <Plus /> Create New
+                        </Button>
+                    </div>
+                    <div className="flex justify-between gap-4">
+                        <EventSearch />
+                        <EventTagsFilter />
+                        <EventSorting />
+                    </div>
+                </CardContent>
+            </Card>
 
             {events?.pagination.total === 0 ? (
                 <EmptyState
