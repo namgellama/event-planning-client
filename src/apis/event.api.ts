@@ -1,5 +1,6 @@
 import type { Event } from "@/types/event";
 import type { PaginatedResponse } from "@/types/pagination";
+import type { ListQueryParams } from "@/types/request";
 import type { ApiResponse } from "@/types/response";
 import type {
     CreateEventInput,
@@ -10,13 +11,12 @@ import { toast } from "sonner";
 import api, { handleApiError, type ApiError } from ".";
 
 export type EventType = "all" | "public" | "private";
+export type EventSortBy = "createdAt" | "date";
 
-export type FetchAllEventsParams = {
-    page: number;
-    limit: number;
+export type EventListQueryParams = ListQueryParams & {
     type: EventType;
-    search: string;
     tags: string[];
+    sortBy: EventSortBy;
 };
 
 export const useFetchAllEvents = ({
@@ -25,7 +25,9 @@ export const useFetchAllEvents = ({
     type,
     search,
     tags,
-}: FetchAllEventsParams) => {
+    sortBy,
+    sortOrder,
+}: EventListQueryParams) => {
     const fetchAllEvents = async () => {
         const response = await api.get<ApiResponse<PaginatedResponse<Event>>>(
             "/events",
@@ -36,6 +38,8 @@ export const useFetchAllEvents = ({
                     type: type === "all" ? undefined : type,
                     search: search?.trim() || undefined,
                     tags: tags.length > 0 ? tags.join(",") : undefined,
+                    sortBy,
+                    sortOrder,
                 },
             },
         );
@@ -53,7 +57,16 @@ export const useFetchAllEvents = ({
         PaginatedResponse<Event>
     >({
         queryFn: fetchAllEvents,
-        queryKey: ["events", page, limit, type, search, tags],
+        queryKey: [
+            "events",
+            page,
+            limit,
+            type,
+            search,
+            tags,
+            sortBy,
+            sortOrder,
+        ],
         select: ({ data }) => data,
     });
 
