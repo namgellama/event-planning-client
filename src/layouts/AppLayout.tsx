@@ -9,7 +9,7 @@ const AppLayout = () => {
 
     return (
         <SidebarProvider>
-            <AppSidebar user={user!} onLogout={() => {}} />
+            <AppSidebar user={user!} />
             <main className="w-full p-10">
                 <Outlet />
             </main>

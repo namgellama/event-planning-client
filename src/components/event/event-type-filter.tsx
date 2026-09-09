@@ -11,10 +11,10 @@ const tabs: { label: string; value: EventType }[] = [
 ];
 
 const EventTypeFilter = () => {
-    const [{}, setQuery] = useQueryStates(queryState);
+    const [{ type }, setQuery] = useQueryStates(queryState);
 
     return (
-        <Tabs defaultValue={tabs[0].value} className="w-100">
+        <Tabs value={type} className="w-100">
             <TabsList className="h-10!">
                 {tabs.map((tab) => (
                     <TabsTrigger

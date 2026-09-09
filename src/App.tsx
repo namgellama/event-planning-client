@@ -28,6 +28,7 @@ function App() {
                             element={<EventDetailPage />}
                         />
                         <Route path="/events/new" element={<NewEventPage />} />
+                        <Route path="/tags" element={<>Hello</>} />
                         <Route
                             path="/events/:id/edit"
                             element={<EditEventPage />}
