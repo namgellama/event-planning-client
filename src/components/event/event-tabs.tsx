@@ -1,9 +1,8 @@
 import { parseAsInteger, parseAsStringEnum, useQueryStates } from "nuqs";
 import { Button } from "../ui/button";
+import type { EventType } from "@/apis/event.api";
 
-export type TypeValue = "all" | "public" | "private";
-
-const tabs: { label: string; value: TypeValue }[] = [
+const tabs: { label: string; value: EventType }[] = [
     { label: "All", value: "all" },
     { label: "Public", value: "public" },
     { label: "Private", value: "private" },
@@ -11,7 +10,7 @@ const tabs: { label: string; value: TypeValue }[] = [
 
 const EventTabs = () => {
     const [{ type }, setQuery] = useQueryStates({
-        type: parseAsStringEnum<TypeValue>([
+        type: parseAsStringEnum<EventType>([
             "all",
             "public",
             "private",

@@ -65,13 +65,9 @@ const Pagination = ({ totalPages }: Props) => {
     if (totalPages <= 0) return null;
 
     return (
-        <div className="flex items-center justify-between">
+        <div className="flex items-center">
             {/* Rows per page */}
             <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">
-                    Rows per page
-                </span>
-
                 <Select value={String(limit)} onValueChange={handleLimitChange}>
                     <SelectTrigger className="w-20">
                         <SelectValue />

@@ -10,17 +10,9 @@ interface Props {
     placeholder?: string;
     value: string;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    count?: number;
-    showResults?: boolean;
 }
 
-const SearchInput = ({
-    placeholder = "Search...",
-    value,
-    onChange,
-    count,
-    showResults = true,
-}: Props) => {
+const SearchInput = ({ placeholder = "Search...", value, onChange }: Props) => {
     return (
         <InputGroup className="max-w-xs">
             <InputGroupInput
@@ -31,11 +23,6 @@ const SearchInput = ({
             <InputGroupAddon>
                 <Search />
             </InputGroupAddon>
-            {showResults && (
-                <InputGroupAddon align="inline-end">
-                    {count} results
-                </InputGroupAddon>
-            )}
         </InputGroup>
     );
 };

@@ -1,4 +1,3 @@
-import type { TypeValue } from "@/components/event/event-tabs";
 import type { Event } from "@/types/event";
 import type { PaginatedResponse } from "@/types/pagination";
 import type { ApiResponse } from "@/types/response";
@@ -7,21 +6,24 @@ import type {
     UpdateEventInput,
 } from "@/validations/event.validation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { parseAsInteger, parseAsStringEnum, useQueryStates } from "nuqs";
 import { toast } from "sonner";
 import api, { handleApiError, type ApiError } from ".";
 
-export const useFetchAllEvents = () => {
-    const [{ page, limit, type }] = useQueryStates({
-        page: parseAsInteger.withDefault(1),
-        limit: parseAsInteger.withDefault(10),
-        type: parseAsStringEnum<TypeValue>([
-            "all",
-            "public",
-            "private",
-        ]).withDefault("all"),
-    });
+export type EventType = "all" | "public" | "private";
 
+export type FetchAllEventsParams = {
+    page: number;
+    limit: number;
+    type: EventType;
+    search: string;
+};
+
+export const useFetchAllEvents = ({
+    page,
+    limit,
+    type,
+    search,
+}: FetchAllEventsParams) => {
     const fetchAllEvents = async () => {
         const response = await api.get<ApiResponse<PaginatedResponse<Event>>>(
             "/events",
@@ -30,6 +32,7 @@ export const useFetchAllEvents = () => {
                     page,
                     limit,
                     type: type === "all" ? undefined : type,
+                    search: search?.trim() || undefined,
                 },
             },
         );
@@ -47,7 +50,7 @@ export const useFetchAllEvents = () => {
         PaginatedResponse<Event>
     >({
         queryFn: fetchAllEvents,
-        queryKey: ["events", page, limit, type],
+        queryKey: ["events", page, limit, type, search],
         select: ({ data }) => data,
     });
 
