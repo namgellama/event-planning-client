@@ -1,5 +1,5 @@
 import { cn } from "cn";
-import { Search } from "lucide-react";
+import { Search, Upload, X } from "lucide-react";
 import type { ChangeEvent } from "react";
 import {
     InputGroup,
@@ -12,6 +12,7 @@ interface Props {
     value: string;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     className?: string;
+    onReset: () => void;
 }
 
 const SearchInput = ({
@@ -19,6 +20,7 @@ const SearchInput = ({
     value,
     onChange,
     className,
+    onReset,
 }: Props) => {
     return (
         <InputGroup className={cn("w-full", className)}>
@@ -30,6 +32,15 @@ const SearchInput = ({
             <InputGroupAddon>
                 <Search />
             </InputGroupAddon>
+            {value && (
+                <InputGroupAddon
+                    align="inline-end"
+                    onClick={onReset}
+                    className="cursor-pointer"
+                >
+                    <X />
+                </InputGroupAddon>
+            )}
         </InputGroup>
     );
 };
