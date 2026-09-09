@@ -2,7 +2,7 @@ import { useQueryStates } from "nuqs";
 
 import type { EventType } from "@/apis/event.api";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { queryState } from "./event-list";
+import { queryState } from "./event-list-content";
 
 const tabs: { label: string; value: EventType }[] = [
     { label: "All", value: "all" },

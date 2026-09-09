@@ -3,7 +3,7 @@ import { useQueryStates } from "nuqs";
 import { useFetchAllTags } from "@/apis/tag.api";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { queryState } from "./event-list";
+import { queryState } from "./event-list-content";
 
 const EventTagsFilter = () => {
     const [{ tags }, setQuery] = useQueryStates(queryState);

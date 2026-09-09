@@ -1,7 +1,7 @@
 import { useQueryStates } from "nuqs";
 
 import { SearchInput } from "../shared";
-import { queryState } from "./event-list";
+import { queryState } from "./event-list-content";
 
 const EventSearch = () => {
     const [{ search }, setQuery] = useQueryStates(queryState);

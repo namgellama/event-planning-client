@@ -12,7 +12,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "../ui/select";
-import { queryState } from "./event-list";
+import { queryState } from "./event-list-content";
 
 const sortByItems = [
     { label: "Created Date", value: "createdAt" },
