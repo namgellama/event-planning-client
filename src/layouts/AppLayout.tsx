@@ -1,14 +1,15 @@
+import { Outlet } from "react-router";
+
 import AppSidebar from "@/components/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useAuth } from "@/contexts/AuthContext";
-import { Outlet } from "react-router";
 
 const AppLayout = () => {
     const { user } = useAuth();
 
     return (
         <SidebarProvider>
-            <AppSidebar user={user!} onLogout={() => {}} />
+            <AppSidebar user={user!} />
             <main className="w-full p-10">
                 <Outlet />
             </main>

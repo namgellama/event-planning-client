@@ -1,3 +1,7 @@
+import { CalendarDays, LogOut, Tag as TagIcon } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router";
+
+import { useLogoutUser } from "@/apis/auth.api";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -12,12 +16,9 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import type { User } from "@/types/user";
-import { CalendarDays, LogOut, Tag as TagIcon } from "lucide-react";
-import { NavLink, useLocation, useNavigate } from "react-router";
 
 interface AppSidebarProps {
     user: User;
-    onLogout: () => void | Promise<void>;
 }
 
 const navItems = [
@@ -34,12 +35,13 @@ function initials(name: string) {
         .join("");
 }
 
-export default function AppSidebar({ user, onLogout }: AppSidebarProps) {
+export default function AppSidebar({ user }: AppSidebarProps) {
     const location = useLocation();
     const navigate = useNavigate();
+    const { logoutUserMutation, isLoading } = useLogoutUser();
 
     async function handleLogout() {
-        await onLogout();
+        await logoutUserMutation();
         navigate("/login");
     }
 
@@ -65,27 +67,19 @@ export default function AppSidebar({ user, onLogout }: AppSidebarProps) {
                                     >
                                         <SidebarMenuButton
                                             isActive={isActive}
-                                            className="group cursor-pointer"
-                                        >
-                                            <NavLink
-                                                to={item.to}
-                                                className="flex items-center gap-2"
-                                            >
-                                                <item.icon
-                                                    className={`h-4 w-4  ${isActive ? "text-white" : "group-hover:text-white"}`}
-                                                    strokeWidth={1.75}
-                                                />
-                                                <span
-                                                    className={
-                                                        isActive
-                                                            ? "text-white"
-                                                            : "group-hover:text-white"
-                                                    }
+                                            className="cursor-pointer"
+                                            render={
+                                                <Link
+                                                    to={item.to}
+                                                    className="flex items-center gap-2"
                                                 >
-                                                    {item.label}
-                                                </span>
-                                            </NavLink>
-                                        </SidebarMenuButton>
+                                                    <item.icon
+                                                        strokeWidth={1.75}
+                                                    />
+                                                    <span>{item.label}</span>
+                                                </Link>
+                                            }
+                                        ></SidebarMenuButton>
                                     </SidebarMenuItem>
                                 );
                             })}
@@ -112,11 +106,13 @@ export default function AppSidebar({ user, onLogout }: AppSidebarProps) {
                     </div>
                 </div>
 
-                <SidebarMenu className="mt-1">
+                <Separator className="bg-sidebar-border" />
+                <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton
+                            disabled={isLoading}
                             onClick={handleLogout}
-                            className="gap-3 text-sidebar-foreground/60 hover:bg-[#C0392B]/15 hover:text-[#F2A398]"
+                            className="gap-3 text-sidebar-foreground/60"
                         >
                             <LogOut className="h-4 w-4" strokeWidth={1.75} />
                             <span>Log out</span>

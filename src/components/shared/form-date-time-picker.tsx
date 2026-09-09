@@ -1,3 +1,14 @@
+import { format } from "date-fns";
+import { ChevronDownIcon } from "lucide-react";
+import { useState, type ChangeEvent } from "react";
+import type { Matcher } from "react-day-picker";
+import {
+    Controller,
+    type FieldPath,
+    type FieldValues,
+    type UseFormReturn,
+} from "react-hook-form";
+
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -13,19 +24,9 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { format } from "date-fns";
-import { ChevronDownIcon } from "lucide-react";
-import * as React from "react";
-import type { Matcher } from "react-day-picker";
-import {
-    Controller,
-    type FieldPath,
-    type FieldValues,
-    type UseFormReturn,
-} from "react-hook-form";
 
 interface Props<T extends FieldValues> {
-    form: UseFormReturn<T>;
+    form: UseFormReturn<T, any, any>;
     name: FieldPath<T>;
     label: string;
     disabled?: Matcher | Matcher[];
@@ -37,7 +38,7 @@ const FormDateTimePicker = <T extends FieldValues>({
     label,
     disabled,
 }: Props<T>) => {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     return (
         <Controller
@@ -69,7 +70,7 @@ const FormDateTimePicker = <T extends FieldValues>({
                 };
 
                 const handleTimeChange = (
-                    event: React.ChangeEvent<HTMLInputElement>,
+                    event: ChangeEvent<HTMLInputElement>,
                 ) => {
                     const [hours, minutes, seconds = "00"] =
                         event.target.value.split(":");

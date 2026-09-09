@@ -1,27 +1,45 @@
-import type { TypeValue } from "@/components/event/event-tabs";
 import type { Event } from "@/types/event";
 import type { PaginatedResponse } from "@/types/pagination";
+import type { ListQueryParams } from "@/types/request";
 import type { ApiResponse } from "@/types/response";
-import type { CreateEventInput } from "@/validations/event.validation";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { parseAsStringEnum, useQueryState } from "nuqs";
+import type {
+    CreateEventInput,
+    UpdateEventInput,
+} from "@/validations/event.validation";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import api, { handleApiError, type ApiError } from ".";
 
-export const useFetchAllEvents = () => {
-    const [type] = useQueryState(
-        "type",
-        parseAsStringEnum<TypeValue>(["all", "public", "private"]).withDefault(
-            "all",
-        ),
-    );
+export type EventType = "all" | "public" | "private";
+export type EventSortBy = "createdAt" | "date";
 
+export type EventListQueryParams = ListQueryParams & {
+    type: EventType;
+    tags: string[];
+    sortBy: EventSortBy;
+};
+
+export const useFetchAllEvents = ({
+    page,
+    limit,
+    type,
+    search,
+    tags,
+    sortBy,
+    sortOrder,
+}: EventListQueryParams) => {
     const fetchAllEvents = async () => {
         const response = await api.get<ApiResponse<PaginatedResponse<Event>>>(
             "/events",
             {
                 params: {
+                    page,
+                    limit,
                     type: type === "all" ? undefined : type,
+                    search: search?.trim() || undefined,
+                    tags: tags.length > 0 ? tags.join(",") : undefined,
+                    sortBy,
+                    sortOrder,
                 },
             },
         );
@@ -39,7 +57,16 @@ export const useFetchAllEvents = () => {
         PaginatedResponse<Event>
     >({
         queryFn: fetchAllEvents,
-        queryKey: ["events", type],
+        queryKey: [
+            "events",
+            page,
+            limit,
+            type,
+            search,
+            tags,
+            sortBy,
+            sortOrder,
+        ],
         select: ({ data }) => data,
     });
 
@@ -63,12 +90,15 @@ export const useFetchEvent = (eventId: string) => {
         queryFn: fetchEvent,
         queryKey: ["events", eventId],
         select: ({ data }) => data,
+        enabled: !!eventId,
     });
 
     return { event, isLoading, error, refetch };
 };
 
 export const useCreateEvent = () => {
+    const queryClient = useQueryClient();
+
     const createEvent = async (data: CreateEventInput) => {
         const response = await api.post<ApiResponse<Event>>(`/events/`, data);
         return response.data;
@@ -79,6 +109,7 @@ export const useCreateEvent = () => {
             mutationFn: createEvent,
             onSuccess: ({ message }) => {
                 toast.success(message ?? "Event created successfully");
+                queryClient.invalidateQueries({ queryKey: ["events"] });
             },
             onError: (error) => {
                 handleApiError(
@@ -91,7 +122,49 @@ export const useCreateEvent = () => {
     return { createEventMutation, isLoading };
 };
 
+export const useUpdatevent = () => {
+    const queryClient = useQueryClient();
+
+    const updateEvent = async ({
+        data,
+        eventId,
+    }: {
+        data: UpdateEventInput;
+        eventId: string;
+    }) => {
+        const response = await api.patch<ApiResponse<Event>>(
+            `/events/${eventId}`,
+            data,
+        );
+        return response.data;
+    };
+
+    const { mutateAsync: updateEventMutation, isPending: isLoading } =
+        useMutation<
+            ApiResponse<Event>,
+            ApiError,
+            { data: UpdateEventInput; eventId: string }
+        >({
+            mutationFn: updateEvent,
+            onSuccess: ({ message, data }) => {
+                toast.success(message ?? "Event updated successfully");
+                queryClient.setQueryData(["events", data.id], data);
+                queryClient.invalidateQueries({ queryKey: ["events"] });
+            },
+            onError: (error) => {
+                handleApiError(
+                    error,
+                    "Unable to update event. Please try again",
+                );
+            },
+        });
+
+    return { updateEventMutation, isLoading };
+};
+
 export const useDeleteEvent = () => {
+    const queryClient = useQueryClient();
+
     const deleteEvent = async (eventId: string) => {
         await api.delete(`/events/${eventId}`);
     };
@@ -101,6 +174,7 @@ export const useDeleteEvent = () => {
             mutationFn: deleteEvent,
             onSuccess: () => {
                 toast.success("Event deleted successfully");
+                queryClient.invalidateQueries({ queryKey: ["events"] });
             },
             onError: (error) => {
                 handleApiError(

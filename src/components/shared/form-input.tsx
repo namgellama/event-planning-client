@@ -1,19 +1,20 @@
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 import {
     Controller,
     type FieldPath,
     type FieldValues,
     type UseFormReturn,
 } from "react-hook-form";
-import { Field, FieldError, FieldLabel } from "../ui/field";
-import { Input } from "../ui/input";
-import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 
 interface Props<T extends FieldValues> extends Omit<
     React.ComponentProps<"input">,
     "name" | "defaultValue" | "form"
 > {
-    form: UseFormReturn<T>;
+    form: UseFormReturn<T, any, any>;
     name: FieldPath<T>;
     label: string;
 }

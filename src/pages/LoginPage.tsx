@@ -1,3 +1,8 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router";
+
 import { useLoginUser } from "@/apis/auth.api";
 import { FormInput, FormPasswordInput } from "@/components/shared";
 import { Button } from "@/components/ui/button";
@@ -15,10 +20,6 @@ import {
     loginUserSchema,
     type LoginUserInput,
 } from "@/validations/auth.validation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
 
 const LoginPage = () => {
     const { isAuthenticated } = useAuth();

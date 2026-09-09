@@ -1,7 +1,8 @@
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { CheckCircle2, MapPin, TagIcon } from "lucide-react";
 import { useNavigate } from "react-router";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 const upcomingPreview = [
     {

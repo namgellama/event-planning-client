@@ -1,5 +1,6 @@
 import { SearchX } from "lucide-react";
-import StatusState from "./status-state";
+
+import { StatusState } from ".";
 
 interface Props {
     title?: string;

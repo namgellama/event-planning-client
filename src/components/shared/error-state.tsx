@@ -1,7 +1,7 @@
-import type { ApiError } from "@/apis";
 import { AlertTriangle } from "lucide-react";
-import NotFoundState from "./not-found-state";
-import StatusState from "./status-state";
+
+import type { ApiError } from "@/apis";
+import { NotFoundState, StatusState } from ".";
 
 interface Props {
     title: string;

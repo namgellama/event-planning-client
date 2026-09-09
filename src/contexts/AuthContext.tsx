@@ -1,10 +1,4 @@
 import {
-    api,
-    BASE_URL,
-    type InternalAxiosRequestConfigWithRetry,
-} from "@/apis";
-import type { User } from "@/types/user";
-import {
     createContext,
     useContext,
     useEffect,
@@ -15,6 +9,13 @@ import {
     type SetStateAction,
 } from "react";
 import { useNavigate } from "react-router";
+
+import {
+    api,
+    BASE_URL,
+    type InternalAxiosRequestConfigWithRetry,
+} from "@/apis";
+import type { User } from "@/types/user";
 
 interface AuthContextValue {
     accessToken: string | null;

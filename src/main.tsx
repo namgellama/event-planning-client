@@ -4,9 +4,10 @@ import { NuqsAdapter } from "nuqs/adapters/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router";
+
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "sonner";
 import App from "./App";
-import { TooltipProvider } from "./components/ui/tooltip";
 import { AuthProvider } from "./contexts/AuthContext";
 import "./index.css";
 

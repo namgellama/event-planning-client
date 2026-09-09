@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router";
+
 import { CenteredSpinner } from "./components/shared";
 import AppLayout from "./layouts/AppLayout";
 import ProtectedRoute from "./layouts/ProtectedRoute";
@@ -10,6 +11,7 @@ const LoginPage = lazy(() => import("./pages/LoginPage"));
 const EventsPage = lazy(() => import("./pages/EventsPage"));
 const EventDetailPage = lazy(() => import("./pages/EventDetailPage"));
 const NewEventPage = lazy(() => import("./pages/NewEventPage"));
+const EditEventPage = lazy(() => import("./pages/EditEventPage"));
 
 function App() {
     return (
@@ -26,6 +28,11 @@ function App() {
                             element={<EventDetailPage />}
                         />
                         <Route path="/events/new" element={<NewEventPage />} />
+                        <Route path="/tags" element={<>Hello</>} />
+                        <Route
+                            path="/events/:id/edit"
+                            element={<EditEventPage />}
+                        />
                     </Route>
                 </Route>
             </Routes>

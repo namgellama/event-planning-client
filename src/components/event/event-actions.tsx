@@ -1,9 +1,18 @@
-import { useDeleteEvent } from "@/apis/event.api";
-import type { Event } from "@/types/event";
+import { Edit, EllipsisVertical, Trash } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { DeleteAlertDialog } from "../shared";
-import { Button } from "../ui/button";
+
+import { useDeleteEvent } from "@/apis/event.api";
+import { DeleteAlertDialog } from "@/components/shared";
+import { Button } from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import type { Event } from "@/types/event";
 
 const EventActions = ({ event }: { event: Event }) => {
     const navigate = useNavigate();
@@ -17,18 +26,35 @@ const EventActions = ({ event }: { event: Event }) => {
     };
 
     return (
-        <div className="self-end space-x-2">
-            <Button size="lg" className="bg-primary px-4 cursor-pointer">
-                Update
-            </Button>
-            <Button
-                size="lg"
-                variant="destructive"
-                className="px-4 cursor-pointer"
-                onClick={() => setIsDeleteOpen(true)}
-            >
-                Delete
-            </Button>
+        <>
+            <DropdownMenu>
+                <DropdownMenuTrigger
+                    render={
+                        <Button
+                            variant="ghost"
+                            className="cursor-pointer rounded-full hover:bg-inherit"
+                        />
+                    }
+                >
+                    <EllipsisVertical className="size-5" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem
+                            className="flex items-center cursor-pointer"
+                            onClick={() => navigate(`/events/${event.id}/edit`)}
+                        >
+                            <Edit className="size-3 text-blue-500" /> Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() => setIsDeleteOpen(true)}
+                            className="flex items-center cursor-pointer"
+                        >
+                            <Trash className="size-3 text-destructive" /> Delete
+                        </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                </DropdownMenuContent>
+            </DropdownMenu>
 
             <DeleteAlertDialog
                 isOpen={isDeleteOpen}
@@ -36,7 +62,7 @@ const EventActions = ({ event }: { event: Event }) => {
                 isLoading={isLoading}
                 onDelete={onDelete}
             />
-        </div>
+        </>
     );
 };
 

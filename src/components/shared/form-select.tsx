@@ -4,17 +4,23 @@ import {
     type FieldValues,
     type UseFormReturn,
 } from "react-hook-form";
-import { Field, FieldContent, FieldError, FieldLabel } from "../ui/field";
+
+import {
+    Field,
+    FieldContent,
+    FieldError,
+    FieldLabel,
+} from "@/components/ui/field";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "../ui/select";
+} from "@/components/ui/select";
 
 interface Props<T extends FieldValues> {
-    form: UseFormReturn<T>;
+    form: UseFormReturn<T, any, any>;
     name: FieldPath<T>;
     label: string;
     data: { label: string; value: string }[];
