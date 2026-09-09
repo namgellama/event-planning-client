@@ -1,5 +1,6 @@
 export { default as CenteredSpinner } from "./centered-spinner";
 export { default as DeleteAlertDialog } from "./delete-alert-dialog";
+export { default as EditDeleteActions } from "./edit-delete-actions";
 export { default as EmptyState } from "./empty-state";
 export { default as ErrorState } from "./error-state";
 export { default as FormDateTimePicker } from "./form-date-time-picker";
