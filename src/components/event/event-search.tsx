@@ -16,6 +16,7 @@ const EventSearch = () => {
                 })
             }
             className="flex-1 w-full h-10"
+            onReset={() => setQuery({ search: "" })}
         />
     );
 };

@@ -22,7 +22,7 @@ import type { SortOrder } from "@/types/request";
 import {
     EventCard,
     EventSearch,
-    EventSorting,
+    EventSort,
     EventTagsFilter,
     EventTypeFilter,
 } from ".";
@@ -100,7 +100,7 @@ const EventList = () => {
                     <div className="flex justify-between gap-4">
                         <EventSearch />
                         <EventTagsFilter />
-                        <EventSorting />
+                        <EventSort />
                     </div>
                 </CardContent>
             </Card>

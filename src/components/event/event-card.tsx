@@ -1,8 +1,9 @@
+import { Calendar, Clock, Globe, Lock, MapPin } from "lucide-react";
+import { useNavigate } from "react-router";
+
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { Event } from "@/types/event";
-import { Calendar, Clock, Globe, Lock, MapPin } from "lucide-react";
-import { useNavigate } from "react-router";
 
 export default function EventCard({ event }: { event: Event }) {
     const navigate = useNavigate();

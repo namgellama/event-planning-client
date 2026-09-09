@@ -1,3 +1,6 @@
+import { CalendarDays, LogOut, Tag as TagIcon } from "lucide-react";
+import { NavLink, useLocation, useNavigate } from "react-router";
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -12,9 +15,6 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import type { User } from "@/types/user";
-import { CalendarDays, LogOut, Tag as TagIcon } from "lucide-react";
-import { NavLink, useLocation, useNavigate } from "react-router";
-
 interface AppSidebarProps {
     user: User;
     onLogout: () => void | Promise<void>;

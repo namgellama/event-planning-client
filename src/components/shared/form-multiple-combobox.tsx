@@ -1,4 +1,11 @@
 import {
+    Controller,
+    type FieldPath,
+    type FieldValues,
+    type UseFormReturn,
+} from "react-hook-form";
+
+import {
     Combobox,
     ComboboxChip,
     ComboboxChips,
@@ -9,13 +16,7 @@ import {
     ComboboxList,
     ComboboxValue,
 } from "@/components/ui/combobox";
-import {
-    Controller,
-    type FieldPath,
-    type FieldValues,
-    type UseFormReturn,
-} from "react-hook-form";
-import { Field, FieldError, FieldLabel } from "../ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 
 type Option = {
     label: string;

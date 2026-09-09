@@ -1,3 +1,5 @@
+import type { Dispatch, SetStateAction } from "react";
+
 import {
     AlertDialog,
     AlertDialogAction,
@@ -8,8 +10,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import type { Dispatch, SetStateAction } from "react";
-import { Spinner } from "../ui/spinner";
+import { Spinner } from "@/components/ui/spinner";
 
 interface Props {
     isOpen: boolean;

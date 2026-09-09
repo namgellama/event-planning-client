@@ -1,4 +1,3 @@
-import { useFetchAllTags } from "@/apis/tag.api";
 import { Tags } from "lucide-react";
 import type {
     FieldValues,
@@ -7,17 +6,19 @@ import type {
     UseFormReturn,
 } from "react-hook-form";
 import { useNavigate } from "react-router";
+
+import { useFetchAllTags } from "@/apis/tag.api";
 import {
     FormDateTimePicker,
     FormInput,
     FormMarkdownEditor,
     FormMultipleCombobox,
     FormSelect,
-} from "../shared";
-import { Button } from "../ui/button";
-import { FieldGroup } from "../ui/field";
-import { Separator } from "../ui/separator";
-import { Spinner } from "../ui/spinner";
+} from "@/components/shared";
+import { Button } from "@/components/ui/button";
+import { FieldGroup } from "@/components/ui/field";
+import { Separator } from "@/components/ui/separator";
+import { Spinner } from "@/components/ui/spinner";
 
 interface EventFormFields {
     title?: unknown;

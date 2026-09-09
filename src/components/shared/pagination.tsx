@@ -1,5 +1,5 @@
-import { getPageItems } from "@/utils/get-page-items";
 import { createParser, parseAsInteger, useQueryStates } from "nuqs";
+
 import {
     PaginationContent,
     PaginationEllipsis,
@@ -8,7 +8,7 @@ import {
     PaginationNext,
     PaginationPrevious,
     Pagination as ShadcnPagination,
-} from "../ui/pagination";
+} from "@/components/ui/pagination";
 import {
     Select,
     SelectContent,
@@ -16,7 +16,8 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "../ui/select";
+} from "@/components/ui/select";
+import { getPageItems } from "@/utils/get-page-items";
 
 const rows = [10, 25, 50, 100];
 
@@ -69,7 +70,7 @@ const Pagination = ({ totalPages }: Props) => {
             {/* Rows per page */}
             <div className="flex items-center gap-2">
                 <Select value={String(limit)} onValueChange={handleLimitChange}>
-                    <SelectTrigger className="w-20">
+                    <SelectTrigger className="w-20 bg-white">
                         <SelectValue />
                     </SelectTrigger>
 
@@ -88,7 +89,7 @@ const Pagination = ({ totalPages }: Props) => {
             {/* Pagination */}
             <ShadcnPagination>
                 <PaginationContent>
-                    <PaginationItem>
+                    <PaginationItem className="text-black">
                         <PaginationPrevious
                             href="#"
                             onClick={(event) => {
@@ -118,6 +119,11 @@ const Pagination = ({ totalPages }: Props) => {
                                 <PaginationLink
                                     href="#"
                                     isActive={item === page}
+                                    className={
+                                        item === page
+                                            ? "bg-white border-2 hover:bg-white"
+                                            : "hover:bg-gray-50"
+                                    }
                                     onClick={(event) => {
                                         event.preventDefault();
                                         handlePageChange(item);

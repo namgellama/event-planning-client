@@ -1,7 +1,8 @@
-import type { EventSortBy } from "@/apis/event.api";
-import type { SortOrder } from "@/types/request";
 import { ArrowDownAZ, ArrowUpAZ } from "lucide-react";
 import { useQueryStates } from "nuqs";
+
+import type { EventSortBy } from "@/apis/event.api";
+import type { SortOrder } from "@/types/request";
 import { Button } from "../ui/button";
 import {
     Select,
@@ -18,7 +19,7 @@ const sortByItems = [
     { label: "Date", value: "date" },
 ] as const;
 
-const EventSorting = () => {
+const EventSort = () => {
     const [{ sortBy, sortOrder }, setQuery] = useQueryStates(queryState);
 
     const handleSortBy = (value: string | null) => {
@@ -64,4 +65,4 @@ const EventSorting = () => {
     );
 };
 
-export default EventSorting;
+export default EventSort;

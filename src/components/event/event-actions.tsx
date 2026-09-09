@@ -1,4 +1,9 @@
+import { Edit, EllipsisVertical, Trash } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+
 import { useDeleteEvent } from "@/apis/event.api";
+import { DeleteAlertDialog } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -8,10 +13,6 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { Event } from "@/types/event";
-import { Edit, EllipsisVertical, Trash } from "lucide-react";
-import { useState } from "react";
-import { useNavigate } from "react-router";
-import { DeleteAlertDialog } from "../shared";
 
 const EventActions = ({ event }: { event: Event }) => {
     const navigate = useNavigate();

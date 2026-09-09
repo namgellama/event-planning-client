@@ -1,3 +1,8 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import type z from "zod";
+
 import { useCreateEvent } from "@/apis/event.api";
 import { EventForm } from "@/components/event";
 import EventFormLayout from "@/layouts/EventFormLayout";
@@ -5,10 +10,6 @@ import {
     createEventSchema,
     type CreateEventInput,
 } from "@/validations/event.validation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
-import type z from "zod";
 
 const NewEventPage = () => {
     const navigate = useNavigate();

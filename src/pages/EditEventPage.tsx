@@ -1,3 +1,7 @@
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { useFetchEvent, useUpdatevent } from "@/apis/event.api";
 import { EventForm } from "@/components/event";
 import { CenteredSpinner, ErrorState } from "@/components/shared";
@@ -7,9 +11,6 @@ import {
     updateEventSchema,
     type UpdateEventInput,
 } from "@/validations/event.validation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router";
 
 const EditEventPage = () => {
     const { id } = useParams();

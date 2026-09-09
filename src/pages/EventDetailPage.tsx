@@ -1,3 +1,6 @@
+import { CalendarDays, Clock, Globe2, Lock, MapPin } from "lucide-react";
+import { useParams } from "react-router";
+
 import { useFetchEvent } from "@/apis/event.api";
 import { EventActions } from "@/components/event";
 import { CenteredSpinner, ErrorState, Markdown } from "@/components/shared";
@@ -5,8 +8,6 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import type { Event } from "@/types/event";
 import { formatDate } from "@/utils/format-date";
-import { CalendarDays, Clock, Globe2, Lock, MapPin } from "lucide-react";
-import { useParams } from "react-router";
 
 const EventDetailPage = () => {
     const { id } = useParams();

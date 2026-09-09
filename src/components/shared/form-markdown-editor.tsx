@@ -5,7 +5,8 @@ import {
     type FieldValues,
     type UseFormReturn,
 } from "react-hook-form";
-import { Field, FieldError, FieldLabel } from "../ui/field";
+
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 
 interface Props<T extends FieldValues> {
     form: UseFormReturn<T, any, any>;
