@@ -1,4 +1,5 @@
 import { useFetchAllEvents, type EventType } from "@/apis/event.api";
+import { useFetchAllTags } from "@/apis/tag.api";
 import {
     EmptyState,
     ErrorState,
@@ -9,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useDebounce } from "@/hooks/useDebounce";
 import { CalendarX, Plus } from "lucide-react";
 import {
+    parseAsArrayOf,
     parseAsInteger,
     parseAsString,
     parseAsStringEnum,
@@ -16,13 +18,14 @@ import {
 } from "nuqs";
 import { useNavigate } from "react-router";
 import { Button } from "../ui/button";
+import { MultiSelect } from "../ui/multi-select";
 import EventCard from "./event-card";
 import EventTabs from "./event-tabs";
 
 const EventList = () => {
     const navigate = useNavigate();
 
-    const [{ page, limit, type, search }, setQuery] = useQueryStates({
+    const [{ page, limit, type, search, tags }, setQuery] = useQueryStates({
         page: parseAsInteger.withDefault(1),
         limit: parseAsInteger.withDefault(10),
         type: parseAsStringEnum<EventType>([
@@ -31,7 +34,9 @@ const EventList = () => {
             "private",
         ]).withDefault("all"),
         search: parseAsString.withDefault(""),
+        tags: parseAsArrayOf(parseAsString).withDefault([]),
     });
+    const { tags: tagsData, isLoading: isTagsLoading } = useFetchAllTags();
 
     const debouncedSearch = useDebounce(search);
 
@@ -40,6 +45,7 @@ const EventList = () => {
         limit,
         type,
         search: debouncedSearch,
+        tags,
     });
 
     if (isLoading && !events) {
@@ -76,24 +82,48 @@ const EventList = () => {
             </div>
 
             <div className="flex items-end justify-between">
-                <SearchInput
-                    value={search}
-                    onChange={(e) =>
-                        setQuery({
-                            search: e.target.value,
-                            page: 1,
-                        })
-                    }
-                />
+                <div className="w-fit flex items-center gap-4">
+                    <SearchInput
+                        value={search}
+                        onChange={(e) =>
+                            setQuery({
+                                search: e.target.value,
+                                page: 1,
+                            })
+                        }
+                        className="min-w-md h-10"
+                    />
+                </div>
 
                 {events && events.pagination.total > 0 && (
                     <p className="italic text-gray-400">
                         {events.pagination.total}{" "}
-                        {events.pagination.total > 1 ? "results" : "result"}
+                        {events.pagination.total > 1 ? "results" : "result"}{" "}
                         found
                     </p>
                 )}
             </div>
+
+            {isTagsLoading ? (
+                <Skeleton className="w-md h-10" />
+            ) : (
+                tagsData && (
+                    <MultiSelect
+                        defaultValue={tags}
+                        options={
+                            tagsData.items.map((item) => ({
+                                label: item.title,
+                                value: item.id,
+                            })) ?? []
+                        }
+                        onValueChange={(value) => {
+                            setQuery({ tags: value });
+                        }}
+                        placeholder="Filter by tags"
+                        className="w-md!"
+                    />
+                )
+            )}
 
             {events?.pagination.total === 0 ? (
                 <EmptyState

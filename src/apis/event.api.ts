@@ -16,6 +16,7 @@ export type FetchAllEventsParams = {
     limit: number;
     type: EventType;
     search: string;
+    tags: string[];
 };
 
 export const useFetchAllEvents = ({
@@ -23,6 +24,7 @@ export const useFetchAllEvents = ({
     limit,
     type,
     search,
+    tags,
 }: FetchAllEventsParams) => {
     const fetchAllEvents = async () => {
         const response = await api.get<ApiResponse<PaginatedResponse<Event>>>(
@@ -33,6 +35,7 @@ export const useFetchAllEvents = ({
                     limit,
                     type: type === "all" ? undefined : type,
                     search: search?.trim() || undefined,
+                    tags: tags.length > 0 ? tags.join(",") : undefined,
                 },
             },
         );
@@ -50,7 +53,7 @@ export const useFetchAllEvents = ({
         PaginatedResponse<Event>
     >({
         queryFn: fetchAllEvents,
-        queryKey: ["events", page, limit, type, search],
+        queryKey: ["events", page, limit, type, search, tags],
         select: ({ data }) => data,
     });
 

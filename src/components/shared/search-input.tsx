@@ -1,3 +1,4 @@
+import { cn } from "cn";
 import { Search } from "lucide-react";
 import type { ChangeEvent } from "react";
 import {
@@ -10,11 +11,17 @@ interface Props {
     placeholder?: string;
     value: string;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    className?: string;
 }
 
-const SearchInput = ({ placeholder = "Search...", value, onChange }: Props) => {
+const SearchInput = ({
+    placeholder = "Search...",
+    value,
+    onChange,
+    className,
+}: Props) => {
     return (
-        <InputGroup className="max-w-xs">
+        <InputGroup className={cn("w-full", className)}>
             <InputGroupInput
                 placeholder={placeholder}
                 value={value}
