@@ -7,7 +7,7 @@ import { eventQueryState } from "./event-list-content";
 
 const EventTagsFilter = () => {
     const [{ tags }, setQuery] = useQueryStates(eventQueryState);
-    const { tags: tagsData, isLoading } = useFetchAllTags({});
+    const { tags: tagsData, isLoading } = useFetchAllTags({ limit: 100 });
 
     if (isLoading) return <Skeleton className="w-xs h-10" />;
 

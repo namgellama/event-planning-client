@@ -52,7 +52,7 @@ const EventForm = <
     isLoading,
     buttonText,
 }: Props<TFieldValues, TContext, TTransformedValues>) => {
-    const { tags } = useFetchAllTags({});
+    const { tags } = useFetchAllTags({ limit: 100 });
     const navigate = useNavigate();
 
     const data =
