@@ -35,7 +35,7 @@ const TagListHeader = () => {
             <CardContent className="flex flex-col gap-4">
                 <Button
                     size="lg"
-                    className="px-4 cursor-pointer self-end"
+                    className="px-4 self-end"
                     onClick={() => setIsOpen(true)}
                 >
                     <Plus /> Create New

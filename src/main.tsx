@@ -10,6 +10,7 @@ import { Toaster } from "sonner";
 import App from "./App";
 import { AuthProvider } from "./contexts/AuthContext";
 import "./index.css";
+import ScrollToTop from "./ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -17,6 +18,7 @@ createRoot(document.getElementById("root")!).render(
     <StrictMode>
         <QueryClientProvider client={queryClient}>
             <BrowserRouter>
+                <ScrollToTop />
                 <NuqsAdapter>
                     <AuthProvider>
                         <TooltipProvider>

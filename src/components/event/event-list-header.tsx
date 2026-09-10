@@ -6,6 +6,7 @@ import type { EventSortBy } from "@/apis/event.api";
 import { SearchInput, SortControls } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useAuth } from "@/contexts/AuthContext";
 import type { SortOrder } from "@/types/request";
 import { EventTagsFilter, EventTypeFilter } from ".";
 import { eventQueryState } from "./event-list-content";
@@ -17,6 +18,7 @@ const sortByItems = [
 ];
 
 const EventListHeader = () => {
+    const { user } = useAuth();
     const [{ search, sortBy, sortOrder }, setQuery] =
         useQueryStates(eventQueryState);
     const navigate = useNavigate();
@@ -36,13 +38,15 @@ const EventListHeader = () => {
             <CardContent className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                     <EventTypeFilter />
-                    <Button
-                        size="lg"
-                        className="px-4 cursor-pointer"
-                        onClick={() => navigate("/admin/events/new")}
-                    >
-                        <Plus /> Create New
-                    </Button>
+                    {user?.role === "admin" && (
+                        <Button
+                            size="lg"
+                            className="px-4"
+                            onClick={() => navigate("/admin/events/new")}
+                        >
+                            <Plus /> Create New
+                        </Button>
+                    )}
                 </div>
                 <div className="flex justify-between gap-4">
                     <SearchInput
@@ -54,7 +58,7 @@ const EventListHeader = () => {
                             })
                         }
                         className="flex-1 w-full h-10"
-                        onReset={() => setQuery({ search: "" })}
+                        onReset={() => setQuery({ search: "", page: 1 })}
                     />
                     <EventTagsFilter />
                     <SortControls

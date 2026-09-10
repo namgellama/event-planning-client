@@ -24,7 +24,7 @@ const EventTagsFilter = () => {
                 })) ?? []
             }
             onValueChange={(value) => {
-                setQuery({ tags: value });
+                setQuery({ tags: value, page: 1 });
             }}
             placeholder="Filter by tags"
             className="flex-1 h-10"

@@ -27,7 +27,7 @@ const EditDeleteActions = ({ onEdit, onDelete, isLoading }: Props) => {
                     render={
                         <Button
                             variant="ghost"
-                            className="cursor-pointer rounded-full hover:bg-inherit"
+                            className="rounded-full hover:bg-inherit"
                         />
                     }
                 >

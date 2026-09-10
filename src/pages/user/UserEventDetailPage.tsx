@@ -9,7 +9,7 @@ import {
 import { CenteredSpinner, ErrorState } from "@/components/shared";
 import { Separator } from "@/components/ui/separator";
 
-const EventDetailPage = () => {
+const UserEventDetailPage = () => {
     const { id } = useParams();
 
     const { event, isLoading, error, refetch } = useFetchEvent(id);
@@ -51,4 +51,4 @@ const EventDetailPage = () => {
     );
 };
 
-export default EventDetailPage;
+export default UserEventDetailPage;
