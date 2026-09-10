@@ -65,7 +65,7 @@ const EventHeader = ({ event }: { event: Event }) => {
 
     const onDelete = async () => {
         await deleteEventMutation(event.id);
-        navigate("/events");
+        navigate("/admin/events");
     };
 
     return (
@@ -93,7 +93,7 @@ const EventHeader = ({ event }: { event: Event }) => {
             </div>
 
             <EditDeleteActions
-                onEdit={() => navigate(`/events/${event.id}/edit`)}
+                onEdit={() => navigate(`/admin/events/${event.id}/edit`)}
                 onDelete={onDelete}
                 isLoading={isLoading}
             />

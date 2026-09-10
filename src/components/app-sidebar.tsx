@@ -22,8 +22,8 @@ interface AppSidebarProps {
 }
 
 const navItems = [
-    { label: "Events", to: "/events", icon: CalendarDays },
-    { label: "Tags", to: "/tags", icon: TagIcon },
+    { label: "Events", to: "/admin/events", icon: CalendarDays },
+    { label: "Tags", to: "/admin/tags", icon: TagIcon },
 ];
 
 function initials(name: string) {

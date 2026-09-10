@@ -39,7 +39,7 @@ const EventListHeader = () => {
                     <Button
                         size="lg"
                         className="px-4 cursor-pointer"
-                        onClick={() => navigate("/events/new")}
+                        onClick={() => navigate("/admin/events/new")}
                     >
                         <Plus /> Create New
                     </Button>

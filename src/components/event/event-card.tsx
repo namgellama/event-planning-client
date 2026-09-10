@@ -28,7 +28,7 @@ export default function EventCard({ event }: { event: Event }) {
     return (
         <Card
             className="w-full max-w-md h-47 gap-3 flex flex-col cursor-pointer"
-            onClick={() => navigate(`/events/${event.id}`)}
+            onClick={() => navigate(`/admin/events/${event.id}`)}
         >
             <CardHeader className="flex flex-row items-start justify-between gap-3 space-y-0">
                 <div className="w-full space-y-1.5">

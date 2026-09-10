@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router";
 
 import { CenteredSpinner } from "./components/shared";
+import AdminRoute from "./layouts/AdminRoute";
 import AppLayout from "./layouts/AppLayout";
 import ProtectedRoute from "./layouts/ProtectedRoute";
 
@@ -22,18 +23,26 @@ function App() {
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route element={<ProtectedRoute />}>
-                    <Route element={<AppLayout />}>
-                        <Route path="/events" element={<EventsPage />} />
-                        <Route
-                            path="/events/:id"
-                            element={<EventDetailPage />}
-                        />
-                        <Route path="/events/new" element={<NewEventPage />} />
-                        <Route
-                            path="/events/:id/edit"
-                            element={<EditEventPage />}
-                        />
-                        <Route path="/tags" element={<TagsPage />} />
+                    <Route element={<AdminRoute />}>
+                        <Route element={<AppLayout />}>
+                            <Route
+                                path="/admin/events"
+                                element={<EventsPage />}
+                            />
+                            <Route
+                                path="/admin/events/:id"
+                                element={<EventDetailPage />}
+                            />
+                            <Route
+                                path="/admin/events/new"
+                                element={<NewEventPage />}
+                            />
+                            <Route
+                                path="/admin/events/:id/edit"
+                                element={<EditEventPage />}
+                            />
+                            <Route path="/admin/tags" element={<TagsPage />} />
+                        </Route>
                     </Route>
                 </Route>
             </Routes>
