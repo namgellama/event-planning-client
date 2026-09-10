@@ -1,5 +1,12 @@
-import { useFetchAllTags } from "@/apis/tag.api";
-import { EditDeleteActions, ErrorState } from "@/components/shared";
+import {
+    parseAsInteger,
+    parseAsString,
+    parseAsStringEnum,
+    useQueryStates,
+} from "nuqs";
+
+import { useFetchAllTags, type TagSortBy } from "@/apis/tag.api";
+import { EditDeleteActions, ErrorState, Pagination } from "@/components/shared";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -10,17 +17,37 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import type { SortOrder } from "@/types/request";
 import { formatDate } from "@/utils/format-date";
 
+export const queryState = {
+    page: parseAsInteger.withDefault(1),
+    limit: parseAsInteger.withDefault(10),
+    search: parseAsString.withDefault(""),
+    sortBy: parseAsStringEnum<TagSortBy>(["createdAt", "title"]).withDefault(
+        "createdAt",
+    ),
+    sortOrder: parseAsStringEnum<SortOrder>(["asc", "desc"]).withDefault(
+        "desc",
+    ),
+};
+
 const TagListContent = () => {
-    const { tags, isLoading, error, refetch } = useFetchAllTags();
+    const [{ page, limit, search, sortBy, sortOrder }] =
+        useQueryStates(queryState);
+
+    const { tags, isLoading, error, refetch } = useFetchAllTags({
+        page,
+        limit,
+        search,
+        sortBy,
+        sortOrder,
+    });
 
     if (isLoading && !tags) {
         return (
-            <div className="w-full grid grid-cols-3 gap-6">
-                {Array.from({ length: 8 }).map((_, i) => (
-                    <Skeleton key={i} className="w-full h-47 bg-gray-200" />
-                ))}
+            <div className="space-y-5 max-w-4xl mx-auto">
+                <Skeleton className="h-150 bg-gray-200" />
             </div>
         );
     }
@@ -75,6 +102,7 @@ const TagListContent = () => {
                     </Table>
                 </CardContent>
             </Card>
+            {tags && <Pagination totalPages={tags.pagination.totalPages} />}
         </div>
     );
 };

@@ -1,13 +1,37 @@
+import { useQuery } from "@tanstack/react-query";
+
 import { type PaginatedResponse } from "@/types/pagination";
+import type { ListQueryParams } from "@/types/request";
 import type { ApiResponse } from "@/types/response";
 import type { Tag } from "@/types/tag";
-import { useQuery } from "@tanstack/react-query";
 import api, { type ApiError } from ".";
 
-export const useFetchAllTags = () => {
+export type TagSortBy = "createdAt" | "title";
+
+export type TagListQueryParams = ListQueryParams & {
+    sortBy: TagSortBy;
+};
+
+export const useFetchAllTags = ({
+    page,
+    limit,
+    search,
+    sortBy,
+    sortOrder,
+}: TagListQueryParams) => {
     const fetchAllTags = async () => {
-        const response =
-            await api.get<ApiResponse<PaginatedResponse<Tag>>>("/tags");
+        const response = await api.get<ApiResponse<PaginatedResponse<Tag>>>(
+            "/tags",
+            {
+                params: {
+                    page,
+                    limit,
+                    search: search?.trim() || undefined,
+                    sortBy,
+                    sortOrder,
+                },
+            },
+        );
         return response.data;
     };
 
@@ -22,7 +46,7 @@ export const useFetchAllTags = () => {
         PaginatedResponse<Tag>
     >({
         queryFn: fetchAllTags,
-        queryKey: ["tags"],
+        queryKey: ["tags", page, limit, search, sortBy, sortOrder],
         select: ({ data }) => data,
     });
 
