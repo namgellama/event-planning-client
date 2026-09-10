@@ -67,7 +67,6 @@ export default function AppSidebar({ user }: AppSidebarProps) {
                                     >
                                         <SidebarMenuButton
                                             isActive={isActive}
-                                            className="cursor-pointer"
                                             render={
                                                 <Link
                                                     to={item.to}

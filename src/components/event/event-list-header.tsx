@@ -41,7 +41,7 @@ const EventListHeader = () => {
                     {user?.role === "admin" && (
                         <Button
                             size="lg"
-                            className="px-4 cursor-pointer"
+                            className="px-4"
                             onClick={() => navigate("/admin/events/new")}
                         >
                             <Plus /> Create New
