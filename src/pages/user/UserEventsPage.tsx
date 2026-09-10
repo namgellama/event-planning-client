@@ -1,6 +1,6 @@
-import { EventListContent, EventListHeader } from ".";
+import { EventListContent, EventListHeader } from "@/components/event";
 
-const EventList = () => {
+const UserEventsPage = () => {
     return (
         <div className="space-y-5">
             <EventListHeader />
@@ -9,4 +9,4 @@ const EventList = () => {
     );
 };
 
-export default EventList;
+export default UserEventsPage;

@@ -9,8 +9,11 @@ import {
     CardHeader,
 } from "@/components/ui/card";
 import type { Event } from "@/types/event";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function EventCard({ event }: { event: Event }) {
+    const { user } = useAuth();
+
     const navigate = useNavigate();
 
     const d = new Date(event.date);
@@ -28,7 +31,11 @@ export default function EventCard({ event }: { event: Event }) {
     return (
         <Card
             className="w-full max-w-md h-47 gap-3 flex flex-col cursor-pointer"
-            onClick={() => navigate(`/admin/events/${event.id}`)}
+            onClick={() =>
+                user?.role === "admin"
+                    ? navigate(`/admin/events/${event.id}`)
+                    : navigate(`/events/${event.id}`)
+            }
         >
             <CardHeader className="flex flex-row items-start justify-between gap-3 space-y-0">
                 <div className="w-full space-y-1.5">

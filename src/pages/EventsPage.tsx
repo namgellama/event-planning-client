@@ -1,9 +1,10 @@
-import { EventList } from "@/components/event";
+import { EventListContent, EventListHeader } from "@/components/event";
 
 const EventsPage = () => {
     return (
-        <div>
-            <EventList />
+        <div className="space-y-5">
+            <EventListHeader />
+            <EventListContent />
         </div>
     );
 };
