@@ -13,6 +13,7 @@ import { eventQueryState } from "./event-list-content";
 const sortByItems = [
     { label: "Created Date", value: "createdAt" },
     { label: "Date", value: "date" },
+    { label: "Title", value: "title" },
 ];
 
 const EventListHeader = () => {
@@ -22,12 +23,12 @@ const EventListHeader = () => {
 
     const handleSortBy = (value: string | null) => {
         if (!value) return;
-        setQuery({ sortBy: value as EventSortBy });
+        setQuery({ sortBy: value as EventSortBy, page: 1 });
     };
 
     const handleSortOrder = () => {
         const value: SortOrder = sortOrder === "asc" ? "desc" : "asc";
-        setQuery({ sortOrder: value });
+        setQuery({ sortOrder: value, page: 1 });
     };
 
     return (

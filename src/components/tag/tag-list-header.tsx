@@ -22,12 +22,12 @@ const TagListHeader = () => {
 
     const handleSortBy = (value: string | null) => {
         if (!value) return;
-        setQuery({ sortBy: value as TagSortBy });
+        setQuery({ sortBy: value as TagSortBy, page: 1 });
     };
 
     const handleSortOrder = () => {
         const value: SortOrder = sortOrder === "asc" ? "desc" : "asc";
-        setQuery({ sortOrder: value });
+        setQuery({ sortOrder: value, page: 1 });
     };
 
     return (
