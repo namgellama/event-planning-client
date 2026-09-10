@@ -73,7 +73,7 @@ export const useFetchAllEvents = ({
     return { events, isLoading, error, refetch };
 };
 
-export const useFetchEvent = (eventId: string) => {
+export const useFetchEvent = (eventId: string | undefined) => {
     const fetchEvent = async () => {
         const response = await api.get<ApiResponse<Event>>(
             `/events/${eventId}`,

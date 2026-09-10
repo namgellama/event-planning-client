@@ -6,7 +6,7 @@ import {
 } from "nuqs";
 import { useState } from "react";
 
-import { useFetchAllTags, type TagSortBy } from "@/apis/tag.api";
+import { useDeleteTag, useFetchAllTags, type TagSortBy } from "@/apis/tag.api";
 import { EditDeleteActions, ErrorState, Pagination } from "@/components/shared";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -48,6 +48,7 @@ const TagListContent = () => {
         sortBy,
         sortOrder,
     });
+    const { deleteTagMutation, isLoading: isDeleteLoading } = useDeleteTag();
 
     if (isLoading && !tags) {
         return <Skeleton className="h-150 bg-gray-200" />;
@@ -95,8 +96,12 @@ const TagListContent = () => {
                                                     setIsOpen(true);
                                                     setTagId(tag.id);
                                                 }}
-                                                onDelete={() => {}}
-                                                isLoading={false}
+                                                onDelete={async () => {
+                                                    await deleteTagMutation(
+                                                        tag.id,
+                                                    );
+                                                }}
+                                                isLoading={isDeleteLoading}
                                             />
                                         </TableCell>
                                     </TableRow>

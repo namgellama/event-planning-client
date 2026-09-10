@@ -135,3 +135,25 @@ export const useUpdateTag = () => {
 
     return { updateTagMutation, isLoading };
 };
+
+export const useDeleteTag = () => {
+    const queryClient = useQueryClient();
+
+    const deleteTag = async (tagId: string) => {
+        await api.delete(`/tags/${tagId}`);
+    };
+
+    const { mutateAsync: deleteTagMutation, isPending: isLoading } =
+        useMutation<void, ApiError, string>({
+            mutationFn: deleteTag,
+            onSuccess: () => {
+                toast.success("Tag deleted successfully");
+                queryClient.invalidateQueries({ queryKey: ["tags"] });
+            },
+            onError: (error) => {
+                handleApiError(error, "Unable to delete tag. Please try again");
+            },
+        });
+
+    return { deleteTagMutation, isLoading };
+};

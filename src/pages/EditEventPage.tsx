@@ -15,7 +15,7 @@ import {
 const EditEventPage = () => {
     const { id } = useParams();
 
-    const { event, isLoading, error, refetch } = useFetchEvent(id ?? "");
+    const { event, isLoading, error, refetch } = useFetchEvent(id);
 
     if (isLoading && !event) {
         return <CenteredSpinner />;
