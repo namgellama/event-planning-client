@@ -1,11 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EllipsisVertical } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router";
 
 import { useFetchEvent } from "@/apis/event.api";
-import { useCreateRsvp, useFetchMyRsvp } from "@/apis/rsvp.api";
+import { useCreateRsvp, useFetchMyRsvp, useUpdateRsvp } from "@/apis/rsvp.api";
 import { FormSelect } from "@/components/shared";
 import {
     AlertDialog,
@@ -20,6 +20,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import type { Rsvp } from "@/types/rsvp";
 import {
     createRsvpSchema,
     type CreateRsvpInput,
@@ -31,7 +32,7 @@ const data = [
     { label: "Maybe", value: "maybe" },
 ];
 
-const RsvpActions = () => {
+const EventRsvpActions = () => {
     const { id } = useParams();
     const { event } = useFetchEvent(id);
 
@@ -45,17 +46,33 @@ const RsvpActions = () => {
     });
 
     const { rsvp, isLoading: isRsvpLoading } = useFetchMyRsvp(event?.id);
-    const { createRsvpMutation, isLoading } = useCreateRsvp();
+    const { createRsvpMutation, isLoading: isCreateLoading } = useCreateRsvp();
+    const { updateRsvpMutation, isLoading: isUpdateLoading } = useUpdateRsvp();
+    const isSubmitting = isCreateLoading || isUpdateLoading;
+
+    useEffect(() => {
+        if (!rsvp) return;
+
+        form.reset({ status: rsvp.status });
+    }, [rsvp, form]);
 
     const onSubmit = async (data: CreateRsvpInput) => {
-        if (event) {
+        if (!event) return;
+
+        if (rsvp) {
+            await updateRsvpMutation({
+                eventId: event.id,
+                status: data.status,
+            });
+        } else {
             await createRsvpMutation({
                 eventId: event.id,
                 status: data.status,
             });
-            setIsOpen(false);
-            form.reset();
         }
+
+        setIsOpen(false);
+        form.reset();
     };
 
     return (
@@ -64,22 +81,7 @@ const RsvpActions = () => {
                 <Spinner />
             ) : rsvp ? (
                 <div className="flex items-center gap-2">
-                    <Badge
-                        variant="outline"
-                        className={
-                            rsvp.status === "yes"
-                                ? "border-green-500/30 bg-green-500/10 text-green-600 dark:text-green-400"
-                                : rsvp.status === "maybe"
-                                  ? "border-yellow-500/30 bg-yellow-500/10 text-yellow-600 dark:text-yellow-400"
-                                  : "border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400"
-                        }
-                    >
-                        {rsvp.status === "yes"
-                            ? "Going"
-                            : rsvp.status === "maybe"
-                              ? "Maybe"
-                              : "Not Going"}
-                    </Badge>
+                    <RsvpBadge rsvp={rsvp} />
                     <Button
                         variant="ghost"
                         size="icon"
@@ -90,21 +92,21 @@ const RsvpActions = () => {
                     </Button>
                 </div>
             ) : event?.type === "private" ? (
-                <Badge>Need Invitation</Badge>
+                <Badge variant="destructive">Invitation Required</Badge>
             ) : (
                 <Button className="px-4" onClick={() => setIsOpen(true)}>
                     Join
                 </Button>
             )}
+
             <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>
-                            Are you absolutely sure?
-                        </AlertDialogTitle>
+                        <AlertDialogTitle>RSVP to this event</AlertDialogTitle>
                         <AlertDialogDescription>
-                            This action cannot be undone. This will permanently
-                            delete your account from our servers.
+                            Let the organizer know whether you’re going, not
+                            going, or maybe attending. You can change your RSVP
+                            later.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
 
@@ -119,17 +121,17 @@ const RsvpActions = () => {
 
                     <AlertDialogFooter>
                         <AlertDialogCancel
-                            disabled={isLoading}
+                            disabled={isSubmitting}
                             onClick={() => form.reset()}
                         >
                             Cancel
                         </AlertDialogCancel>
                         <AlertDialogAction
-                            disabled={isLoading}
+                            disabled={isSubmitting}
                             type="submit"
                             form="form-rsvp"
                         >
-                            {isLoading ? <Spinner /> : "Continue"}
+                            {isSubmitting ? <Spinner /> : "Continue"}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
@@ -138,4 +140,22 @@ const RsvpActions = () => {
     );
 };
 
-export default RsvpActions;
+export default EventRsvpActions;
+
+const styles = {
+    yes: "border-green-500/30 bg-green-500/10 text-green-600 dark:text-green-400",
+    no: "border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400",
+    maybe: "border-yellow-500/30 bg-yellow-500/10 text-yellow-600 dark:text-yellow-400",
+};
+
+const RsvpBadge = ({ rsvp }: { rsvp: Rsvp }) => {
+    return (
+        <Badge className={styles[rsvp.status]}>
+            {rsvp.status === "yes"
+                ? "Going"
+                : rsvp.status === "maybe"
+                  ? "Maybe"
+                  : "Not Going"}
+        </Badge>
+    );
+};

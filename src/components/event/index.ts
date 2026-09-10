@@ -5,6 +5,6 @@ export { default as EventDetailHeader } from "./event-detail-header";
 export { default as EventForm } from "./event-form";
 export { default as EventListContent } from "./event-list-content";
 export { default as EventListHeader } from "./event-list-header";
+export { default as EventRsvpActions } from "./event-rsvp-actions";
 export { default as EventTagsFilter } from "./event-tags-filter";
 export { default as EventTypeFilter } from "./event-type-filter";
-export { default as RsvpActions } from "./rsvp-actions";

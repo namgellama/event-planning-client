@@ -6,7 +6,7 @@ import { EditDeleteActions } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import type { Event } from "@/types/event";
-import { RsvpActions } from ".";
+import { EventRsvpActions } from ".";
 
 const EventDetailHeader = ({ event }: { event: Event }) => {
     const { user } = useAuth();
@@ -51,7 +51,7 @@ const EventDetailHeader = ({ event }: { event: Event }) => {
                     isLoading={isLoading}
                 />
             ) : (
-                <RsvpActions />
+                <EventRsvpActions />
             )}
         </div>
     );

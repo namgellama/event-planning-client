@@ -69,3 +69,46 @@ export const useCreateRsvp = () => {
 
     return { createRsvpMutation, isLoading };
 };
+
+export const useUpdateRsvp = () => {
+    const queryClient = useQueryClient();
+
+    const updateRsvp = async ({
+        eventId,
+        status,
+    }: {
+        eventId: string;
+        status: RsvpStatus;
+    }) => {
+        const response = await api.patch<ApiResponse<Rsvp>>(
+            `/events/${eventId}/rsvps`,
+            { status },
+        );
+        return response.data;
+    };
+
+    const { mutateAsync: updateRsvpMutation, isPending: isLoading } =
+        useMutation<
+            ApiResponse<Rsvp>,
+            ApiError,
+            { eventId: string; status: RsvpStatus }
+        >({
+            mutationFn: updateRsvp,
+            onSuccess: ({ message, data }) => {
+                toast.success(message ?? "Rsvp updated successfully");
+                queryClient.setQueryData(
+                    ["rsvps", data.eventId, data.userId],
+                    data,
+                );
+                queryClient.invalidateQueries({ queryKey: ["rsvps"] });
+            },
+            onError: (error) => {
+                handleApiError(
+                    error,
+                    "Unable to update rsvp. Please try again",
+                );
+            },
+        });
+
+    return { updateRsvpMutation, isLoading };
+};
