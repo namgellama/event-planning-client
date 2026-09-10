@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type { SortOrder } from "@/types/request";
 import { useState } from "react";
+import { TagFormDialog } from ".";
 import { tagQueryState } from "./tag-list-content";
 
 const sortByItems = [
@@ -60,6 +61,8 @@ const TagListHeader = () => {
                     />
                 </div>
             </CardContent>
+
+            <TagFormDialog isOpen={isOpen} setIsOpen={setIsOpen} />
         </Card>
     );
 };

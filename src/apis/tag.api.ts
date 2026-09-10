@@ -1,10 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import { type PaginatedResponse } from "@/types/pagination";
 import type { ListQueryParams } from "@/types/request";
 import type { ApiResponse } from "@/types/response";
 import type { Tag } from "@/types/tag";
-import api, { type ApiError } from ".";
+import type { CreateTagInput } from "@/validations/tag.validation";
+import api, { handleApiError, type ApiError } from ".";
 
 export type TagSortBy = "createdAt" | "title";
 
@@ -51,4 +53,27 @@ export const useFetchAllTags = ({
     });
 
     return { tags, isLoading, error, refetch };
+};
+
+export const useCreateTag = () => {
+    const queryClient = useQueryClient();
+
+    const createTag = async (data: CreateTagInput) => {
+        const response = await api.post<ApiResponse<Tag>>(`/tags`, data);
+        return response.data;
+    };
+
+    const { mutateAsync: createTagMutation, isPending: isLoading } =
+        useMutation<ApiResponse<Tag>, ApiError, CreateTagInput>({
+            mutationFn: createTag,
+            onSuccess: ({ message }) => {
+                toast.success(message ?? "Tag created successfully");
+                queryClient.invalidateQueries({ queryKey: ["tags"] });
+            },
+            onError: (error) => {
+                handleApiError(error, "Unable to create tag. Please try again");
+            },
+        });
+
+    return { createTagMutation, isLoading };
 };

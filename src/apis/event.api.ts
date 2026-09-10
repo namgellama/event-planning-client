@@ -100,7 +100,7 @@ export const useCreateEvent = () => {
     const queryClient = useQueryClient();
 
     const createEvent = async (data: CreateEventInput) => {
-        const response = await api.post<ApiResponse<Event>>(`/events/`, data);
+        const response = await api.post<ApiResponse<Event>>(`/events`, data);
         return response.data;
     };
 
