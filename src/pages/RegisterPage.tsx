@@ -22,7 +22,7 @@ import {
 } from "@/validations/auth.validation";
 
 const RegisterPage = () => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
     const navigate = useNavigate();
     const form = useForm<RegisterUserInput>({
         resolver: zodResolver(registerUserSchema),
@@ -36,9 +36,15 @@ const RegisterPage = () => {
     const { registerUserMutation, isLoading } = useRegisterUser();
 
     useEffect(() => {
-        if (isAuthenticated) navigate("/events");
-    }, [isAuthenticated, navigate]);
+        if (!isAuthenticated || !user) return;
 
+        if (user.role === "user") {
+            navigate("/events");
+            return;
+        }
+
+        if (user.role === "admin") navigate("/admin/events");
+    }, [isAuthenticated, navigate, user]);
     async function onSubmit(data: RegisterUserInput) {
         await registerUserMutation(data);
         form.reset();

@@ -34,7 +34,7 @@ const NewEventPage = () => {
 
     async function onSubmit(data: CreateEventInput) {
         const response = await createEventMutation(data);
-        navigate(`/events/${response.data.id}`);
+        navigate(`/admin/events/${response.data.id}`);
     }
 
     return (

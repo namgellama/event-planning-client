@@ -65,7 +65,7 @@ const EditEventForm = ({ event }: { event: Event }) => {
 
     async function onSubmit(data: UpdateEventInput) {
         const response = await updateEventMutation({ data, eventId: event.id });
-        navigate(`/events/${response.data.id}`);
+        navigate(`/admin/events/${response.data.id}`);
     }
 
     return (
