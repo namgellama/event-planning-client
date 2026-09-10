@@ -18,7 +18,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 import type { SortOrder } from "@/types/request";
 import { EventCard } from ".";
 
-export const queryState = {
+export const eventQueryState = {
     page: parseAsInteger.withDefault(1),
     limit: parseAsInteger.withDefault(10),
     type: parseAsStringEnum<EventType>([
@@ -38,7 +38,7 @@ export const queryState = {
 
 const EventListContent = () => {
     const [{ page, limit, type, search, tags, sortBy, sortOrder }] =
-        useQueryStates(queryState);
+        useQueryStates(eventQueryState);
 
     const debouncedSearch = useDebounce(search);
 
@@ -56,7 +56,7 @@ const EventListContent = () => {
         return (
             <div className="w-full grid grid-cols-3 gap-6">
                 {Array.from({ length: 8 }).map((_, i) => (
-                    <Skeleton key={i} className="w-full h-36" />
+                    <Skeleton key={i} className="w-full h-47 bg-gray-200" />
                 ))}
             </div>
         );

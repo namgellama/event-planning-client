@@ -1,9 +1,6 @@
 import { Edit, EllipsisVertical, Trash } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router";
 
-import { useDeleteEvent } from "@/apis/event.api";
-import { DeleteAlertDialog } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -12,18 +9,16 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { Event } from "@/types/event";
+import { DeleteAlertDialog } from ".";
 
-const EventActions = ({ event }: { event: Event }) => {
-    const navigate = useNavigate();
-    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-    const { deleteEventMutation, isLoading } = useDeleteEvent();
+interface Props {
+    onEdit: () => void;
+    onDelete: () => void;
+    isLoading: boolean;
+}
 
-    const onDelete = async () => {
-        await deleteEventMutation(event.id);
-        setIsDeleteOpen(false);
-        navigate("/events");
-    };
+const EditDeleteActions = ({ onEdit, onDelete, isLoading }: Props) => {
+    const [isOpen, setIsOpen] = useState(false);
 
     return (
         <>
@@ -42,12 +37,14 @@ const EventActions = ({ event }: { event: Event }) => {
                     <DropdownMenuGroup>
                         <DropdownMenuItem
                             className="flex items-center cursor-pointer"
-                            onClick={() => navigate(`/events/${event.id}/edit`)}
+                            onClick={onEdit}
                         >
                             <Edit className="size-3 text-blue-500" /> Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                            onClick={() => setIsDeleteOpen(true)}
+                            onClick={() => {
+                                setIsOpen(true);
+                            }}
                             className="flex items-center cursor-pointer"
                         >
                             <Trash className="size-3 text-destructive" /> Delete
@@ -57,8 +54,8 @@ const EventActions = ({ event }: { event: Event }) => {
             </DropdownMenu>
 
             <DeleteAlertDialog
-                isOpen={isDeleteOpen}
-                setIsOpen={setIsDeleteOpen}
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
                 isLoading={isLoading}
                 onDelete={onDelete}
             />
@@ -66,4 +63,4 @@ const EventActions = ({ event }: { event: Event }) => {
     );
 };
 
-export default EventActions;
+export default EditDeleteActions;

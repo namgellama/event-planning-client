@@ -2,7 +2,7 @@ import { useQueryStates } from "nuqs";
 
 import type { EventType } from "@/apis/event.api";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { queryState } from "./event-list-content";
+import { eventQueryState } from "./event-list-content";
 
 const tabs: { label: string; value: EventType }[] = [
     { label: "All", value: "all" },
@@ -11,7 +11,7 @@ const tabs: { label: string; value: EventType }[] = [
 ];
 
 const EventTypeFilter = () => {
-    const [{ type }, setQuery] = useQueryStates(queryState);
+    const [{ type }, setQuery] = useQueryStates(eventQueryState);
 
     return (
         <Tabs value={type} className="w-100">

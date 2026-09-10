@@ -11,22 +11,22 @@ import { toast } from "sonner";
 import api, { handleApiError, type ApiError } from ".";
 
 export type EventType = "all" | "public" | "private";
-export type EventSortBy = "createdAt" | "date";
+export type EventSortBy = "createdAt" | "date" | "title";
 
 export type EventListQueryParams = ListQueryParams & {
-    type: EventType;
-    tags: string[];
-    sortBy: EventSortBy;
+    type?: EventType;
+    tags?: string[];
+    sortBy?: EventSortBy;
 };
 
 export const useFetchAllEvents = ({
-    page,
-    limit,
+    page = 1,
+    limit = 10,
     type,
     search,
-    tags,
-    sortBy,
-    sortOrder,
+    tags = [],
+    sortBy = "createdAt",
+    sortOrder = "desc",
 }: EventListQueryParams) => {
     const fetchAllEvents = async () => {
         const response = await api.get<ApiResponse<PaginatedResponse<Event>>>(
@@ -73,7 +73,7 @@ export const useFetchAllEvents = ({
     return { events, isLoading, error, refetch };
 };
 
-export const useFetchEvent = (eventId: string) => {
+export const useFetchEvent = (eventId: string | undefined) => {
     const fetchEvent = async () => {
         const response = await api.get<ApiResponse<Event>>(
             `/events/${eventId}`,
@@ -100,7 +100,7 @@ export const useCreateEvent = () => {
     const queryClient = useQueryClient();
 
     const createEvent = async (data: CreateEventInput) => {
-        const response = await api.post<ApiResponse<Event>>(`/events/`, data);
+        const response = await api.post<ApiResponse<Event>>(`/events`, data);
         return response.data;
     };
 
@@ -122,7 +122,7 @@ export const useCreateEvent = () => {
     return { createEventMutation, isLoading };
 };
 
-export const useUpdatevent = () => {
+export const useUpdateEvent = () => {
     const queryClient = useQueryClient();
 
     const updateEvent = async ({

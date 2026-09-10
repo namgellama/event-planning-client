@@ -1,9 +1,13 @@
 import { CalendarDays, Clock, Globe2, Lock, MapPin } from "lucide-react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
-import { useFetchEvent } from "@/apis/event.api";
-import { EventActions } from "@/components/event";
-import { CenteredSpinner, ErrorState, Markdown } from "@/components/shared";
+import { useDeleteEvent, useFetchEvent } from "@/apis/event.api";
+import {
+    CenteredSpinner,
+    EditDeleteActions,
+    ErrorState,
+    Markdown,
+} from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import type { Event } from "@/types/event";
@@ -12,7 +16,7 @@ import { formatDate } from "@/utils/format-date";
 const EventDetailPage = () => {
     const { id } = useParams();
 
-    const { event, isLoading, error, refetch } = useFetchEvent(id ?? "");
+    const { event, isLoading, error, refetch } = useFetchEvent(id);
 
     if (isLoading && !event) {
         return <CenteredSpinner />;
@@ -54,7 +58,15 @@ const EventDetailPage = () => {
 export default EventDetailPage;
 
 const EventHeader = ({ event }: { event: Event }) => {
+    const navigate = useNavigate();
+    const { deleteEventMutation, isLoading } = useDeleteEvent();
+
     const isPublic = event.type === "public";
+
+    const onDelete = async () => {
+        await deleteEventMutation(event.id);
+        navigate("/events");
+    };
 
     return (
         <div className="flex items-end justify-between gap-4">
@@ -80,7 +92,11 @@ const EventHeader = ({ event }: { event: Event }) => {
                 </h1>
             </div>
 
-            <EventActions event={event} />
+            <EditDeleteActions
+                onEdit={() => navigate(`/events/${event.id}/edit`)}
+                onDelete={onDelete}
+                isLoading={isLoading}
+            />
         </div>
     );
 };
