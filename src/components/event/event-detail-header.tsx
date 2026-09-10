@@ -4,9 +4,12 @@ import { useNavigate } from "react-router";
 import { useDeleteEvent } from "@/apis/event.api";
 import { EditDeleteActions } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/contexts/AuthContext";
 import type { Event } from "@/types/event";
+import { RsvpActions } from ".";
 
 const EventDetailHeader = ({ event }: { event: Event }) => {
+    const { user } = useAuth();
     const navigate = useNavigate();
     const { deleteEventMutation, isLoading } = useDeleteEvent();
 
@@ -36,16 +39,20 @@ const EventDetailHeader = ({ event }: { event: Event }) => {
                     )}
                     {isPublic ? "Public event" : "Private event"}
                 </Badge>
-                <h1 className="w-full font-serif text-3xl leading-[1.05] tracking-tight text-[#1F2933]">
+                <h1 className="w-full font-serif text-3xl tracking-tight">
                     {event.title}
                 </h1>
             </div>
 
-            <EditDeleteActions
-                onEdit={() => navigate(`/admin/events/${event.id}/edit`)}
-                onDelete={onDelete}
-                isLoading={isLoading}
-            />
+            {user?.role === "admin" ? (
+                <EditDeleteActions
+                    onEdit={() => navigate(`/admin/events/${event.id}/edit`)}
+                    onDelete={onDelete}
+                    isLoading={isLoading}
+                />
+            ) : (
+                <RsvpActions />
+            )}
         </div>
     );
 };
