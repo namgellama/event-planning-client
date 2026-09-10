@@ -14,19 +14,19 @@ export type EventType = "all" | "public" | "private";
 export type EventSortBy = "createdAt" | "date";
 
 export type EventListQueryParams = ListQueryParams & {
-    type: EventType;
-    tags: string[];
-    sortBy: EventSortBy;
+    type?: EventType;
+    tags?: string[];
+    sortBy?: EventSortBy;
 };
 
 export const useFetchAllEvents = ({
-    page,
-    limit,
+    page = 1,
+    limit = 10,
     type,
     search,
-    tags,
-    sortBy,
-    sortOrder,
+    tags = [],
+    sortBy = "createdAt",
+    sortOrder = "desc",
 }: EventListQueryParams) => {
     const fetchAllEvents = async () => {
         const response = await api.get<ApiResponse<PaginatedResponse<Event>>>(
