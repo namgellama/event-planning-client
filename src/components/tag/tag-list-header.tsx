@@ -1,12 +1,12 @@
 import { Plus } from "lucide-react";
 import { useQueryStates } from "nuqs";
+import { useState } from "react";
 
 import type { TagSortBy } from "@/apis/tag.api";
 import { SearchInput, SortControls } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type { SortOrder } from "@/types/request";
-import { useState } from "react";
 import { TagFormDialog } from ".";
 import { tagQueryState } from "./tag-list-content";
 
@@ -62,7 +62,7 @@ const TagListHeader = () => {
                 </div>
             </CardContent>
 
-            <TagFormDialog isOpen={isOpen} setIsOpen={setIsOpen} />
+            {isOpen && <TagFormDialog isOpen={isOpen} setIsOpen={setIsOpen} />}
         </Card>
     );
 };

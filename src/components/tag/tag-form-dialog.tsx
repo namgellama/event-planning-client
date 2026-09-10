@@ -1,9 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Dispatch, SetStateAction } from "react";
+import { useEffect, type Dispatch, type SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 
-import { useCreateTag } from "@/apis/tag.api";
-import { FormInput } from "@/components/shared";
+import { useCreateTag, useFetchTag, useUpdateTag } from "@/apis/tag.api";
+import { CenteredSpinner, ErrorState, FormInput } from "@/components/shared";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -20,29 +20,81 @@ import {
 } from "@/validations/tag.validation";
 
 interface Props {
+    isEdit?: boolean;
     isOpen: boolean;
     setIsOpen: Dispatch<SetStateAction<boolean>>;
+    tagId?: string | null;
 }
 
-const TagFormDialog = ({ isOpen, setIsOpen }: Props) => {
+const TagFormDialog = ({ isEdit = false, isOpen, setIsOpen, tagId }: Props) => {
     const form = useForm<CreateTagInput>({
         resolver: zodResolver(createTagSchema),
         defaultValues: {
             title: "",
         },
     });
-    const { createTagMutation, isLoading } = useCreateTag();
+
+    const {
+        tag,
+        isLoading: isTagLoading,
+        error: tagError,
+        refetch,
+    } = useFetchTag(isEdit && tagId ? tagId : undefined);
+    const { createTagMutation, isLoading: isCreateLoading } = useCreateTag();
+    const { updateTagMutation, isLoading: isUpdateLoading } = useUpdateTag();
+
+    const isSubmitting = isCreateLoading || isUpdateLoading;
+
+    useEffect(() => {
+        if (!tag) return;
+
+        form.reset({
+            title: tag.title,
+        });
+    }, [tag, form]);
 
     const onSubmit = async (data: CreateTagInput) => {
-        await createTagMutation(data);
+        if (isEdit && tag) {
+            await updateTagMutation({ data, tagId: tag.id });
+        } else await createTagMutation(data);
         setIsOpen(false);
+        form.reset();
     };
 
+    if (isEdit && isTagLoading && !tag) {
+        return <CenteredSpinner />;
+    }
+
+    if (isEdit && tagError && !tag) {
+        return (
+            <ErrorState
+                title="Couldn't load tag"
+                error={tagError}
+                onRetry={refetch}
+                notFound={{
+                    title: "Tag not found",
+                    description: "This tag may have been deleted.",
+                }}
+            />
+        );
+    }
+
     return (
-        <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+        <AlertDialog
+            open={isOpen}
+            onOpenChange={(open) => {
+                if (!open) {
+                    form.reset();
+                }
+
+                setIsOpen(open);
+            }}
+        >
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Create New Tag</AlertDialogTitle>
+                    <AlertDialogTitle>
+                        {isEdit ? "Edit Tag" : "Create New Tag"}{" "}
+                    </AlertDialogTitle>
                 </AlertDialogHeader>
 
                 <form
@@ -54,20 +106,15 @@ const TagFormDialog = ({ isOpen, setIsOpen }: Props) => {
                 </form>
 
                 <AlertDialogFooter>
-                    <AlertDialogCancel
-                        disabled={isLoading}
-                        onClick={() => {
-                            form.reset();
-                        }}
-                    >
+                    <AlertDialogCancel disabled={isSubmitting}>
                         Cancel
                     </AlertDialogCancel>
                     <AlertDialogAction
                         type="submit"
                         form="form-tag"
-                        disabled={isLoading}
+                        disabled={isSubmitting}
                     >
-                        {isLoading ? <Spinner /> : "Submit"}
+                        {isSubmitting ? <Spinner /> : "Submit"}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

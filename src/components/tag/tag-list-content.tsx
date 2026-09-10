@@ -4,6 +4,7 @@ import {
     parseAsStringEnum,
     useQueryStates,
 } from "nuqs";
+import { useState } from "react";
 
 import { useFetchAllTags, type TagSortBy } from "@/apis/tag.api";
 import { EditDeleteActions, ErrorState, Pagination } from "@/components/shared";
@@ -19,6 +20,7 @@ import {
 } from "@/components/ui/table";
 import type { SortOrder } from "@/types/request";
 import { formatDate } from "@/utils/format-date";
+import { TagFormDialog } from ".";
 
 export const tagQueryState = {
     page: parseAsInteger.withDefault(1),
@@ -33,6 +35,9 @@ export const tagQueryState = {
 };
 
 const TagListContent = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [tagId, setTagId] = useState<string | null>(null);
+
     const [{ page, limit, search, sortBy, sortOrder }] =
         useQueryStates(tagQueryState);
 
@@ -86,7 +91,10 @@ const TagListContent = () => {
                                         <TableCell>{date.full}</TableCell>
                                         <TableCell className="text-right">
                                             <EditDeleteActions
-                                                onEdit={() => {}}
+                                                onEdit={() => {
+                                                    setIsOpen(true);
+                                                    setTagId(tag.id);
+                                                }}
                                                 onDelete={() => {}}
                                                 isLoading={false}
                                             />
@@ -99,6 +107,15 @@ const TagListContent = () => {
                 </CardContent>
             </Card>
             {tags && <Pagination totalPages={tags.pagination.totalPages} />}
+
+            {isOpen && (
+                <TagFormDialog
+                    tagId={tagId}
+                    isOpen={isOpen}
+                    setIsOpen={setIsOpen}
+                    isEdit={true}
+                />
+            )}
         </div>
     );
 };

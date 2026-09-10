@@ -122,7 +122,7 @@ export const useCreateEvent = () => {
     return { createEventMutation, isLoading };
 };
 
-export const useUpdatevent = () => {
+export const useUpdateEvent = () => {
     const queryClient = useQueryClient();
 
     const updateEvent = async ({

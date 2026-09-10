@@ -1,8 +1,8 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
-import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useFetchEvent, useUpdatevent } from "@/apis/event.api";
+import { useFetchEvent, useUpdateEvent } from "@/apis/event.api";
 import { EventForm } from "@/components/event";
 import { CenteredSpinner, ErrorState } from "@/components/shared";
 import EventFormLayout from "@/layouts/EventFormLayout";
@@ -58,7 +58,8 @@ const EditEventForm = ({ event }: { event: Event }) => {
         },
     });
 
-    const { updateEventMutation, isLoading: isUpdateLoading } = useUpdatevent();
+    const { updateEventMutation, isLoading: isUpdateLoading } =
+        useUpdateEvent();
 
     const navigate = useNavigate();
 

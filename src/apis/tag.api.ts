@@ -55,6 +55,27 @@ export const useFetchAllTags = ({
     return { tags, isLoading, error, refetch };
 };
 
+export const useFetchTag = (tagId: string | undefined) => {
+    const fetchTag = async () => {
+        const response = await api.get<ApiResponse<Tag>>(`/tags/${tagId}`);
+        return response.data;
+    };
+
+    const {
+        data: tag,
+        isLoading,
+        error,
+        refetch,
+    } = useQuery<ApiResponse<Tag>, ApiError, Tag>({
+        queryFn: fetchTag,
+        queryKey: ["tags", tagId],
+        select: ({ data }) => data,
+        enabled: !!tagId,
+    });
+
+    return { tag, isLoading, error, refetch };
+};
+
 export const useCreateTag = () => {
     const queryClient = useQueryClient();
 
@@ -76,4 +97,41 @@ export const useCreateTag = () => {
         });
 
     return { createTagMutation, isLoading };
+};
+
+export const useUpdateTag = () => {
+    const queryClient = useQueryClient();
+
+    const updateTag = async ({
+        data,
+        tagId,
+    }: {
+        data: CreateTagInput;
+        tagId: string;
+    }) => {
+        const response = await api.patch<ApiResponse<Tag>>(
+            `/tags/${tagId}`,
+            data,
+        );
+        return response.data;
+    };
+
+    const { mutateAsync: updateTagMutation, isPending: isLoading } =
+        useMutation<
+            ApiResponse<Tag>,
+            ApiError,
+            { data: CreateTagInput; tagId: string }
+        >({
+            mutationFn: updateTag,
+            onSuccess: ({ message, data }) => {
+                toast.success(message ?? "Tag updated successfully");
+                queryClient.setQueryData(["tags", data.id], data);
+                queryClient.invalidateQueries({ queryKey: ["tags"] });
+            },
+            onError: (error) => {
+                handleApiError(error, "Unable to update tag. Please try again");
+            },
+        });
+
+    return { updateTagMutation, isLoading };
 };
