@@ -18,6 +18,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { getPageItems } from "@/utils/get-page-items";
+import { useEffect } from "react";
 
 const rows = [10, 25, 50, 100];
 
@@ -46,6 +47,10 @@ const Pagination = ({ totalPages }: Props) => {
     const currentPage = Math.min(Math.max(page, 1), totalPages);
 
     const pageItems = getPageItems(currentPage, totalPages);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [page]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage < 1 || newPage > totalPages || newPage === currentPage) {
