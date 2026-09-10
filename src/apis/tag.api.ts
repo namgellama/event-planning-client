@@ -9,15 +9,15 @@ import api, { type ApiError } from ".";
 export type TagSortBy = "createdAt" | "title";
 
 export type TagListQueryParams = ListQueryParams & {
-    sortBy: TagSortBy;
+    sortBy?: TagSortBy;
 };
 
 export const useFetchAllTags = ({
-    page,
-    limit,
+    page = 1,
+    limit = 10,
     search,
-    sortBy,
-    sortOrder,
+    sortBy = "createdAt",
+    sortOrder = "desc",
 }: TagListQueryParams) => {
     const fetchAllTags = async () => {
         const response = await api.get<ApiResponse<PaginatedResponse<Tag>>>(

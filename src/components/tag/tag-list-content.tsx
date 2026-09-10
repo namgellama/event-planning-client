@@ -20,7 +20,7 @@ import {
 import type { SortOrder } from "@/types/request";
 import { formatDate } from "@/utils/format-date";
 
-export const queryState = {
+export const tagQueryState = {
     page: parseAsInteger.withDefault(1),
     limit: parseAsInteger.withDefault(10),
     search: parseAsString.withDefault(""),
@@ -34,7 +34,7 @@ export const queryState = {
 
 const TagListContent = () => {
     const [{ page, limit, search, sortBy, sortOrder }] =
-        useQueryStates(queryState);
+        useQueryStates(tagQueryState);
 
     const { tags, isLoading, error, refetch } = useFetchAllTags({
         page,
@@ -45,11 +45,7 @@ const TagListContent = () => {
     });
 
     if (isLoading && !tags) {
-        return (
-            <div className="space-y-5 max-w-4xl mx-auto">
-                <Skeleton className="h-150 bg-gray-200" />
-            </div>
-        );
+        return <Skeleton className="h-150 bg-gray-200" />;
     }
 
     if (error && !tags) {
@@ -63,7 +59,7 @@ const TagListContent = () => {
     }
 
     return (
-        <div className="space-y-5 max-w-4xl mx-auto">
+        <div className="space-y-5">
             <Card>
                 <CardContent>
                     <Table>
