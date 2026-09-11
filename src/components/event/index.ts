@@ -7,6 +7,7 @@ export { default as EventListContent } from "./event-list-content";
 export { default as EventListHeader } from "./event-list-header";
 export { default as EventRsvpActions } from "./event-rsvp-actions";
 export { default as EventRsvpBadge } from "./event-rsvp-badge";
+export { default as EventStatusBadge } from "./event-status-badge";
 export { default as EventTagBadge } from "./event-tag-badge";
 export { default as EventTagsFilter } from "./event-tags-filter";
 export { default as EventTypeBadge } from "./event-type-badge";

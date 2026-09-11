@@ -24,7 +24,7 @@ import {
     createRsvpSchema,
     type CreateRsvpInput,
 } from "@/validations/rsvp.validation";
-import { EventRsvpBadge } from ".";
+import { EventRsvpBadge, EventStatusBadge } from ".";
 
 const data = [
     { label: "Yes", value: "yes" },
@@ -82,31 +82,45 @@ const EventRsvpActions = () => {
               ? "Not Going"
               : "Maybe";
 
+    const isUpcoming = event?.status === "upcoming";
+
     return (
-        <div className="flex">
-            {isRsvpLoading ? (
-                <Spinner />
-            ) : rsvp ? (
-                <div className="flex items-center gap-2">
-                    <EventRsvpBadge status={rsvp.status}>
-                        {badgeText}
-                    </EventRsvpBadge>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="px-4"
-                        onClick={() => setIsOpen(true)}
-                    >
-                        <EllipsisVertical className="size-5" />
-                    </Button>
-                </div>
-            ) : event?.type === "private" ? (
-                <Badge variant="destructive">Invitation Required</Badge>
-            ) : (
-                <Button className="px-4" onClick={() => setIsOpen(true)}>
-                    Join
-                </Button>
-            )}
+        <>
+            <div className="flex items-center gap-3">
+                {event && <EventStatusBadge status={event.status} />}
+
+                {isRsvpLoading ? (
+                    <Spinner />
+                ) : rsvp ? (
+                    <div className="flex items-center gap-2">
+                        <EventRsvpBadge status={rsvp.status}>
+                            {badgeText}
+                        </EventRsvpBadge>
+                        {isUpcoming && (
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="px-4"
+                                onClick={() => setIsOpen(true)}
+                            >
+                                <EllipsisVertical className="size-5" />
+                            </Button>
+                        )}
+                    </div>
+                ) : (
+                    isUpcoming &&
+                    (event?.type === "private" ? (
+                        <Badge variant="destructive">Invitation Required</Badge>
+                    ) : (
+                        <Button
+                            className="px-4"
+                            onClick={() => setIsOpen(true)}
+                        >
+                            Join
+                        </Button>
+                    ))
+                )}
+            </div>
 
             <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
                 <AlertDialogContent>
@@ -145,7 +159,7 @@ const EventRsvpActions = () => {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </div>
+        </>
     );
 };
 

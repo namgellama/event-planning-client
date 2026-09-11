@@ -18,7 +18,7 @@ const EventDetailHeader = ({ event }: { event: EventItem }) => {
 
     return (
         <div className="flex items-end justify-between gap-4">
-            <div className="w-full">
+            <div className="w-full flex flex-col gap-4">
                 <EventTypeBadge
                     type={event.type}
                     label={
