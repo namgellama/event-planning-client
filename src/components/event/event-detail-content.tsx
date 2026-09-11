@@ -1,10 +1,9 @@
 import { CalendarDays, Clock, MapPin } from "lucide-react";
 
 import { Markdown } from "@/components/shared";
-import { Badge } from "@/components/ui/badge";
 import type { EventItem } from "@/types/event";
 import { formatDate } from "@/utils/format-date";
-import { EventRsvpBadge } from ".";
+import { EventRsvpBadge, EventTagBadge } from ".";
 
 const EventDetailContent = ({ event }: { event: EventItem }) => {
     const { day, month, full, time } = formatDate(event.date);
@@ -23,13 +22,7 @@ const EventDetailContent = ({ event }: { event: EventItem }) => {
                 {event.tags.length > 0 && (
                     <div className="mt-8 flex flex-wrap gap-2">
                         {event.tags.map((tag) => (
-                            <Badge
-                                key={tag.id}
-                                variant="secondary"
-                                className="font-normal text-slate-600"
-                            >
-                                {tag.title}
-                            </Badge>
+                            <EventTagBadge key={tag.id} title={tag.title} />
                         ))}
                     </div>
                 )}

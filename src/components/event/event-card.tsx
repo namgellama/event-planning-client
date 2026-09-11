@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router";
 
-import { Badge } from "@/components/ui/badge";
 import {
     Card,
     CardContent,
@@ -17,7 +16,7 @@ import {
 } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import type { EventListItem } from "@/types/event";
-import { EventRsvpBadge, EventTypeBadge } from ".";
+import { EventRsvpBadge, EventTagBadge, EventTypeBadge } from ".";
 
 export default function EventCard({ event }: { event: EventListItem }) {
     const { user } = useAuth();
@@ -86,13 +85,7 @@ export default function EventCard({ event }: { event: EventListItem }) {
                 {event.tags.length > 0 && (
                     <div className="flex gap-1.5 overflow-hidden">
                         {event.tags.slice(0, 4).map((tag) => (
-                            <Badge
-                                key={tag.id}
-                                variant="secondary"
-                                className="font-normal text-slate-600"
-                            >
-                                {tag.title}
-                            </Badge>
+                            <EventTagBadge key={tag.id} title={tag.title} />
                         ))}
                     </div>
                 )}
