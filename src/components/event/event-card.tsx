@@ -90,7 +90,7 @@ export default function EventCard({ event }: { event: EventListItem }) {
                     </div>
                 )}
 
-                <div>
+                <div className="w-full flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <EventRsvpBadge status="yes">
                             <UserRoundCheck className="size-4" />
@@ -105,6 +105,16 @@ export default function EventCard({ event }: { event: EventListItem }) {
                             {event.rsvp.yes}
                         </EventRsvpBadge>
                     </div>
+
+                    {event.myRsvp && (
+                        <EventRsvpBadge status={event.myRsvp}>
+                            {event.myRsvp === "yes"
+                                ? "Going"
+                                : event.myRsvp === "no"
+                                  ? "Not Going"
+                                  : "Tentative"}
+                        </EventRsvpBadge>
+                    )}
                 </div>
             </CardFooter>
         </Card>

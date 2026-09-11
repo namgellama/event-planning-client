@@ -15,16 +15,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import type { User } from "@/types/user";
-
-interface AppSidebarProps {
-    user: User;
-}
-
-const navItems = [
-    { label: "Events", to: "/admin/events", icon: CalendarDays },
-    { label: "Tags", to: "/admin/tags", icon: TagIcon },
-];
+import { useAuth } from "@/contexts/AuthContext";
 
 function initials(name: string) {
     return name
@@ -35,7 +26,8 @@ function initials(name: string) {
         .join("");
 }
 
-export default function AppSidebar({ user }: AppSidebarProps) {
+export default function AppSidebar() {
+    const { user } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
     const { logoutUserMutation, isLoading } = useLogoutUser();
@@ -44,6 +36,23 @@ export default function AppSidebar({ user }: AppSidebarProps) {
         await logoutUserMutation();
         navigate("/login");
     }
+
+    const navItems = [
+        {
+            label: "Events",
+            to: user?.role === "admin" ? "/admin/events" : "/events",
+            icon: CalendarDays,
+        },
+        ...(user?.role === "admin"
+            ? [
+                  {
+                      label: "Tags",
+                      to: "/admin/tags",
+                      icon: TagIcon,
+                  },
+              ]
+            : []),
+    ];
 
     return (
         <Sidebar className="font-sans">
@@ -92,15 +101,15 @@ export default function AppSidebar({ user }: AppSidebarProps) {
                 <div className="flex items-center gap-3 rounded-sm px-2 py-2">
                     <Avatar className="h-9 w-9">
                         <AvatarFallback className="bg-gray-300 text-sidebar-foreground text-xs">
-                            {initials(user.name)}
+                            {initials(user!.name)}
                         </AvatarFallback>
                     </Avatar>
                     <div className="min-w-0">
                         <p className="truncate text-sm font-medium text-sidebar-foreground">
-                            {user.name}
+                            {user!.name}
                         </p>
                         <p className="truncate text-xs text-sidebar-foreground/50">
-                            {user.email}
+                            {user!.email}
                         </p>
                     </div>
                 </div>

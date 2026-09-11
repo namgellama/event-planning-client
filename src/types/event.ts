@@ -23,6 +23,7 @@ export type EventItem = Event & {
 export type EventListItem = Event & {
     tags: TagItem[];
     rsvp: Record<RsvpStatus, number>;
+    myRsvp?: RsvpStatus | null;
 };
 
 export type EventWithTagIds = Event & {
