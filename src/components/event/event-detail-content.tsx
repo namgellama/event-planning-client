@@ -1,10 +1,10 @@
 import { CalendarDays, Clock, MapPin } from "lucide-react";
 
 import { Markdown } from "@/components/shared";
-import type { Event } from "@/types/event";
+import type { EventItem } from "@/types/event";
 import { formatDate } from "@/utils/format-date";
 
-const EventDetailContent = ({ event }: { event: Event }) => {
+const EventDetailContent = ({ event }: { event: EventItem }) => {
     const { day, month, full, time } = formatDate(event.date);
 
     return (

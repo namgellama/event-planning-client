@@ -9,9 +9,9 @@ import {
     CardHeader,
 } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
-import type { Event } from "@/types/event";
+import type { EventListItem } from "@/types/event";
 
-export default function EventCard({ event }: { event: Event }) {
+export default function EventCard({ event }: { event: EventListItem }) {
     const { user } = useAuth();
 
     const navigate = useNavigate();

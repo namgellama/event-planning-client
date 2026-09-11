@@ -5,10 +5,10 @@ import { useDeleteEvent } from "@/apis/event.api";
 import { EditDeleteActions } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
-import type { Event } from "@/types/event";
+import type { EventItem } from "@/types/event";
 import { EventRsvpActions } from ".";
 
-const EventDetailHeader = ({ event }: { event: Event }) => {
+const EventDetailHeader = ({ event }: { event: EventItem }) => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const { deleteEventMutation, isLoading } = useDeleteEvent();

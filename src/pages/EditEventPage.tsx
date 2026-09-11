@@ -6,7 +6,7 @@ import { useFetchEvent, useUpdateEvent } from "@/apis/event.api";
 import { EventForm } from "@/components/event";
 import { CenteredSpinner, ErrorState } from "@/components/shared";
 import EventFormLayout from "@/layouts/EventFormLayout";
-import type { Event } from "@/types/event";
+import type { EventItem } from "@/types/event";
 import {
     updateEventSchema,
     type UpdateEventInput,
@@ -45,7 +45,7 @@ const EditEventPage = () => {
 
 export default EditEventPage;
 
-const EditEventForm = ({ event }: { event: Event }) => {
+const EditEventForm = ({ event }: { event: EventItem }) => {
     const form = useForm<UpdateEventInput>({
         resolver: zodResolver(updateEventSchema),
         defaultValues: {
