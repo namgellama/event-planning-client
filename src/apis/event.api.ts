@@ -1,4 +1,4 @@
-import type { Event } from "@/types/event";
+import type { EventItem, EventListItem, EventWithTagIds } from "@/types/event";
 import type { PaginatedResponse } from "@/types/pagination";
 import type { ListQueryParams } from "@/types/request";
 import type { ApiResponse } from "@/types/response";
@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import api, { handleApiError, type ApiError } from ".";
 
 export type EventType = "all" | "public" | "private";
-export type EventSortBy = "createdAt" | "date" | "title";
+export type EventSortBy = "createdAt" | "date" | "title" | "popularity";
 
 export type EventListQueryParams = ListQueryParams & {
     type?: EventType;
@@ -29,20 +29,19 @@ export const useFetchAllEvents = ({
     sortOrder = "desc",
 }: EventListQueryParams) => {
     const fetchAllEvents = async () => {
-        const response = await api.get<ApiResponse<PaginatedResponse<Event>>>(
-            "/events",
-            {
-                params: {
-                    page,
-                    limit,
-                    type: type === "all" ? undefined : type,
-                    search: search?.trim() || undefined,
-                    tags: tags.length > 0 ? tags.join(",") : undefined,
-                    sortBy,
-                    sortOrder,
-                },
+        const response = await api.get<
+            ApiResponse<PaginatedResponse<EventListItem>>
+        >("/events", {
+            params: {
+                page,
+                limit,
+                type: type === "all" ? undefined : type,
+                search: search?.trim() || undefined,
+                tags: tags.length > 0 ? tags.join(",") : undefined,
+                sortBy,
+                sortOrder,
             },
-        );
+        });
         return response.data;
     };
 
@@ -52,9 +51,9 @@ export const useFetchAllEvents = ({
         error,
         refetch,
     } = useQuery<
-        ApiResponse<PaginatedResponse<Event>>,
+        ApiResponse<PaginatedResponse<EventListItem>>,
         ApiError,
-        PaginatedResponse<Event>
+        PaginatedResponse<EventListItem>
     >({
         queryFn: fetchAllEvents,
         queryKey: [
@@ -75,7 +74,7 @@ export const useFetchAllEvents = ({
 
 export const useFetchEvent = (eventId: string | undefined) => {
     const fetchEvent = async () => {
-        const response = await api.get<ApiResponse<Event>>(
+        const response = await api.get<ApiResponse<EventItem>>(
             `/events/${eventId}`,
         );
         return response.data;
@@ -86,7 +85,7 @@ export const useFetchEvent = (eventId: string | undefined) => {
         isLoading,
         error,
         refetch,
-    } = useQuery<ApiResponse<Event>, ApiError, Event>({
+    } = useQuery<ApiResponse<EventItem>, ApiError, EventItem>({
         queryFn: fetchEvent,
         queryKey: ["events", eventId],
         select: ({ data }) => data,
@@ -100,12 +99,15 @@ export const useCreateEvent = () => {
     const queryClient = useQueryClient();
 
     const createEvent = async (data: CreateEventInput) => {
-        const response = await api.post<ApiResponse<Event>>(`/events`, data);
+        const response = await api.post<ApiResponse<EventWithTagIds>>(
+            `/events`,
+            data,
+        );
         return response.data;
     };
 
     const { mutateAsync: createEventMutation, isPending: isLoading } =
-        useMutation<ApiResponse<Event>, ApiError, CreateEventInput>({
+        useMutation<ApiResponse<EventWithTagIds>, ApiError, CreateEventInput>({
             mutationFn: createEvent,
             onSuccess: ({ message }) => {
                 toast.success(message ?? "Event created successfully");
@@ -132,7 +134,7 @@ export const useUpdateEvent = () => {
         data: UpdateEventInput;
         eventId: string;
     }) => {
-        const response = await api.patch<ApiResponse<Event>>(
+        const response = await api.patch<ApiResponse<EventWithTagIds>>(
             `/events/${eventId}`,
             data,
         );
@@ -141,7 +143,7 @@ export const useUpdateEvent = () => {
 
     const { mutateAsync: updateEventMutation, isPending: isLoading } =
         useMutation<
-            ApiResponse<Event>,
+            ApiResponse<EventWithTagIds>,
             ApiError,
             { data: UpdateEventInput; eventId: string }
         >({

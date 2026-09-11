@@ -5,7 +5,6 @@ import { CenteredSpinner } from "./components/shared";
 import AdminRoute from "./layouts/AdminRoute";
 import AppLayout from "./layouts/AppLayout";
 import ProtectedRoute from "./layouts/ProtectedRoute";
-import UserLayout from "./layouts/UserLayout";
 
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
@@ -29,8 +28,8 @@ function App() {
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route element={<ProtectedRoute />}>
-                    <Route element={<AdminRoute />}>
-                        <Route element={<AppLayout />}>
+                    <Route element={<AppLayout />}>
+                        <Route element={<AdminRoute />}>
                             <Route
                                 path="/admin/events"
                                 element={<EventsPage />}
@@ -49,9 +48,7 @@ function App() {
                             />
                             <Route path="/admin/tags" element={<TagsPage />} />
                         </Route>
-                    </Route>
 
-                    <Route element={<UserLayout />}>
                         <Route path="/events" element={<UserEventsPage />} />
                         <Route
                             path="/events/:id"

@@ -20,11 +20,11 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import type { Rsvp } from "@/types/rsvp";
 import {
     createRsvpSchema,
     type CreateRsvpInput,
 } from "@/validations/rsvp.validation";
+import { EventRsvpBadge } from ".";
 
 const data = [
     { label: "Yes", value: "yes" },
@@ -75,13 +75,22 @@ const EventRsvpActions = () => {
         form.reset();
     };
 
+    const badgeText =
+        rsvp?.status === "yes"
+            ? "Going"
+            : rsvp?.status === "no"
+              ? "Not Going"
+              : "Maybe";
+
     return (
         <div className="flex">
             {isRsvpLoading ? (
                 <Spinner />
             ) : rsvp ? (
                 <div className="flex items-center gap-2">
-                    <RsvpBadge rsvp={rsvp} />
+                    <EventRsvpBadge status={rsvp.status}>
+                        {badgeText}
+                    </EventRsvpBadge>
                     <Button
                         variant="ghost"
                         size="icon"
@@ -141,21 +150,3 @@ const EventRsvpActions = () => {
 };
 
 export default EventRsvpActions;
-
-const styles = {
-    yes: "border-green-500/30 bg-green-500/10 text-green-600 dark:text-green-400",
-    no: "border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400",
-    maybe: "border-yellow-500/30 bg-yellow-500/10 text-yellow-600 dark:text-yellow-400",
-};
-
-const RsvpBadge = ({ rsvp }: { rsvp: Rsvp }) => {
-    return (
-        <Badge className={styles[rsvp.status]}>
-            {rsvp.status === "yes"
-                ? "Going"
-                : rsvp.status === "maybe"
-                  ? "Maybe"
-                  : "Not Going"}
-        </Badge>
-    );
-};

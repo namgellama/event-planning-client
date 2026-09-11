@@ -1,17 +1,24 @@
-import { Calendar, Clock, Globe, Lock, MapPin } from "lucide-react";
+import {
+    Calendar,
+    Clock,
+    MapPin,
+    UserRoundCheck,
+    UserRoundCog,
+    UserRoundX,
+} from "lucide-react";
 import { useNavigate } from "react-router";
 
-import { Badge } from "@/components/ui/badge";
 import {
     Card,
     CardContent,
     CardFooter,
     CardHeader,
 } from "@/components/ui/card";
-import type { Event } from "@/types/event";
 import { useAuth } from "@/contexts/AuthContext";
+import type { EventListItem } from "@/types/event";
+import { EventRsvpBadge, EventTagBadge, EventTypeBadge } from ".";
 
-export default function EventCard({ event }: { event: Event }) {
+export default function EventCard({ event }: { event: EventListItem }) {
     const { user } = useAuth();
 
     const navigate = useNavigate();
@@ -26,58 +33,42 @@ export default function EventCard({ event }: { event: Event }) {
         hour: "numeric",
         minute: "2-digit",
     });
-    const isPublic = event.type === "public";
 
     return (
         <Card
-            className="w-full max-w-md h-47 gap-3 flex flex-col cursor-pointer"
+            className="w-full max-w-md h-auto gap-4 flex flex-col cursor-pointer"
             onClick={() =>
                 user?.role === "admin"
                     ? navigate(`/admin/events/${event.id}`)
                     : navigate(`/events/${event.id}`)
             }
         >
-            <CardHeader className="flex flex-row items-start justify-between gap-3 space-y-0">
-                <div className="w-full space-y-1.5">
-                    <div className="w-full flex items-center justify-between">
-                        <h3 className="text-lg font-semibold leading-tight text-slate-900 line-clamp-1">
-                            {event.title}
-                        </h3>
-                        <Badge
-                            variant="outline"
-                            className={
-                                isPublic
-                                    ? "flex items-center gap-1 border-emerald-200 bg-emerald-50 text-emerald-700"
-                                    : "flex items-center gap-1 border-amber-200 bg-amber-50 text-amber-700"
-                            }
-                        >
-                            {isPublic ? (
-                                <Globe className="h-3 w-3" />
-                            ) : (
-                                <Lock className="h-3 w-3" />
-                            )}
-                            {isPublic ? "Public" : "Private"}
-                        </Badge>
+            <CardHeader className="flex flex-col gap-2">
+                <div className="w-full flex items-center justify-between">
+                    <h3 className="text-lg font-semibold leading-tight text-slate-900 line-clamp-1">
+                        {event.title}
+                    </h3>
+                    <EventTypeBadge
+                        type={event.type}
+                        label={event.type === "public" ? "Public" : "Private"}
+                    />
+                </div>
+
+                <div className="w-full flex items-center justify-between gap-3 text-sm text-slate-500">
+                    <div className="w-full flex items-center gap-4">
+                        <span className="flex items-center gap-1">
+                            <Calendar className="size-3.5" />
+                            {dateLabel}
+                        </span>
+                        <span className="flex items-center gap-1">
+                            <Clock className="size-3.5" />
+                            {timeLabel}
+                        </span>
                     </div>
 
-                    <div className="w-full flex items-center justify-between gap-3 text-sm text-slate-500">
-                        <div className="w-full flex items-center gap-4">
-                            <span className="flex items-center gap-1">
-                                <Calendar className="size-3.5" />
-                                {dateLabel}
-                            </span>
-                            <span className="flex items-center gap-1">
-                                <Clock className="size-3.5" />
-                                {timeLabel}
-                            </span>
-                        </div>
-
-                        <div className="w-2/3 flex items-center gap-1.5 text-sm text-slate-600">
-                            <MapPin className="h-3.5 w-3.5" />
-                            <span className="line-clamp-1">
-                                {event.location}
-                            </span>
-                        </div>
+                    <div className="w-2/3 flex items-center gap-1.5 text-sm text-slate-600">
+                        <MapPin className="h-3.5 w-3.5" />
+                        <span className="line-clamp-1">{event.location}</span>
                     </div>
                 </div>
             </CardHeader>
@@ -90,20 +81,41 @@ export default function EventCard({ event }: { event: Event }) {
                 </p>
             </CardContent>
 
-            <CardFooter className="bg-inherit border-0">
+            <CardFooter className="bg-inherit border-0 flex flex-col items-start gap-3 pt-0 mt-4">
                 {event.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                        {event.tags.map((tag) => (
-                            <Badge
-                                key={tag.id}
-                                variant="secondary"
-                                className="font-normal text-slate-600"
-                            >
-                                {tag.title}
-                            </Badge>
+                    <div className="flex gap-1.5 overflow-hidden">
+                        {event.tags.slice(0, 4).map((tag) => (
+                            <EventTagBadge key={tag.id} title={tag.title} />
                         ))}
                     </div>
                 )}
+
+                <div className="w-full flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <EventRsvpBadge status="yes">
+                            <UserRoundCheck className="size-4" />
+                            {event.rsvp.yes}
+                        </EventRsvpBadge>
+                        <EventRsvpBadge status="no">
+                            <UserRoundX className="size-4" />
+                            {event.rsvp.no}
+                        </EventRsvpBadge>
+                        <EventRsvpBadge status="maybe">
+                            <UserRoundCog />
+                            {event.rsvp.yes}
+                        </EventRsvpBadge>
+                    </div>
+
+                    {event.myRsvp && (
+                        <EventRsvpBadge status={event.myRsvp}>
+                            {event.myRsvp === "yes"
+                                ? "Going"
+                                : event.myRsvp === "no"
+                                  ? "Not Going"
+                                  : "Tentative"}
+                        </EventRsvpBadge>
+                    )}
+                </div>
             </CardFooter>
         </Card>
     );

@@ -15,6 +15,7 @@ const sortByItems = [
     { label: "Created Date", value: "createdAt" },
     { label: "Date", value: "date" },
     { label: "Title", value: "title" },
+    { label: "Popularity", value: "popularity" },
 ];
 
 const EventListHeader = () => {

@@ -1,14 +1,31 @@
-import type { Tag } from "./tag";
+import type { RsvpStatus } from "./rsvp";
+import type { TagItem } from "./tag";
+
+export type EventType = "public" | "private";
 
 export type Event = {
     id: string;
     title: string;
-    description: string | null;
-    location: string;
+    description?: string | null | undefined;
     date: string;
-    type: "public" | "private";
-    tags: Pick<Tag, "id" | "title">[];
+    location: string;
+    type: EventType;
     createdAt: Date;
     updatedAt: Date;
     userId: string;
+};
+
+export type EventItem = Event & {
+    tags: TagItem[];
+    rsvp: Record<RsvpStatus, number>;
+};
+
+export type EventListItem = Event & {
+    tags: TagItem[];
+    rsvp: Record<RsvpStatus, number>;
+    myRsvp?: RsvpStatus | null;
+};
+
+export type EventWithTagIds = Event & {
+    tags: string[];
 };

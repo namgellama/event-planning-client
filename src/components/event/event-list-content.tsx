@@ -28,9 +28,12 @@ export const eventQueryState = {
     ]).withDefault("all"),
     search: parseAsString.withDefault(""),
     tags: parseAsArrayOf(parseAsString).withDefault([]),
-    sortBy: parseAsStringEnum<EventSortBy>(["createdAt", "date"]).withDefault(
+    sortBy: parseAsStringEnum<EventSortBy>([
         "createdAt",
-    ),
+        "date",
+        "title",
+        "popularity",
+    ]).withDefault("createdAt"),
     sortOrder: parseAsStringEnum<SortOrder>(["asc", "desc"]).withDefault(
         "desc",
     ),

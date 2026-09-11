@@ -1,4 +1,4 @@
-import { ArrowDownAZ, ArrowUpAZ } from "lucide-react";
+import { ArrowDown, ArrowUp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -48,7 +48,7 @@ const SortControls = ({
                 aria-label="Submit"
                 onClick={handleSortOrder}
             >
-                {sortOrder === "asc" ? <ArrowDownAZ /> : <ArrowUpAZ />}
+                {sortOrder === "asc" ? <ArrowUp /> : <ArrowDown />}
             </Button>
         </div>
     );

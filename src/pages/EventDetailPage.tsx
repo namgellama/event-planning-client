@@ -38,15 +38,11 @@ const EventDetailPage = () => {
     }
 
     return (
-        <div className="flex flex-col gap-4">
-            <div className="min-h-screen px-6 py-12">
-                <div className="mx-auto max-w-4xl">
-                    <EventDetailHeader event={event} />
-                    <Separator className="my-4 bg-[#D8CFBC]" />
-                    <EventDetailContent event={event} />
-                    <EventDetailFooter event={event} />
-                </div>
-            </div>
+        <div className="mx-auto max-w-4xl py-12">
+            <EventDetailHeader event={event} />
+            <Separator className="my-4" />
+            <EventDetailContent event={event} />
+            <EventDetailFooter event={event} />
         </div>
     );
 };
