@@ -11,4 +11,5 @@ export type Event = {
     createdAt: Date;
     updatedAt: Date;
     userId: string;
+    popularity: number;
 };

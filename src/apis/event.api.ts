@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import api, { handleApiError, type ApiError } from ".";
 
 export type EventType = "all" | "public" | "private";
-export type EventSortBy = "createdAt" | "date" | "title";
+export type EventSortBy = "createdAt" | "date" | "title" | "popularity";
 
 export type EventListQueryParams = ListQueryParams & {
     type?: EventType;

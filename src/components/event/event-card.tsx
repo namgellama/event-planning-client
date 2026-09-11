@@ -1,4 +1,4 @@
-import { Calendar, Clock, Globe, Lock, MapPin } from "lucide-react";
+import { Calendar, Clock, Globe, Lock, MapPin, Users } from "lucide-react";
 import { useNavigate } from "react-router";
 
 import { Badge } from "@/components/ui/badge";
@@ -8,8 +8,8 @@ import {
     CardFooter,
     CardHeader,
 } from "@/components/ui/card";
-import type { Event } from "@/types/event";
 import { useAuth } from "@/contexts/AuthContext";
+import type { Event } from "@/types/event";
 
 export default function EventCard({ event }: { event: Event }) {
     const { user } = useAuth();
@@ -90,10 +90,10 @@ export default function EventCard({ event }: { event: Event }) {
                 </p>
             </CardContent>
 
-            <CardFooter className="bg-inherit border-0">
+            <CardFooter className="bg-inherit border-0 flex items-center">
                 {event.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 pt-1">
-                        {event.tags.map((tag) => (
+                        {event.tags.slice(0, 3).map((tag) => (
                             <Badge
                                 key={tag.id}
                                 variant="secondary"
@@ -104,6 +104,14 @@ export default function EventCard({ event }: { event: Event }) {
                         ))}
                     </div>
                 )}
+
+                <Badge
+                    variant="outline"
+                    className="ml-auto gap-1.5 border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-400"
+                >
+                    <Users className="size-3.5" />
+                    {event.popularity}
+                </Badge>
             </CardFooter>
         </Card>
     );
