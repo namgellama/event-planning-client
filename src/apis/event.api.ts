@@ -1,4 +1,10 @@
-import type { EventItem, EventListItem, EventWithTagIds } from "@/types/event";
+import type {
+    EventItem,
+    EventListItem,
+    EventStatus,
+    EventType,
+    EventWithTagIds,
+} from "@/types/event";
 import type { PaginatedResponse } from "@/types/pagination";
 import type { ListQueryParams } from "@/types/request";
 import type { ApiResponse } from "@/types/response";
@@ -10,11 +16,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import api, { handleApiError, type ApiError } from ".";
 
-export type EventType = "all" | "public" | "private";
 export type EventSortBy = "createdAt" | "date" | "title" | "popularity";
 
 export type EventListQueryParams = ListQueryParams & {
-    type?: EventType;
+    type?: EventType | "all";
+    status?: EventStatus | "all";
     tags?: string[];
     sortBy?: EventSortBy;
 };
@@ -23,6 +29,7 @@ export const useFetchAllEvents = ({
     page = 1,
     limit = 10,
     type,
+    status,
     search,
     tags = [],
     sortBy = "createdAt",
@@ -36,6 +43,7 @@ export const useFetchAllEvents = ({
                 page,
                 limit,
                 type: type === "all" ? undefined : type,
+                status: status === "all" ? undefined : status,
                 search: search?.trim() || undefined,
                 tags: tags.length > 0 ? tags.join(",") : undefined,
                 sortBy,
@@ -61,6 +69,7 @@ export const useFetchAllEvents = ({
             page,
             limit,
             type,
+            status,
             search,
             tags,
             sortBy,

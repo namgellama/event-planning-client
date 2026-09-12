@@ -7,24 +7,26 @@ import {
     useQueryStates,
 } from "nuqs";
 
-import {
-    useFetchAllEvents,
-    type EventSortBy,
-    type EventType,
-} from "@/apis/event.api";
+import { useFetchAllEvents, type EventSortBy } from "@/apis/event.api";
 import { EmptyState, ErrorState, Pagination } from "@/components/shared";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDebounce } from "@/hooks/useDebounce";
+import type { EventStatus, EventType } from "@/types/event";
 import type { SortOrder } from "@/types/request";
 import { EventCard } from ".";
 
 export const eventQueryState = {
     page: parseAsInteger.withDefault(1),
     limit: parseAsInteger.withDefault(10),
-    type: parseAsStringEnum<EventType>([
+    type: parseAsStringEnum<EventType | "all">([
         "all",
         "public",
         "private",
+    ]).withDefault("all"),
+    status: parseAsStringEnum<EventStatus | "all">([
+        "all",
+        "upcoming",
+        "completed",
     ]).withDefault("all"),
     search: parseAsString.withDefault(""),
     tags: parseAsArrayOf(parseAsString).withDefault([]),
@@ -40,7 +42,7 @@ export const eventQueryState = {
 };
 
 const EventListContent = () => {
-    const [{ page, limit, type, search, tags, sortBy, sortOrder }] =
+    const [{ page, limit, type, status, search, tags, sortBy, sortOrder }] =
         useQueryStates(eventQueryState);
 
     const debouncedSearch = useDebounce(search);
@@ -49,6 +51,7 @@ const EventListContent = () => {
         page,
         limit,
         type,
+        status,
         search: debouncedSearch,
         tags,
         sortBy,

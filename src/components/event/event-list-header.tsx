@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import type { SortOrder } from "@/types/request";
-import { EventTagsFilter, EventTypeFilter } from ".";
+import { EventStatusFilter, EventTagsFilter, EventTypeFilter } from ".";
 import { eventQueryState } from "./event-list-content";
 
 const sortByItems = [
@@ -62,6 +62,7 @@ const EventListHeader = () => {
                         onReset={() => setQuery({ search: "", page: 1 })}
                     />
                     <EventTagsFilter />
+                    <EventStatusFilter />
                     <SortControls
                         items={sortByItems}
                         sortBy={sortBy}
