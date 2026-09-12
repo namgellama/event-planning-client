@@ -4,7 +4,7 @@ import { useDeleteEvent } from "@/apis/event.api";
 import { EditDeleteActions } from "@/components/shared";
 import { useAuth } from "@/contexts/AuthContext";
 import type { EventItem } from "@/types/event";
-import { EventRsvpActions, EventTypeBadge } from ".";
+import { EventRsvpActions, EventStatusBadge, EventTypeBadge } from ".";
 
 const EventDetailHeader = ({ event }: { event: EventItem }) => {
     const { user } = useAuth();
@@ -33,15 +33,21 @@ const EventDetailHeader = ({ event }: { event: EventItem }) => {
                 </h1>
             </div>
 
-            {user?.role === "admin" ? (
-                <EditDeleteActions
-                    onEdit={() => navigate(`/admin/events/${event.id}/edit`)}
-                    onDelete={onDelete}
-                    isLoading={isLoading}
-                />
-            ) : (
-                <EventRsvpActions />
-            )}
+            <div className="flex items-center gap-1">
+                <EventStatusBadge status={event.status} />
+
+                {user?.role === "admin" ? (
+                    <EditDeleteActions
+                        onEdit={() =>
+                            navigate(`/admin/events/${event.id}/edit`)
+                        }
+                        onDelete={onDelete}
+                        isLoading={isLoading}
+                    />
+                ) : (
+                    <EventRsvpActions />
+                )}
+            </div>
         </div>
     );
 };

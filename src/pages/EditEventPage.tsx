@@ -54,6 +54,7 @@ const EditEventForm = ({ event }: { event: EventItem }) => {
             date: event.date,
             location: event.location,
             type: event.type,
+            status: event.status,
             tags: event.tags.map((tag) => tag.id),
         },
     });

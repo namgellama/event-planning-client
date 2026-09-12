@@ -24,7 +24,7 @@ import {
     createRsvpSchema,
     type CreateRsvpInput,
 } from "@/validations/rsvp.validation";
-import { EventRsvpBadge, EventStatusBadge } from ".";
+import { EventRsvpBadge } from ".";
 
 const data = [
     { label: "Yes", value: "yes" },
@@ -87,8 +87,6 @@ const EventRsvpActions = () => {
     return (
         <>
             <div className="flex items-center gap-3">
-                {event && <EventStatusBadge status={event.status} />}
-
                 {isRsvpLoading ? (
                     <Spinner />
                 ) : rsvp ? (

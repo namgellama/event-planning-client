@@ -41,6 +41,7 @@ interface Props<
 }
 
 const eventTypes = ["Public", "Private"];
+const eventStatuses = ["Upcoming", "Completed"];
 
 const EventForm = <
     TFieldValues extends FieldValues & EventFormFields,
@@ -157,6 +158,17 @@ const EventForm = <
                     name={"tags" as Path<TFieldValues>}
                     label="Event tags"
                     data={data}
+                />
+
+                <FormSelect
+                    form={form}
+                    name={"status" as Path<TFieldValues>}
+                    label="Status"
+                    orientation="vertical"
+                    data={eventStatuses.map((type) => ({
+                        label: type,
+                        value: type.toLowerCase(),
+                    }))}
                 />
             </section>
 
