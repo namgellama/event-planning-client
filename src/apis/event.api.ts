@@ -1,7 +1,14 @@
-import type { EventItem, EventListItem, EventWithTagIds } from "@/types/event";
+import type {
+    EventItem,
+    EventListItem,
+    EventStatus,
+    EventType,
+    EventWithTagIds,
+} from "@/types/event";
 import type { PaginatedResponse } from "@/types/pagination";
 import type { ListQueryParams } from "@/types/request";
 import type { ApiResponse } from "@/types/response";
+import type { RsvpStatus } from "@/types/rsvp";
 import type {
     CreateEventInput,
     UpdateEventInput,
@@ -10,11 +17,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import api, { handleApiError, type ApiError } from ".";
 
-export type EventType = "all" | "public" | "private";
 export type EventSortBy = "createdAt" | "date" | "title" | "popularity";
 
 export type EventListQueryParams = ListQueryParams & {
-    type?: EventType;
+    type?: EventType | "all";
+    status?: EventStatus | "all";
+    rsvpStatus: RsvpStatus | "all";
     tags?: string[];
     sortBy?: EventSortBy;
 };
@@ -23,8 +31,10 @@ export const useFetchAllEvents = ({
     page = 1,
     limit = 10,
     type,
+    status,
     search,
     tags = [],
+    rsvpStatus,
     sortBy = "createdAt",
     sortOrder = "desc",
 }: EventListQueryParams) => {
@@ -36,10 +46,12 @@ export const useFetchAllEvents = ({
                 page,
                 limit,
                 type: type === "all" ? undefined : type,
+                status: status === "all" ? undefined : status,
                 search: search?.trim() || undefined,
                 tags: tags.length > 0 ? tags.join(",") : undefined,
                 sortBy,
                 sortOrder,
+                rsvpStatus: rsvpStatus === "all" ? undefined : rsvpStatus,
             },
         });
         return response.data;
@@ -61,6 +73,8 @@ export const useFetchAllEvents = ({
             page,
             limit,
             type,
+            status,
+            rsvpStatus,
             search,
             tags,
             sortBy,

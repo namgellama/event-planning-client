@@ -16,7 +16,12 @@ import {
 } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import type { EventListItem } from "@/types/event";
-import { EventRsvpBadge, EventTagBadge, EventTypeBadge } from ".";
+import {
+    EventRsvpBadge,
+    EventStatusBadge,
+    EventTagBadge,
+    EventTypeBadge,
+} from ".";
 
 export default function EventCard({ event }: { event: EventListItem }) {
     const { user } = useAuth();
@@ -54,21 +59,25 @@ export default function EventCard({ event }: { event: EventListItem }) {
                     />
                 </div>
 
-                <div className="w-full flex items-center justify-between gap-3 text-sm text-slate-500">
-                    <div className="w-full flex items-center gap-4">
+                <div className="flex w-full items-center justify-between gap-3 text-sm text-slate-500">
+                    <div className="flex shrink-0 items-center gap-4">
                         <span className="flex items-center gap-1">
                             <Calendar className="size-3.5" />
                             {dateLabel}
                         </span>
+
                         <span className="flex items-center gap-1">
                             <Clock className="size-3.5" />
                             {timeLabel}
                         </span>
                     </div>
 
-                    <div className="w-2/3 flex items-center gap-1.5 text-sm text-slate-600">
-                        <MapPin className="h-3.5 w-3.5" />
-                        <span className="line-clamp-1">{event.location}</span>
+                    <div className="flex min-w-0 items-center gap-1.5 text-slate-600">
+                        <MapPin className="size-3.5 shrink-0" />
+
+                        <span className="line-clamp-1 text-right">
+                            {event.location}
+                        </span>
                     </div>
                 </div>
             </CardHeader>
@@ -82,13 +91,17 @@ export default function EventCard({ event }: { event: EventListItem }) {
             </CardContent>
 
             <CardFooter className="bg-inherit border-0 flex flex-col items-start gap-3 pt-0 mt-4">
-                {event.tags.length > 0 && (
-                    <div className="flex gap-1.5 overflow-hidden">
-                        {event.tags.slice(0, 4).map((tag) => (
-                            <EventTagBadge key={tag.id} title={tag.title} />
-                        ))}
-                    </div>
-                )}
+                <div className="w-full flex items-center justify-between">
+                    {event.tags.length > 0 && (
+                        <div className="flex gap-1.5 overflow-hidden">
+                            {event.tags.slice(0, 3).map((tag) => (
+                                <EventTagBadge key={tag.id} title={tag.title} />
+                            ))}
+                        </div>
+                    )}
+
+                    <EventStatusBadge status={event.status} />
+                </div>
 
                 <div className="w-full flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -102,7 +115,7 @@ export default function EventCard({ event }: { event: EventListItem }) {
                         </EventRsvpBadge>
                         <EventRsvpBadge status="maybe">
                             <UserRoundCog />
-                            {event.rsvp.yes}
+                            {event.rsvp.maybe}
                         </EventRsvpBadge>
                     </div>
 

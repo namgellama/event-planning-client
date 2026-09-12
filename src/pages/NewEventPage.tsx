@@ -26,6 +26,7 @@ const NewEventPage = () => {
             date: "",
             location: "",
             type: "public",
+            status: "upcoming",
             tags: [],
         },
     });

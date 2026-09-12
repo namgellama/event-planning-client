@@ -28,8 +28,8 @@ const SortControls = ({
     return (
         <div className="flex items-center gap-2">
             <Select items={items} value={sortBy} onValueChange={handleSortBy}>
-                <SelectTrigger className="w-36 h-10!">
-                    <SelectValue />
+                <SelectTrigger className="w-40 h-10!">
+                    Sort: <SelectValue className="font-medium" />
                 </SelectTrigger>
                 <SelectContent>
                     <SelectGroup>
