@@ -8,6 +8,7 @@ import type {
 import type { PaginatedResponse } from "@/types/pagination";
 import type { ListQueryParams } from "@/types/request";
 import type { ApiResponse } from "@/types/response";
+import type { RsvpStatus } from "@/types/rsvp";
 import type {
     CreateEventInput,
     UpdateEventInput,
@@ -21,6 +22,7 @@ export type EventSortBy = "createdAt" | "date" | "title" | "popularity";
 export type EventListQueryParams = ListQueryParams & {
     type?: EventType | "all";
     status?: EventStatus | "all";
+    rsvpStatus: RsvpStatus | "all";
     tags?: string[];
     sortBy?: EventSortBy;
 };
@@ -32,6 +34,7 @@ export const useFetchAllEvents = ({
     status,
     search,
     tags = [],
+    rsvpStatus,
     sortBy = "createdAt",
     sortOrder = "desc",
 }: EventListQueryParams) => {
@@ -48,6 +51,7 @@ export const useFetchAllEvents = ({
                 tags: tags.length > 0 ? tags.join(",") : undefined,
                 sortBy,
                 sortOrder,
+                rsvpStatus: rsvpStatus === "all" ? undefined : rsvpStatus,
             },
         });
         return response.data;
@@ -70,6 +74,7 @@ export const useFetchAllEvents = ({
             limit,
             type,
             status,
+            rsvpStatus,
             search,
             tags,
             sortBy,

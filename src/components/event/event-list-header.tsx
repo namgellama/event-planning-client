@@ -8,7 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import type { SortOrder } from "@/types/request";
-import { EventStatusFilter, EventTagsFilter, EventTypeFilter } from ".";
+import {
+    EventRsvpStatusFilter,
+    EventStatusFilter,
+    EventTagsFilter,
+    EventTypeFilter,
+} from ".";
 import { eventQueryState } from "./event-list-content";
 
 const sortByItems = [
@@ -36,7 +41,7 @@ const EventListHeader = () => {
 
     return (
         <Card>
-            <CardContent className="flex flex-col gap-4">
+            <CardContent className="flex flex-col  gap-4">
                 <div className="flex items-center justify-between">
                     <EventTypeFilter />
                     {user?.role === "admin" && (
@@ -49,7 +54,7 @@ const EventListHeader = () => {
                         </Button>
                     )}
                 </div>
-                <div className="flex justify-between gap-4">
+                <div className="flex justify-between items-end gap-4">
                     <SearchInput
                         value={search}
                         onChange={(e) =>
@@ -63,6 +68,7 @@ const EventListHeader = () => {
                     />
                     <EventTagsFilter />
                     <EventStatusFilter />
+                    {user?.role === "user" && <EventRsvpStatusFilter />}
                     <SortControls
                         items={sortByItems}
                         sortBy={sortBy}

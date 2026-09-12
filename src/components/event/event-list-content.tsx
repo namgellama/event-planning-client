@@ -13,6 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useDebounce } from "@/hooks/useDebounce";
 import type { EventStatus, EventType } from "@/types/event";
 import type { SortOrder } from "@/types/request";
+import type { RsvpStatus } from "@/types/rsvp";
 import { EventCard } from ".";
 
 export const eventQueryState = {
@@ -28,6 +29,12 @@ export const eventQueryState = {
         "upcoming",
         "completed",
     ]).withDefault("all"),
+    rsvpStatus: parseAsStringEnum<RsvpStatus | "all">([
+        "all",
+        "yes",
+        "no",
+        "maybe",
+    ]).withDefault("all"),
     search: parseAsString.withDefault(""),
     tags: parseAsArrayOf(parseAsString).withDefault([]),
     sortBy: parseAsStringEnum<EventSortBy>([
@@ -42,8 +49,19 @@ export const eventQueryState = {
 };
 
 const EventListContent = () => {
-    const [{ page, limit, type, status, search, tags, sortBy, sortOrder }] =
-        useQueryStates(eventQueryState);
+    const [
+        {
+            page,
+            limit,
+            type,
+            status,
+            rsvpStatus,
+            search,
+            tags,
+            sortBy,
+            sortOrder,
+        },
+    ] = useQueryStates(eventQueryState);
 
     const debouncedSearch = useDebounce(search);
 
@@ -52,6 +70,7 @@ const EventListContent = () => {
         limit,
         type,
         status,
+        rsvpStatus,
         search: debouncedSearch,
         tags,
         sortBy,

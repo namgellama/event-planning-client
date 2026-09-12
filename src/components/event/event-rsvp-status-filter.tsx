@@ -12,27 +12,27 @@ import { eventQueryState } from "./event-list-content";
 
 const items = [
     { label: "All", value: "all" },
-    { label: "Upcoming", value: "upcoming" },
-    { label: "Completed", value: "completed" },
+    { label: "Yes", value: "yes" },
+    { label: "No", value: "no" },
+    { label: "Maybe", value: "maybe" },
 ];
 
-const EventStatusFilter = () => {
-    const [{ status }, setQuery] = useQueryStates(eventQueryState);
+const EventRsvpStatusFilter = () => {
+    const [{ rsvpStatus }, setQuery] = useQueryStates(eventQueryState);
 
     return (
         <Select
             items={items}
-            value={status}
+            value={rsvpStatus}
             onValueChange={(value) =>
                 setQuery({
-                    status: value,
+                    rsvpStatus: value,
                     page: 1,
                 })
             }
         >
-            <SelectTrigger className="w-40 h-10!">
-                Status:
-                <SelectValue className="font-medium" />
+            <SelectTrigger className="w-32 h-10!">
+                RSVP: <SelectValue className="font-medium" />
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
@@ -47,4 +47,4 @@ const EventStatusFilter = () => {
     );
 };
 
-export default EventStatusFilter;
+export default EventRsvpStatusFilter;
