@@ -8,7 +8,7 @@ import {
     type ReactNode,
     type SetStateAction,
 } from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 import {
     api,
@@ -34,6 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const navigate = useNavigate();
+    const { pathname } = useLocation();
 
     const isAuthenticated = !!user;
 
@@ -56,7 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
 
         initializeAuth();
-    }, []);
+    }, [pathname]);
 
     useLayoutEffect(() => {
         const authInterceptor = api.interceptors.request.use((config) => {
@@ -82,6 +83,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     `${BASE_URL}/auth/refresh-token`,
                 );
 
+                const isAuthPage =
+                    pathname === "/login" || pathname === "/register";
+
                 if (
                     error.response?.status === 401 &&
                     !isRefreshTokenRequest &&
@@ -104,7 +108,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     } catch {
                         setAccessToken(null);
                         setUser(null);
-                        navigate("/login");
+
+                        if (!isAuthPage) {
+                            navigate("/login");
+                        }
 
                         throw error;
                     }

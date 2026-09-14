@@ -1,11 +1,11 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 
-import { useRegisterUser } from "@/apis/auth.api";
-import FormInput, { FormPasswordInput } from "@/components/shared/form-input";
-import { Button } from "@/components/ui/button";
+import {
+    RegisterUserForm,
+    SendOtpForm,
+    VerifyEmailForm,
+} from "@/components/auth";
 import {
     Card,
     CardContent,
@@ -13,27 +13,18 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Field, FieldGroup } from "@/components/ui/field";
-import { Spinner } from "@/components/ui/spinner";
 import { useAuth } from "@/contexts/AuthContext";
-import {
-    registerUserSchema,
-    type RegisterUserInput,
-} from "@/validations/auth.validation";
+
+export type PendingData = { email: string; isVerified: boolean };
 
 const RegisterPage = () => {
     const { isAuthenticated, user } = useAuth();
     const navigate = useNavigate();
-    const form = useForm<RegisterUserInput>({
-        resolver: zodResolver(registerUserSchema),
-        defaultValues: {
-            name: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
-        },
+    const [step, setStep] = useState<number>(1);
+    const [pendingData, setPendingData] = useState<PendingData>({
+        email: "",
+        isVerified: false,
     });
-    const { registerUserMutation, isLoading } = useRegisterUser();
 
     useEffect(() => {
         if (!isAuthenticated || !user) return;
@@ -45,59 +36,70 @@ const RegisterPage = () => {
 
         if (user.role === "admin") navigate("/admin/events");
     }, [isAuthenticated, navigate, user]);
-    async function onSubmit(data: RegisterUserInput) {
-        await registerUserMutation(data);
-        form.reset();
-        navigate("/login");
-    }
 
     return (
-        <div className="w-full h-screen bg-[#F2F4F1] flex items-center justify-center">
+        <div className="w-full h-screen flex items-center justify-center">
             <Card className="w-full sm:max-w-md">
                 <CardHeader>
                     <CardTitle className="text-md">
-                        <h4 className="font-normal">New Account</h4>
-                        <h1 className="text-2xl">Join Gather</h1>
+                        <h4 className="font-normal">
+                            {step === 1
+                                ? "Create your account"
+                                : step === 2
+                                  ? "Verify your email"
+                                  : "Complete your profile"}
+                        </h4>
+                        <h1 className="text-2xl">
+                            {step === 1
+                                ? "Join Gather"
+                                : step === 2
+                                  ? "Enter the code"
+                                  : "Set up your account"}
+                        </h1>
                     </CardTitle>
+                    <div className="flex items-center gap-2 pt-2">
+                        <span className="h-1.5 flex-1 rounded-full bg-black" />
+                        <span
+                            className={`h-1.5 flex-1 rounded-full ${
+                                step === 2 || step === 3
+                                    ? "bg-black"
+                                    : "bg-black/15"
+                            }`}
+                        />
+                        <span
+                            className={`h-1.5 flex-1 rounded-full ${
+                                step === 3 ? "bg-black" : "bg-black/15"
+                            }`}
+                        />
+                    </div>
                 </CardHeader>
                 <CardContent>
-                    <form
-                        id="form-register"
-                        onSubmit={form.handleSubmit(onSubmit)}
-                        className="space-y-5"
-                    >
-                        <FieldGroup>
-                            <FormInput form={form} name="name" label="Name" />
-                            <FormInput form={form} name="email" label="Email" />
-                            <FormPasswordInput
-                                form={form}
-                                name="password"
-                                label="Password"
-                            />
-                            <FormPasswordInput
-                                form={form}
-                                name="confirmPassword"
-                                label="Confirm Password"
-                            />
-                        </FieldGroup>
-
-                        <Field>
-                            <Button
-                                type="submit"
-                                form="form-register"
-                                disabled={isLoading}
-                            >
-                                {isLoading ? <Spinner /> : "Submit"}
-                            </Button>
-                        </Field>
-                    </form>
+                    {step === 1 ? (
+                        <SendOtpForm
+                            setStep={setStep}
+                            pendingData={pendingData}
+                            setPendingData={setPendingData}
+                        />
+                    ) : step === 2 ? (
+                        <VerifyEmailForm
+                            setStep={setStep}
+                            pendingData={pendingData}
+                            setPendingData={setPendingData}
+                        />
+                    ) : (
+                        <RegisterUserForm
+                            pendingData={pendingData}
+                            setPendingData={setPendingData}
+                            setStep={setStep}
+                        />
+                    )}
                 </CardContent>
-                <CardFooter>
-                    <p className="mt-6 text-center text-sm text-[#1B1D23]/60">
+                <CardFooter className="bg-inherit">
+                    <p className="mt-6 text-center text-sm text-black/60">
                         Already have an account?{" "}
                         <Link
                             to="/login"
-                            className="font-medium text-[#1B1D23] underline underline-offset-4"
+                            className="font-medium text-black underline underline-offset-4"
                         >
                             Log in
                         </Link>

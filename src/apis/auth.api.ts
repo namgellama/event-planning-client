@@ -4,10 +4,64 @@ import type { User } from "@/types/user";
 import type {
     LoginUserInput,
     RegisterUserInput,
+    SendOtpInput,
+    VerifyEmailInput,
 } from "@/validations/auth.validation";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { api, handleApiError, type ApiError } from ".";
+
+export const useSendOtp = () => {
+    const sendOtp = async (data: SendOtpInput) => {
+        const response = await api.post<ApiResponse<null>>(
+            "/auth/register/send-otp",
+            data,
+        );
+        return response.data;
+    };
+
+    const { mutateAsync: sendOtpMutation, isPending: isLoading } = useMutation<
+        ApiResponse<null>,
+        ApiError,
+        SendOtpInput
+    >({
+        mutationFn: sendOtp,
+        onSuccess: ({ message }) => {
+            toast.success(message ?? "OTP has been sent to your email");
+        },
+        onError: (error) => {
+            handleApiError(error, "Unable to send otp. Please try again");
+        },
+    });
+
+    return { sendOtpMutation, isLoading };
+};
+
+export const useVerifyEmail = () => {
+    const verifyEmail = async (data: VerifyEmailInput) => {
+        const response = await api.post<ApiResponse<null>>(
+            "/auth/register/verify-email",
+            data,
+        );
+        return response.data;
+    };
+
+    const { mutateAsync: verifyEmailMutation, isPending: isLoading } =
+        useMutation<ApiResponse<null>, ApiError, VerifyEmailInput>({
+            mutationFn: verifyEmail,
+            onSuccess: ({ message }) => {
+                toast.success(message ?? "Email verified successfully");
+            },
+            onError: (error) => {
+                handleApiError(
+                    error,
+                    "Unable to verify email. Please try again",
+                );
+            },
+        });
+
+    return { verifyEmailMutation, isLoading };
+};
 
 export const useRegisterUser = () => {
     const registerUser = async (data: RegisterUserInput) => {
