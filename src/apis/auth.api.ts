@@ -1,15 +1,19 @@
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+
 import { useAuth } from "@/contexts/AuthContext";
+import type { LoginResponse, LoginSuccessful } from "@/types/auth";
 import type { ApiResponse } from "@/types/response";
 import type { User } from "@/types/user";
 import type {
     LoginUserInput,
     RegisterUserInput,
     SendOtpInput,
+    Verify2FAInput,
     Verify2FASetupInput,
     VerifyEmailInput,
 } from "@/validations/auth.validation";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
+
 import { api, handleApiError, type ApiError } from ".";
 
 export const useSendOtp = () => {
@@ -94,7 +98,7 @@ export const useLoginUser = () => {
     const { setAccessToken, fetchMe } = useAuth();
 
     const loginUser = async (data: LoginUserInput) => {
-        const response = await api.post<ApiResponse<{ accessToken: string }>>(
+        const response = await api.post<ApiResponse<LoginResponse>>(
             "/auth/login",
             data,
         );
@@ -102,15 +106,20 @@ export const useLoginUser = () => {
     };
 
     const { mutateAsync: loginUserMutation, isPending: isLoading } =
-        useMutation<
-            ApiResponse<{ accessToken: string }>,
-            ApiError,
-            LoginUserInput
-        >({
+        useMutation<ApiResponse<LoginResponse>, ApiError, LoginUserInput>({
             mutationFn: loginUser,
             onSuccess: async ({ data, message }) => {
+                if (data.requires2FA) {
+                    toast.success(
+                        message ?? "Authenticate using your authenticator app",
+                    );
+
+                    return;
+                }
+
                 setAccessToken(data.accessToken);
                 await fetchMe();
+
                 toast.success(message ?? "User logged in successfully");
             },
             onError: (error) => {
@@ -213,4 +222,31 @@ export const useVerify2FASetup = () => {
         });
 
     return { verify2FASetupMutation, isLoading };
+};
+
+export const useVerify2FA = () => {
+    const { setAccessToken, fetchMe } = useAuth();
+
+    const verify2FA = async (data: Verify2FAInput) => {
+        const response = await api.post<ApiResponse<LoginSuccessful>>(
+            "/auth/2fa/verify",
+            data,
+        );
+        return response.data;
+    };
+
+    const { mutateAsync: verify2FAMutation, isPending: isLoading } =
+        useMutation<ApiResponse<LoginSuccessful>, ApiError, Verify2FAInput>({
+            mutationFn: verify2FA,
+            onSuccess: async ({ message, data }) => {
+                toast.success(message ?? "2FA verified successfully");
+                setAccessToken(data.accessToken);
+                await fetchMe();
+            },
+            onError: (error) => {
+                handleApiError(error, "Unable to verify 2FA. Please try again");
+            },
+        });
+
+    return { verify2FAMutation, isLoading };
 };

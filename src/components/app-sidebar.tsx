@@ -44,15 +44,11 @@ export default function AppSidebar() {
                   },
               ]
             : []),
-        ...(user?.role === "user"
-            ? [
-                  {
-                      label: "Profile",
-                      to: "/profile",
-                      icon: User,
-                  },
-              ]
-            : []),
+        {
+            label: "Profile",
+            to: "/profile",
+            icon: User,
+        },
     ];
 
     return (
