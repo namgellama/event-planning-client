@@ -1,6 +1,6 @@
-import { TagListContent, TagListHeader } from ".";
+import { TagListContent, TagListHeader } from "@/components/tag";
 
-const TagList = () => {
+const TagListPage = () => {
     return (
         <div className="space-y-5 max-w-4xl mx-auto">
             <TagListHeader />
@@ -9,4 +9,4 @@ const TagList = () => {
     );
 };
 
-export default TagList;
+export default TagListPage;

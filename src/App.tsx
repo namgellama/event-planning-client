@@ -9,11 +9,11 @@ import ProtectedRoute from "./layouts/ProtectedRoute";
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
-const EventsPage = lazy(() => import("./pages/EventsPage"));
+const EventListPage = lazy(() => import("./pages/EventListPage"));
 const EventDetailPage = lazy(() => import("./pages/EventDetailPage"));
 const NewEventPage = lazy(() => import("./pages/NewEventPage"));
 const EditEventPage = lazy(() => import("./pages/EditEventPage"));
-const TagsPage = lazy(() => import("./pages/TagsPage"));
+const TagListPage = lazy(() => import("./pages/TagListPage"));
 
 const UserEventsPage = lazy(() => import("./pages/user/UserEventsPage"));
 const UserEventDetailPage = lazy(
@@ -33,7 +33,7 @@ function App() {
                         <Route element={<AdminRoute />}>
                             <Route
                                 path="/admin/events"
-                                element={<EventsPage />}
+                                element={<EventListPage />}
                             />
                             <Route
                                 path="/admin/events/:id"
@@ -47,7 +47,11 @@ function App() {
                                 path="/admin/events/:id/edit"
                                 element={<EditEventPage />}
                             />
-                            <Route path="/admin/tags" element={<TagsPage />} />
+
+                            <Route
+                                path="/admin/tags"
+                                element={<TagListPage />}
+                            />
                         </Route>
 
                         <Route path="/events" element={<UserEventsPage />} />

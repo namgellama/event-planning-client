@@ -1,6 +1,6 @@
 import { EventListContent, EventListHeader } from "@/components/event";
 
-const EventsPage = () => {
+const EventListPage = () => {
     return (
         <div className="space-y-5">
             <EventListHeader />
@@ -9,4 +9,4 @@ const EventsPage = () => {
     );
 };
 
-export default EventsPage;
+export default EventListPage;

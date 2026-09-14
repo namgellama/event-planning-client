@@ -82,7 +82,7 @@ const TagListContent = () => {
                         <TableBody>
                             {tags?.items.map((tag, index) => {
                                 const date = formatDate(
-                                    tag.createdAt.toISOString(),
+                                    tag.createdAt.toString(),
                                 );
 
                                 return (
