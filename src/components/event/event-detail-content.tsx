@@ -1,9 +1,9 @@
 import { CalendarDays, Clock, MapPin } from "lucide-react";
 
-import { Markdown } from "@/components/shared";
+import { Markdown, RsvpBadge } from "@/components/shared";
 import type { EventItem } from "@/types/event";
 import { formatDate } from "@/utils/format-date";
-import { EventRsvpBadge, EventTagBadge } from ".";
+import { EventTagBadge } from ".";
 
 const EventDetailContent = ({ event }: { event: EventItem }) => {
     const { day, month, full, time } = formatDate(event.date);
@@ -58,15 +58,15 @@ const EventDetailContent = ({ event }: { event: EventItem }) => {
                     </div>
 
                     <div className="flex flex-wrap gap-2 mt-6">
-                        <EventRsvpBadge status="yes">
+                        <RsvpBadge status="yes">
                             {event.rsvp.yes} Going
-                        </EventRsvpBadge>
-                        <EventRsvpBadge status="no">
+                        </RsvpBadge>
+                        <RsvpBadge status="no">
                             {event.rsvp.no} Not Going
-                        </EventRsvpBadge>
-                        <EventRsvpBadge status="maybe">
+                        </RsvpBadge>
+                        <RsvpBadge status="maybe">
                             {event.rsvp.maybe} Maybe
-                        </EventRsvpBadge>
+                        </RsvpBadge>
                     </div>
                 </div>
             </div>

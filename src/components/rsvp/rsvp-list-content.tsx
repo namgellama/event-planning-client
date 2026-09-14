@@ -8,8 +8,12 @@ import {
 import { useParams } from "react-router";
 
 import { useFetchAllRsvps, type RsvpSortBy } from "@/apis/rsvp.api";
-import { EventRsvpBadge } from "@/components/event";
-import { EmptyState, ErrorState, Pagination } from "@/components/shared";
+import {
+    EmptyState,
+    ErrorState,
+    Pagination,
+    RsvpBadge,
+} from "@/components/shared";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -129,11 +133,9 @@ const RsvpListContent = () => {
                                                 {rsvp.user.email}
                                             </TableCell>
                                             <TableCell>
-                                                <EventRsvpBadge
-                                                    status={rsvp.status}
-                                                >
+                                                <RsvpBadge status={rsvp.status}>
                                                     {badgeText}
-                                                </EventRsvpBadge>
+                                                </RsvpBadge>
                                             </TableCell>
                                             <TableCell>
                                                 {createdDate.full}

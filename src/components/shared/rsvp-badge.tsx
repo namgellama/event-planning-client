@@ -14,7 +14,7 @@ const style: Record<RsvpStatus, string> = {
     maybe: "border-yellow-500/30 bg-yellow-500/10 text-yellow-600 dark:text-yellow-400",
 };
 
-const EventRsvpBadge = ({ status, children }: Props) => {
+const RsvpBadge = ({ status, children }: Props) => {
     return (
         <Badge variant="outline" className={style[status]}>
             {children}
@@ -22,4 +22,4 @@ const EventRsvpBadge = ({ status, children }: Props) => {
     );
 };
 
-export default EventRsvpBadge;
+export default RsvpBadge;

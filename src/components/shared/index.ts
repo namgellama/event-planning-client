@@ -11,6 +11,7 @@ export { default as FormSelect } from "./form-select";
 export { default as Markdown } from "./markdown";
 export { default as NotFoundState } from "./not-found-state";
 export { default as Pagination } from "./pagination";
+export { default as RsvpBadge } from "./rsvp-badge";
 export { default as SearchInput } from "./search-input";
 export { default as SortControls } from "./sort-controls";
 export { default as StatusState } from "./status-state";
