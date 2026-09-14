@@ -81,7 +81,9 @@ const TagListContent = () => {
                         </TableHeader>
                         <TableBody>
                             {tags?.items.map((tag, index) => {
-                                const date = formatDate(tag.createdAt);
+                                const date = formatDate(
+                                    tag.createdAt.toISOString(),
+                                );
 
                                 return (
                                     <TableRow key={tag.id}>

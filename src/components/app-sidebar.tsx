@@ -1,4 +1,4 @@
-import { CalendarDays, LogOut, Tag as TagIcon } from "lucide-react";
+import { CalendarDays, LogOut, Tag as TagIcon, User } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router";
 
 import { useLogoutUser } from "@/apis/auth.api";
@@ -16,15 +16,7 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/contexts/AuthContext";
-
-function initials(name: string) {
-    return name
-        .split(" ")
-        .filter(Boolean)
-        .slice(0, 2)
-        .map((part) => part[0]?.toUpperCase())
-        .join("");
-}
+import { getInitials } from "@/utils/get-initials";
 
 export default function AppSidebar() {
     const { user } = useAuth();
@@ -49,6 +41,15 @@ export default function AppSidebar() {
                       label: "Tags",
                       to: "/admin/tags",
                       icon: TagIcon,
+                  },
+              ]
+            : []),
+        ...(user?.role === "user"
+            ? [
+                  {
+                      label: "Profile",
+                      to: "/profile",
+                      icon: User,
                   },
               ]
             : []),
@@ -101,7 +102,7 @@ export default function AppSidebar() {
                 <div className="flex items-center gap-3 rounded-sm px-2 py-2">
                     <Avatar className="h-9 w-9">
                         <AvatarFallback className="bg-gray-300 text-sidebar-foreground text-xs">
-                            {initials(user!.name)}
+                            {getInitials(user!.name)}
                         </AvatarFallback>
                     </Avatar>
                     <div className="min-w-0">

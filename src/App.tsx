@@ -19,6 +19,7 @@ const UserEventsPage = lazy(() => import("./pages/user/UserEventsPage"));
 const UserEventDetailPage = lazy(
     () => import("./pages/user/UserEventDetailPage"),
 );
+const UserProfilePage = lazy(() => import("./pages/user/UserProfilePage"));
 
 function App() {
     return (
@@ -54,6 +55,7 @@ function App() {
                             path="/events/:id"
                             element={<UserEventDetailPage />}
                         />
+                        <Route path="/profile" element={<UserProfilePage />} />
                     </Route>
                 </Route>
             </Routes>
