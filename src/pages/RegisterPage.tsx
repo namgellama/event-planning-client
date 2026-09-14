@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 
+import Logo from "@/assets/logo.svg";
 import {
     RegisterUserForm,
     SendOtpForm,
@@ -38,74 +39,96 @@ const RegisterPage = () => {
     }, [isAuthenticated, navigate, user]);
 
     return (
-        <div className="w-full h-screen flex items-center justify-center">
-            <Card className="w-full sm:max-w-md">
-                <CardHeader>
-                    <CardTitle className="text-md">
-                        <h4 className="font-normal">
-                            {step === 1
-                                ? "Create your account"
-                                : step === 2
-                                  ? "Verify your email"
-                                  : "Complete your profile"}
-                        </h4>
-                        <h1 className="text-2xl">
-                            {step === 1
-                                ? "Join Gather"
-                                : step === 2
-                                  ? "Enter the code"
-                                  : "Set up your account"}
-                        </h1>
-                    </CardTitle>
-                    <div className="flex items-center gap-2 pt-2">
-                        <span className="h-1.5 flex-1 rounded-full bg-black" />
-                        <span
-                            className={`h-1.5 flex-1 rounded-full ${
-                                step === 2 || step === 3
-                                    ? "bg-black"
-                                    : "bg-black/15"
-                            }`}
-                        />
-                        <span
-                            className={`h-1.5 flex-1 rounded-full ${
-                                step === 3 ? "bg-black" : "bg-black/15"
-                            }`}
-                        />
+        <div
+            className="w-full min-h-screen flex items-center justify-center px-4 py-12"
+            style={{
+                backgroundImage:
+                    "radial-gradient(circle, rgba(47,59,46,0.08) 1px, transparent 1px)",
+                backgroundSize: "18px 18px",
+            }}
+        >
+            <div className="w-full sm:max-w-md">
+                {/* Brand lockup */}
+                <div className="flex items-center gap-3 mb-8 px-1">
+                    <img src={Logo} alt="Logo" width={34} height={34} />
+                    <div>
+                        <p className="font-serif text-2xl leading-none text-black">
+                            Gather
+                        </p>
+                        <p className="text-sm text-black/55 mt-1">
+                            Discover and track events. Show up.
+                        </p>
                     </div>
-                </CardHeader>
-                <CardContent>
-                    {step === 1 ? (
-                        <SendOtpForm
-                            setStep={setStep}
-                            pendingData={pendingData}
-                            setPendingData={setPendingData}
-                        />
-                    ) : step === 2 ? (
-                        <VerifyEmailForm
-                            setStep={setStep}
-                            pendingData={pendingData}
-                            setPendingData={setPendingData}
-                        />
-                    ) : (
-                        <RegisterUserForm
-                            pendingData={pendingData}
-                            setPendingData={setPendingData}
-                            setStep={setStep}
-                        />
-                    )}
-                </CardContent>
-                <CardFooter className="bg-inherit">
-                    <p className="mt-6 text-center text-sm text-black/60">
-                        Already have an account?{" "}
-                        <Link
-                            to="/login"
-                            className="font-medium text-black underline underline-offset-4"
-                        >
-                            Log in
-                        </Link>
-                    </p>
-                </CardFooter>
-            </Card>
+                </div>
+
+                <Card className="w-full sm:max-w-md">
+                    <CardHeader>
+                        <CardTitle className="text-md">
+                            <h4 className="font-normal">
+                                {step === 1
+                                    ? "Create your account"
+                                    : step === 2
+                                      ? "Verify your email"
+                                      : "Complete your profile"}
+                            </h4>
+                            <h1 className="text-2xl">
+                                {step === 1
+                                    ? "Join Gather"
+                                    : step === 2
+                                      ? "Enter the code"
+                                      : "Set up your account"}
+                            </h1>
+                        </CardTitle>
+                        <div className="flex items-center gap-2 pt-2">
+                            <span className="h-1.5 flex-1 rounded-full bg-black" />
+                            <span
+                                className={`h-1.5 flex-1 rounded-full ${
+                                    step === 2 || step === 3
+                                        ? "bg-black"
+                                        : "bg-black/15"
+                                }`}
+                            />
+                            <span
+                                className={`h-1.5 flex-1 rounded-full ${
+                                    step === 3 ? "bg-black" : "bg-black/15"
+                                }`}
+                            />
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        {step === 1 ? (
+                            <SendOtpForm
+                                setStep={setStep}
+                                pendingData={pendingData}
+                                setPendingData={setPendingData}
+                            />
+                        ) : step === 2 ? (
+                            <VerifyEmailForm
+                                setStep={setStep}
+                                pendingData={pendingData}
+                                setPendingData={setPendingData}
+                            />
+                        ) : (
+                            <RegisterUserForm
+                                pendingData={pendingData}
+                                setPendingData={setPendingData}
+                                setStep={setStep}
+                            />
+                        )}
+                    </CardContent>
+                    <CardFooter className="bg-inherit">
+                        <p className="mt-6 text-center text-sm text-black/60">
+                            Already have an account?{" "}
+                            <Link
+                                to="/login"
+                                className="font-medium text-black underline underline-offset-4"
+                            >
+                                Log in
+                            </Link>
+                        </p>
+                    </CardFooter>
+                </Card>
+            </div>
         </div>
     );
 };

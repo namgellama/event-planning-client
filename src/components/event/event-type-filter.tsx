@@ -1,10 +1,10 @@
 import { useQueryStates } from "nuqs";
 
-import type { EventType } from "@/apis/event.api";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { EventType } from "@/types/event";
 import { eventQueryState } from "./event-list-content";
 
-const tabs: { label: string; value: EventType }[] = [
+const tabs: { label: string; value: EventType | "all" }[] = [
     { label: "All", value: "all" },
     { label: "Public", value: "public" },
     { label: "Private", value: "private" },

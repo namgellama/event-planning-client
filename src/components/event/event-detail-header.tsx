@@ -1,7 +1,9 @@
+import { Users } from "lucide-react";
 import { useNavigate } from "react-router";
 
 import { useDeleteEvent } from "@/apis/event.api";
 import { EditDeleteActions } from "@/components/shared";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/AuthContext";
 import type { EventItem } from "@/types/event";
 import { EventRsvpActions, EventStatusBadge, EventTypeBadge } from ".";
@@ -43,6 +45,17 @@ const EventDetailHeader = ({ event }: { event: EventItem }) => {
                         }
                         onDelete={onDelete}
                         isLoading={isLoading}
+                        additionalItem={
+                            <DropdownMenuItem
+                                className="flex items-center cursor-pointer"
+                                onClick={() =>
+                                    navigate(`/admin/events/${event.id}/rsvps`)
+                                }
+                            >
+                                <Users className="size-3 text-blue-500" /> View
+                                RSVPs
+                            </DropdownMenuItem>
+                        }
                     />
                 ) : (
                     <EventRsvpActions />

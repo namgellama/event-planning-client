@@ -1,7 +1,7 @@
 import { Calendar, Clock, Mail, ShieldCheck, ShieldOff } from "lucide-react";
 import { useState } from "react";
 
-import { TwoFactorAuthDialog } from "@/components/profile";
+import { Disable2FADialog, Enable2FADialog } from "@/components/profile";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
@@ -11,7 +11,8 @@ import { getInitials } from "@/utils/get-initials";
 
 const UserProfilePage = () => {
     const { user } = useAuth();
-    const [isOpen, setIsOpen] = useState(false);
+    const [isEnableOpen, setIsEnableOpen] = useState(false);
+    const [isDisableOpen, setIsDisableOpen] = useState(false);
 
     const createdAtDate = formatDate(user?.createdAt ?? "");
     const updatedAtDate = formatDate(user?.updatedAt ?? "");
@@ -79,7 +80,9 @@ const UserProfilePage = () => {
                                 <Switch
                                     checked={user?.twoFactorEnabled}
                                     onCheckedChange={() => {
-                                        setIsOpen(true);
+                                        user?.twoFactorEnabled
+                                            ? setIsDisableOpen(true)
+                                            : setIsEnableOpen(true);
                                     }}
                                 />
                             </div>
@@ -121,8 +124,17 @@ const UserProfilePage = () => {
                 </Card>
             </div>
 
-            {isOpen && (
-                <TwoFactorAuthDialog isOpen={isOpen} setIsOpen={setIsOpen} />
+            {isEnableOpen && (
+                <Enable2FADialog
+                    isOpen={isEnableOpen}
+                    setIsOpen={setIsEnableOpen}
+                />
+            )}
+            {isDisableOpen && (
+                <Disable2FADialog
+                    isOpen={isDisableOpen}
+                    setIsOpen={setIsDisableOpen}
+                />
             )}
         </div>
     );

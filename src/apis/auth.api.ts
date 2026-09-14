@@ -6,6 +6,7 @@ import type { LoginResponse, LoginSuccessful } from "@/types/auth";
 import type { ApiResponse } from "@/types/response";
 import type { User } from "@/types/user";
 import type {
+    Disable2FAInput,
     LoginUserInput,
     RegisterUserInput,
     SendOtpInput,
@@ -195,6 +196,8 @@ export const useSetup2FA = () => {
 };
 
 export const useVerify2FASetup = () => {
+    const { fetchMe } = useAuth();
+
     const verify2FASetup = async (data: Verify2FASetupInput) => {
         const response = await api.post<ApiResponse<{ qrCode: string }>>(
             "/auth/2fa/verify-setup",
@@ -212,6 +215,7 @@ export const useVerify2FASetup = () => {
             mutationFn: verify2FASetup,
             onSuccess: ({ message }) => {
                 toast.success(message ?? "2FA enabled successfully");
+                fetchMe();
             },
             onError: (error) => {
                 handleApiError(
@@ -249,4 +253,33 @@ export const useVerify2FA = () => {
         });
 
     return { verify2FAMutation, isLoading };
+};
+
+export const useDisable2FA = () => {
+    const { fetchMe } = useAuth();
+
+    const disable2FA = async (data: Disable2FAInput) => {
+        const response = await api.post<ApiResponse<null>>(
+            "/auth/2fa/disable",
+            data,
+        );
+        return response.data;
+    };
+
+    const { mutateAsync: disable2FAMutation, isPending: isLoading } =
+        useMutation<ApiResponse<null>, ApiError, Disable2FAInput>({
+            mutationFn: disable2FA,
+            onSuccess: async ({ message }) => {
+                toast.success(message ?? "2FA disabled successfully");
+                await fetchMe();
+            },
+            onError: (error) => {
+                handleApiError(
+                    error,
+                    "Unable to disable 2FA. Please try again",
+                );
+            },
+        });
+
+    return { disable2FAMutation, isLoading };
 };

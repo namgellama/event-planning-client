@@ -1,5 +1,5 @@
 import { Edit, EllipsisVertical, Trash } from "lucide-react";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,9 +15,15 @@ interface Props {
     onEdit: () => void;
     onDelete: () => void;
     isLoading: boolean;
+    additionalItem?: ReactNode;
 }
 
-const EditDeleteActions = ({ onEdit, onDelete, isLoading }: Props) => {
+const EditDeleteActions = ({
+    onEdit,
+    onDelete,
+    isLoading,
+    additionalItem,
+}: Props) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -35,6 +41,7 @@ const EditDeleteActions = ({ onEdit, onDelete, isLoading }: Props) => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <DropdownMenuGroup>
+                        {additionalItem}
                         <DropdownMenuItem
                             className="flex items-center cursor-pointer"
                             onClick={onEdit}

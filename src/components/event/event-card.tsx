@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router";
 
+import { RsvpBadge } from "@/components/shared";
 import {
     Card,
     CardContent,
@@ -16,12 +17,7 @@ import {
 } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import type { EventListItem } from "@/types/event";
-import {
-    EventRsvpBadge,
-    EventStatusBadge,
-    EventTagBadge,
-    EventTypeBadge,
-} from ".";
+import { EventStatusBadge, EventTagBadge, EventTypeBadge } from ".";
 
 export default function EventCard({ event }: { event: EventListItem }) {
     const { user } = useAuth();
@@ -105,28 +101,28 @@ export default function EventCard({ event }: { event: EventListItem }) {
 
                 <div className="w-full flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <EventRsvpBadge status="yes">
+                        <RsvpBadge status="yes">
                             <UserRoundCheck className="size-4" />
                             {event.rsvp.yes}
-                        </EventRsvpBadge>
-                        <EventRsvpBadge status="no">
+                        </RsvpBadge>
+                        <RsvpBadge status="no">
                             <UserRoundX className="size-4" />
                             {event.rsvp.no}
-                        </EventRsvpBadge>
-                        <EventRsvpBadge status="maybe">
+                        </RsvpBadge>
+                        <RsvpBadge status="maybe">
                             <UserRoundCog />
                             {event.rsvp.maybe}
-                        </EventRsvpBadge>
+                        </RsvpBadge>
                     </div>
 
                     {event.myRsvp && (
-                        <EventRsvpBadge status={event.myRsvp}>
+                        <RsvpBadge status={event.myRsvp}>
                             {event.myRsvp === "yes"
                                 ? "Going"
                                 : event.myRsvp === "no"
                                   ? "Not Going"
                                   : "Tentative"}
-                        </EventRsvpBadge>
+                        </RsvpBadge>
                     )}
                 </div>
             </CardFooter>

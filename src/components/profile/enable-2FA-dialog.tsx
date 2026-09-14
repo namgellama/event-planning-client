@@ -14,10 +14,8 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
-import { useAuth } from "@/contexts/AuthContext";
 import {
     verify2FASetupSchema,
     type Verify2FASetupInput,
@@ -29,8 +27,6 @@ interface Props {
 }
 
 const TwoFactorAuthDialog = ({ isOpen, setIsOpen }: Props) => {
-    const { fetchMe } = useAuth();
-
     const [step, setStep] = useState<"confirm" | "qr">("confirm");
     const [qrCode, setQrCode] = useState<string | null>(null);
 
@@ -54,7 +50,6 @@ const TwoFactorAuthDialog = ({ isOpen, setIsOpen }: Props) => {
     const onSubmit = async (data: Verify2FASetupInput) => {
         await verify2FASetupMutation(data);
         setIsOpen(false);
-        fetchMe();
     };
 
     return (
@@ -78,12 +73,13 @@ const TwoFactorAuthDialog = ({ isOpen, setIsOpen }: Props) => {
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
 
-                                <Button
+                                <AlertDialogAction
+                                    type="button"
                                     onClick={onConfirm}
                                     disabled={isLoading}
                                 >
                                     {isLoading ? <Spinner /> : "Continue"}
-                                </Button>
+                                </AlertDialogAction>
                             </AlertDialogFooter>
                         </>
                     ) : (

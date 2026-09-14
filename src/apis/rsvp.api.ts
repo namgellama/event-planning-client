@@ -1,10 +1,69 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import type { ApiResponse } from "@/types/response";
-import type { Rsvp, RsvpStatus } from "@/types/rsvp";
-import api, { handleApiError, type ApiError } from ".";
 import { useAuth } from "@/contexts/AuthContext";
+import type { PaginatedResponse } from "@/types/pagination";
+import type { ListQueryParams } from "@/types/request";
+import type { ApiResponse } from "@/types/response";
+import type { Rsvp, RsvpListItem, RsvpStatus } from "@/types/rsvp";
+import api, { handleApiError, type ApiError } from ".";
+
+export type RsvpSortBy = "createdAt" | "updatedAt";
+
+export type RsvpListQueryParams = ListQueryParams & {
+    status?: RsvpStatus | "all";
+    sortBy?: RsvpSortBy;
+};
+
+export const useFetchAllRsvps = (
+    query: RsvpListQueryParams,
+    eventId: string | undefined,
+) => {
+    const { page = 1, limit = 10, status, search, sortBy, sortOrder } = query;
+
+    const fetchAllRsvps = async () => {
+        const response = await api.get<
+            ApiResponse<PaginatedResponse<RsvpListItem>>
+        >(`/events/${eventId}/rsvps`, {
+            params: {
+                page,
+                limit,
+                status: status === "all" ? undefined : status,
+                search: search?.trim() || undefined,
+                sortBy,
+                sortOrder,
+            },
+        });
+        return response.data;
+    };
+
+    const {
+        data: rsvps,
+        isLoading,
+        error,
+        refetch,
+    } = useQuery<
+        ApiResponse<PaginatedResponse<RsvpListItem>>,
+        ApiError,
+        PaginatedResponse<RsvpListItem>
+    >({
+        queryFn: fetchAllRsvps,
+        queryKey: [
+            "rsvps",
+            eventId,
+            page,
+            limit,
+            status,
+            search,
+            sortBy,
+            sortOrder,
+        ],
+        select: ({ data }) => data,
+        enabled: !!eventId,
+    });
+
+    return { rsvps, isLoading, error, refetch };
+};
 
 export const useFetchMyRsvp = (eventId: string | undefined) => {
     const { user } = useAuth();

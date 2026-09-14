@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 
 import { useLoginUser } from "@/apis/auth.api";
+import Logo from "@/assets/logo.svg";
 import { Verify2FADialog } from "@/components/auth";
 import { FormInput, FormPasswordInput } from "@/components/shared";
 import { Button } from "@/components/ui/button";
@@ -21,20 +22,6 @@ import {
     loginUserSchema,
     type LoginUserInput,
 } from "@/validations/auth.validation";
-
-const GatherMark = () => (
-    <svg
-        width="34"
-        height="34"
-        viewBox="0 0 34 34"
-        fill="none"
-        aria-hidden="true"
-    >
-        <circle cx="13" cy="13" r="9" fill="#2F3B2E" fillOpacity="0.85" />
-        <circle cx="21" cy="13" r="9" fill="#2F3B2E" fillOpacity="0.55" />
-        <circle cx="17" cy="21" r="9" fill="#2F3B2E" fillOpacity="0.7" />
-    </svg>
-);
 
 const LoginPage = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -92,7 +79,7 @@ const LoginPage = () => {
             <div className="w-full sm:max-w-md">
                 {/* Brand lockup */}
                 <div className="flex items-center gap-3 mb-8 px-1">
-                    <GatherMark />
+                    <img src={Logo} alt="Logo" width={34} height={34} />
                     <div>
                         <p className="font-serif text-2xl leading-none text-black">
                             Gather
