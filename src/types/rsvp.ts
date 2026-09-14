@@ -1,3 +1,5 @@
+import type { User } from "./user";
+
 export type RsvpStatus = "yes" | "no" | "maybe";
 
 export type Rsvp = {
@@ -6,4 +8,8 @@ export type Rsvp = {
     status: RsvpStatus;
     createdAt: string;
     updatedAt: string;
+};
+
+export type RsvpListItem = Rsvp & {
+    user: Pick<User, "id" | "name" | "email">;
 };

@@ -1,3 +1,4 @@
+import { CalendarX } from "lucide-react";
 import {
     parseAsInteger,
     parseAsString,
@@ -7,7 +8,12 @@ import {
 import { useState } from "react";
 
 import { useDeleteTag, useFetchAllTags, type TagSortBy } from "@/apis/tag.api";
-import { EditDeleteActions, ErrorState, Pagination } from "@/components/shared";
+import {
+    EditDeleteActions,
+    EmptyState,
+    ErrorState,
+    Pagination,
+} from "@/components/shared";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -66,53 +72,66 @@ const TagListContent = () => {
 
     return (
         <div className="space-y-5">
-            <Card>
-                <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="w-25">S.N.</TableHead>
-                                <TableHead>Title</TableHead>
-                                <TableHead>Created Date</TableHead>
-                                <TableHead className="text-right">
-                                    Actions
-                                </TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {tags?.items.map((tag, index) => {
-                                const date = formatDate(
-                                    tag.createdAt.toString(),
-                                );
+            {tags?.pagination.total === 0 ? (
+                <EmptyState
+                    icon={CalendarX}
+                    title={search ? "No matching tags" : "No tags found"}
+                    description={
+                        search
+                            ? "Try a different search term."
+                            : "Create a new tag to get started."
+                    }
+                />
+            ) : (
+                <Card>
+                    <CardContent>
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="w-25">S.N.</TableHead>
+                                    <TableHead>Title</TableHead>
+                                    <TableHead>Created Date</TableHead>
+                                    <TableHead className="text-right">
+                                        Actions
+                                    </TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {tags?.items.map((tag, index) => {
+                                    const date = formatDate(
+                                        tag.createdAt.toString(),
+                                    );
 
-                                return (
-                                    <TableRow key={tag.id}>
-                                        <TableCell className="font-medium">
-                                            {index + 1}
-                                        </TableCell>
-                                        <TableCell>{tag.title}</TableCell>
-                                        <TableCell>{date.full}</TableCell>
-                                        <TableCell className="text-right">
-                                            <EditDeleteActions
-                                                onEdit={() => {
-                                                    setIsOpen(true);
-                                                    setTagId(tag.id);
-                                                }}
-                                                onDelete={async () => {
-                                                    await deleteTagMutation(
-                                                        tag.id,
-                                                    );
-                                                }}
-                                                isLoading={isDeleteLoading}
-                                            />
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                </CardContent>
-            </Card>
+                                    return (
+                                        <TableRow key={tag.id}>
+                                            <TableCell className="font-medium">
+                                                {index + 1}
+                                            </TableCell>
+                                            <TableCell>{tag.title}</TableCell>
+                                            <TableCell>{date.full}</TableCell>
+                                            <TableCell className="text-right">
+                                                <EditDeleteActions
+                                                    onEdit={() => {
+                                                        setIsOpen(true);
+                                                        setTagId(tag.id);
+                                                    }}
+                                                    onDelete={async () => {
+                                                        await deleteTagMutation(
+                                                            tag.id,
+                                                        );
+                                                    }}
+                                                    isLoading={isDeleteLoading}
+                                                />
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
+            )}
+
             {tags && <Pagination totalPages={tags.pagination.totalPages} />}
 
             {isOpen && (

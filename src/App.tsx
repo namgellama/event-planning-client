@@ -14,6 +14,7 @@ const EventDetailPage = lazy(() => import("./pages/EventDetailPage"));
 const NewEventPage = lazy(() => import("./pages/NewEventPage"));
 const EditEventPage = lazy(() => import("./pages/EditEventPage"));
 const TagListPage = lazy(() => import("./pages/TagListPage"));
+const RsvpListPage = lazy(() => import("./pages/RsvpListPage"));
 
 const UserEventsPage = lazy(() => import("./pages/user/UserEventsPage"));
 const UserEventDetailPage = lazy(
@@ -47,7 +48,10 @@ function App() {
                                 path="/admin/events/:id/edit"
                                 element={<EditEventPage />}
                             />
-
+                            <Route
+                                path="/admin/events/:id/rsvps"
+                                element={<RsvpListPage />}
+                            />
                             <Route
                                 path="/admin/tags"
                                 element={<TagListPage />}
