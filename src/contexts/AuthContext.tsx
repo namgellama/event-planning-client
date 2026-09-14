@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
 
         initializeAuth();
-    }, [pathname]);
+    }, []);
 
     useLayoutEffect(() => {
         const authInterceptor = api.interceptors.request.use((config) => {

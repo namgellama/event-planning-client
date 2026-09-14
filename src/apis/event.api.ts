@@ -1,3 +1,6 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+
 import type {
     EventItem,
     EventListItem,
@@ -13,8 +16,6 @@ import type {
     CreateEventInput,
     UpdateEventInput,
 } from "@/validations/event.validation";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import api, { handleApiError, type ApiError } from ".";
 
 export type EventSortBy = "createdAt" | "date" | "title" | "popularity";

@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 
 import { useLoginUser } from "@/apis/auth.api";
+import { Verify2FADialog } from "@/components/auth";
 import { FormInput, FormPasswordInput } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,8 +37,13 @@ const GatherMark = () => (
 );
 
 const LoginPage = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [twoFactorToken, setTwoFactorToken] = useState<string | null>(null);
+
     const { isAuthenticated, user } = useAuth();
+
     const navigate = useNavigate();
+
     const form = useForm<LoginUserInput>({
         resolver: zodResolver(loginUserSchema),
         defaultValues: {
@@ -59,7 +65,14 @@ const LoginPage = () => {
     }, [isAuthenticated, navigate, user]);
 
     async function onSubmit(data: LoginUserInput) {
-        await loginUserMutation(data);
+        const result = await loginUserMutation(data);
+
+        if (result.data.requires2FA) {
+            setTwoFactorToken(result.data.twoFactorToken);
+            setIsOpen(true);
+            return;
+        }
+
         if (user?.role === "admin") {
             navigate("/admin/events");
             return;
@@ -145,6 +158,14 @@ const LoginPage = () => {
                     </CardFooter>
                 </Card>
             </div>
+
+            {isOpen && twoFactorToken && (
+                <Verify2FADialog
+                    isOpen={isOpen}
+                    setIsOpen={setIsOpen}
+                    twoFactorToken={twoFactorToken}
+                />
+            )}
         </div>
     );
 };

@@ -33,3 +33,22 @@ export const loginUserSchema = z.object({
 });
 
 export type LoginUserInput = z.infer<typeof loginUserSchema>;
+
+export const verify2FASetupSchema = z.object({
+    code: z
+        .string()
+        .trim()
+        .regex(/^\d{6}$/, "2FA code must be exactly 6 digits"),
+});
+
+export type Verify2FASetupInput = z.infer<typeof verify2FASetupSchema>;
+
+export const verify2FASchema = z.object({
+    code: z
+        .string()
+        .trim()
+        .regex(/^\d{6}$/, "2FA code must be exactly 6 digits"),
+    twoFactorToken: z.string().trim().min(1, "2FA token is required"),
+});
+
+export type Verify2FAInput = z.infer<typeof verify2FASchema>;
