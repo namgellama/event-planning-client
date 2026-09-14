@@ -52,3 +52,12 @@ export const verify2FASchema = z.object({
 });
 
 export type Verify2FAInput = z.infer<typeof verify2FASchema>;
+
+export const disable2FASchema = z.object({
+    code: z
+        .string()
+        .trim()
+        .regex(/^\d{6}$/, "2FA code must be exactly 6 digits"),
+});
+
+export type Disable2FAInput = z.infer<typeof disable2FASchema>;
