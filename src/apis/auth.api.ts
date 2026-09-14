@@ -5,6 +5,7 @@ import type {
     LoginUserInput,
     RegisterUserInput,
     SendOtpInput,
+    Verify2FASetupInput,
     VerifyEmailInput,
 } from "@/validations/auth.validation";
 import { useMutation } from "@tanstack/react-query";
@@ -153,4 +154,63 @@ export const useLogoutUser = () => {
         });
 
     return { logoutUserMutation, isLoading };
+};
+
+export const useSetup2FA = () => {
+    const setup2FA = async () => {
+        const response = await api.post<ApiResponse<{ qrCode: string }>>(
+            "/auth/2fa/setup",
+            null,
+        );
+        return response.data;
+    };
+
+    const { mutateAsync: setup2FAMutation, isPending: isLoading } = useMutation<
+        ApiResponse<{ qrCode: string }>,
+        ApiError,
+        void
+    >({
+        mutationFn: setup2FA,
+        onSuccess: ({ message }) => {
+            toast.success(message ?? "2FA setup initiated successfully");
+        },
+        onError: (error) => {
+            handleApiError(
+                error,
+                "Unable to initiate 2FA setup. Please try again",
+            );
+        },
+    });
+
+    return { setup2FAMutation, isLoading };
+};
+
+export const useVerify2FASetup = () => {
+    const verify2FASetup = async (data: Verify2FASetupInput) => {
+        const response = await api.post<ApiResponse<{ qrCode: string }>>(
+            "/auth/2fa/verify-setup",
+            data,
+        );
+        return response.data;
+    };
+
+    const { mutateAsync: verify2FASetupMutation, isPending: isLoading } =
+        useMutation<
+            ApiResponse<{ qrCode: string }>,
+            ApiError,
+            Verify2FASetupInput
+        >({
+            mutationFn: verify2FASetup,
+            onSuccess: ({ message }) => {
+                toast.success(message ?? "2FA enabled successfully");
+            },
+            onError: (error) => {
+                handleApiError(
+                    error,
+                    "Unable to verify 2FA setup. Please try again",
+                );
+            },
+        });
+
+    return { verify2FASetupMutation, isLoading };
 };
