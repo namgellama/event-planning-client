@@ -16,7 +16,7 @@ const items = [
     { label: "Maybe", value: "maybe" },
 ];
 
-const RsvpStatusFilter = () => {
+const RSVPStatusFilter = () => {
     const [{ status }, setQuery] = useQueryStates(rsvpQueryState);
 
     return (
@@ -47,4 +47,4 @@ const RsvpStatusFilter = () => {
     );
 };
 
-export default RsvpStatusFilter;
+export default RSVPStatusFilter;

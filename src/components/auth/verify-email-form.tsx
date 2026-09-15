@@ -7,7 +7,7 @@ import { FormInput } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
-import type { PendingData } from "@/pages/RegisterPage";
+import type { PendingData } from "@/pages/shared/RegisterPage";
 import {
     verifyEmailSchema,
     type VerifyEmailInput,

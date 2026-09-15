@@ -12,7 +12,7 @@ import {
     EmptyState,
     ErrorState,
     Pagination,
-    RsvpBadge,
+    RSVPBadge,
 } from "@/components/shared";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -47,7 +47,7 @@ export const rsvpQueryState = {
     ),
 };
 
-const RsvpListContent = () => {
+const RSVPListContent = () => {
     const { id } = useParams();
 
     const [{ page, limit, status, search, sortBy, sortOrder }] =
@@ -133,9 +133,9 @@ const RsvpListContent = () => {
                                                 {rsvp.user.email}
                                             </TableCell>
                                             <TableCell>
-                                                <RsvpBadge status={rsvp.status}>
+                                                <RSVPBadge status={rsvp.status}>
                                                     {badgeText}
-                                                </RsvpBadge>
+                                                </RSVPBadge>
                                             </TableCell>
                                             <TableCell>
                                                 {createdDate.full}
@@ -156,4 +156,4 @@ const RsvpListContent = () => {
     );
 };
 
-export default RsvpListContent;
+export default RSVPListContent;

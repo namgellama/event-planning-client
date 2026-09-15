@@ -6,7 +6,7 @@ import { useParams } from "react-router";
 
 import { useFetchEvent } from "@/apis/event.api";
 import { useCreateRSVP, useFetchMyRSVP, useUpdateRSVP } from "@/apis/rsvp.api";
-import { FormSelect, RsvpBadge } from "@/components/shared";
+import { FormSelect, RSVPBadge } from "@/components/shared";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -90,7 +90,7 @@ const EventRsvpActions = () => {
                     <Spinner />
                 ) : rsvp ? (
                     <div className="flex items-center gap-2">
-                        <RsvpBadge status={rsvp.status}>{badgeText}</RsvpBadge>
+                        <RSVPBadge status={rsvp.status}>{badgeText}</RSVPBadge>
                         {isUpcoming && (
                             <Button
                                 variant="ghost"

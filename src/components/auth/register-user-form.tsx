@@ -11,7 +11,7 @@ import {
     registerUserSchema,
     type RegisterUserInput,
 } from "@/validations/auth.validation";
-import type { PendingData } from "@/pages/RegisterPage";
+import type { PendingData } from "@/pages/shared/RegisterPage";
 import { useNavigate } from "react-router";
 
 interface Props {

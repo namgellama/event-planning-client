@@ -6,17 +6,23 @@ import AdminRoute from "./layouts/AdminRoute";
 import AppLayout from "./layouts/AppLayout";
 import ProtectedRoute from "./layouts/ProtectedRoute";
 
-const LandingPage = lazy(() => import("./pages/LandingPage"));
-const RegisterPage = lazy(() => import("./pages/RegisterPage"));
-const LoginPage = lazy(() => import("./pages/LoginPage"));
-const EventListPage = lazy(() => import("./pages/EventListPage"));
-const EventDetailsPage = lazy(() => import("./pages/EventDetailsPage"));
-const NewEventPage = lazy(() => import("./pages/NewEventPage"));
-const EditEventPage = lazy(() => import("./pages/EditEventPage"));
-const TagListPage = lazy(() => import("./pages/TagListPage"));
-const RsvpListPage = lazy(() => import("./pages/RsvpListPage"));
+const RegisterPage = lazy(() => import("./pages/shared/RegisterPage"));
+const LoginPage = lazy(() => import("./pages/shared/LoginPage"));
 
-const UserEventsPage = lazy(() => import("./pages/user/UserEventsPage"));
+const AdminEventListPage = lazy(
+    () => import("./pages/admin/AdminEventListPage"),
+);
+const AdminEventDetailsPage = lazy(
+    () => import("./pages/admin/AdminEventDetailsPage"),
+);
+const AdminNewEventPage = lazy(() => import("./pages/admin/AdminNewEventPage"));
+const AdminEditEventPage = lazy(
+    () => import("./pages/admin/AdminEditEventPage"),
+);
+const AdminTagListPage = lazy(() => import("./pages/admin/AdminTagListPage"));
+const AdminRsvpListPage = lazy(() => import("./pages/admin/AdminRsvpListPage"));
+
+const UserEventListPage = lazy(() => import("./pages/user/UserEventListPage"));
 const UserEventDetailsPage = lazy(
     () => import("./pages/user/UserEventDetailsPage"),
 );
@@ -26,44 +32,48 @@ function App() {
     return (
         <Suspense fallback={<CenteredSpinner />}>
             <Routes>
-                <Route path="/" element={<LandingPage />} />
+                {/* Shared routes */}
+                <Route path="/" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/login" element={<LoginPage />} />
+
                 <Route element={<ProtectedRoute />}>
                     <Route element={<AppLayout />}>
-                        <Route element={<AdminRoute />}>
-                            <Route
-                                path="/admin/events"
-                                element={<EventListPage />}
-                            />
-                            <Route
-                                path="/admin/events/:id"
-                                element={<EventDetailsPage />}
-                            />
-                            <Route
-                                path="/admin/events/new"
-                                element={<NewEventPage />}
-                            />
-                            <Route
-                                path="/admin/events/:id/edit"
-                                element={<EditEventPage />}
-                            />
-                            <Route
-                                path="/admin/events/:id/rsvps"
-                                element={<RsvpListPage />}
-                            />
-                            <Route
-                                path="/admin/tags"
-                                element={<TagListPage />}
-                            />
-                        </Route>
-
-                        <Route path="/events" element={<UserEventsPage />} />
+                        {/* User routes */}
+                        <Route path="/events" element={<UserEventListPage />} />
                         <Route
                             path="/events/:id"
                             element={<UserEventDetailsPage />}
                         />
                         <Route path="/profile" element={<UserProfilePage />} />
+
+                        {/* Admin routes */}
+                        <Route element={<AdminRoute />}>
+                            <Route
+                                path="/admin/events"
+                                element={<AdminEventListPage />}
+                            />
+                            <Route
+                                path="/admin/events/:id"
+                                element={<AdminEventDetailsPage />}
+                            />
+                            <Route
+                                path="/admin/events/new"
+                                element={<AdminNewEventPage />}
+                            />
+                            <Route
+                                path="/admin/events/:id/edit"
+                                element={<AdminEditEventPage />}
+                            />
+                            <Route
+                                path="/admin/events/:id/rsvps"
+                                element={<AdminRsvpListPage />}
+                            />
+                            <Route
+                                path="/admin/tags"
+                                element={<AdminTagListPage />}
+                            />
+                        </Route>
                     </Route>
                 </Route>
             </Routes>

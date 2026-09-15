@@ -12,7 +12,7 @@ import {
     type UpdateEventInput,
 } from "@/validations/event.validation";
 
-const EditEventPage = () => {
+const AdminEditEventPage = () => {
     const { id } = useParams();
 
     const { event, isLoading, error, refetch } = useFetchEvent(id);
@@ -43,7 +43,7 @@ const EditEventPage = () => {
     return <EditEventForm event={event} />;
 };
 
-export default EditEventPage;
+export default AdminEditEventPage;
 
 const EditEventForm = ({ event }: { event: EventItem }) => {
     const form = useForm<UpdateEventInput>({
