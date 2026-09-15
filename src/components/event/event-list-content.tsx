@@ -13,7 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useDebounce } from "@/hooks/useDebounce";
 import type { EventStatus, EventType } from "@/types/event";
 import type { SortOrder } from "@/types/request";
-import type { RsvpStatus } from "@/types/rsvp";
+import type { RSVPStatus } from "@/types/rsvp";
 import { EventCard } from ".";
 
 export const eventQueryState = {
@@ -29,7 +29,7 @@ export const eventQueryState = {
         "upcoming",
         "completed",
     ]).withDefault("all"),
-    rsvpStatus: parseAsStringEnum<RsvpStatus | "all">([
+    rsvpStatus: parseAsStringEnum<RSVPStatus | "all">([
         "all",
         "yes",
         "no",

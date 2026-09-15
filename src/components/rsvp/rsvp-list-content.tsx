@@ -7,12 +7,12 @@ import {
 } from "nuqs";
 import { useParams } from "react-router";
 
-import { useFetchAllRsvps, type RsvpSortBy } from "@/apis/rsvp.api";
+import { useFetchAllRSVPs, type RSVPSortBy } from "@/apis/rsvp.api";
 import {
     EmptyState,
     ErrorState,
     Pagination,
-    RsvpBadge,
+    RSVPBadge,
 } from "@/components/shared";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -25,20 +25,20 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import type { SortOrder } from "@/types/request";
-import type { RsvpStatus } from "@/types/rsvp";
+import type { RSVPStatus } from "@/types/rsvp";
 import { formatDate } from "@/utils/format-date";
 
 export const rsvpQueryState = {
     page: parseAsInteger.withDefault(1),
     limit: parseAsInteger.withDefault(10),
     search: parseAsString.withDefault(""),
-    status: parseAsStringEnum<RsvpStatus | "all">([
+    status: parseAsStringEnum<RSVPStatus | "all">([
         "all",
         "yes",
         "no",
         "maybe",
     ]).withDefault("all"),
-    sortBy: parseAsStringEnum<RsvpSortBy>([
+    sortBy: parseAsStringEnum<RSVPSortBy>([
         "createdAt",
         "updatedAt",
     ]).withDefault("createdAt"),
@@ -47,13 +47,13 @@ export const rsvpQueryState = {
     ),
 };
 
-const RsvpListContent = () => {
+const RSVPListContent = () => {
     const { id } = useParams();
 
     const [{ page, limit, status, search, sortBy, sortOrder }] =
         useQueryStates(rsvpQueryState);
 
-    const { rsvps, isLoading, error, refetch } = useFetchAllRsvps(
+    const { rsvps, isLoading, error, refetch } = useFetchAllRSVPs(
         {
             page,
             limit,
@@ -133,9 +133,9 @@ const RsvpListContent = () => {
                                                 {rsvp.user.email}
                                             </TableCell>
                                             <TableCell>
-                                                <RsvpBadge status={rsvp.status}>
+                                                <RSVPBadge status={rsvp.status}>
                                                     {badgeText}
-                                                </RsvpBadge>
+                                                </RSVPBadge>
                                             </TableCell>
                                             <TableCell>
                                                 {createdDate.full}
@@ -156,4 +156,4 @@ const RsvpListContent = () => {
     );
 };
 
-export default RsvpListContent;
+export default RSVPListContent;

@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router";
 
-import { RsvpBadge } from "@/components/shared";
+import { RSVPBadge } from "@/components/shared";
 import {
     Card,
     CardContent,
@@ -101,28 +101,28 @@ export default function EventCard({ event }: { event: EventListItem }) {
 
                 <div className="w-full flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <RsvpBadge status="yes">
+                        <RSVPBadge status="yes">
                             <UserRoundCheck className="size-4" />
                             {event.rsvp.yes}
-                        </RsvpBadge>
-                        <RsvpBadge status="no">
+                        </RSVPBadge>
+                        <RSVPBadge status="no">
                             <UserRoundX className="size-4" />
                             {event.rsvp.no}
-                        </RsvpBadge>
-                        <RsvpBadge status="maybe">
+                        </RSVPBadge>
+                        <RSVPBadge status="maybe">
                             <UserRoundCog />
                             {event.rsvp.maybe}
-                        </RsvpBadge>
+                        </RSVPBadge>
                     </div>
 
                     {event.myRsvp && (
-                        <RsvpBadge status={event.myRsvp}>
+                        <RSVPBadge status={event.myRsvp}>
                             {event.myRsvp === "yes"
                                 ? "Going"
                                 : event.myRsvp === "no"
                                   ? "Not Going"
                                   : "Tentative"}
-                        </RsvpBadge>
+                        </RSVPBadge>
                     )}
                 </div>
             </CardFooter>

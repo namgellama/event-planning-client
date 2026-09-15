@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import { useParams } from "react-router";
 
 import { useFetchEvent } from "@/apis/event.api";
-import { useCreateRsvp, useFetchMyRsvp, useUpdateRsvp } from "@/apis/rsvp.api";
-import { FormSelect, RsvpBadge } from "@/components/shared";
+import { useCreateRSVP, useFetchMyRSVP, useUpdateRSVP } from "@/apis/rsvp.api";
+import { FormSelect, RSVPBadge } from "@/components/shared";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -21,8 +21,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import {
-    createRsvpSchema,
-    type CreateRsvpInput,
+    createRSVPSchema,
+    type CreateRSVPInput,
 } from "@/validations/rsvp.validation";
 
 const data = [
@@ -37,16 +37,16 @@ const EventRsvpActions = () => {
 
     const [isOpen, setIsOpen] = useState(false);
 
-    const form = useForm<CreateRsvpInput>({
-        resolver: zodResolver(createRsvpSchema),
+    const form = useForm<CreateRSVPInput>({
+        resolver: zodResolver(createRSVPSchema),
         defaultValues: {
             status: "yes",
         },
     });
 
-    const { rsvp, isLoading: isRsvpLoading } = useFetchMyRsvp(event?.id);
-    const { createRsvpMutation, isLoading: isCreateLoading } = useCreateRsvp();
-    const { updateRsvpMutation, isLoading: isUpdateLoading } = useUpdateRsvp();
+    const { rsvp, isLoading: isRSVPLoading } = useFetchMyRSVP(event?.id);
+    const { createRSVPMutation, isLoading: isCreateLoading } = useCreateRSVP();
+    const { updateRSVPMutation, isLoading: isUpdateLoading } = useUpdateRSVP();
     const isSubmitting = isCreateLoading || isUpdateLoading;
 
     useEffect(() => {
@@ -55,16 +55,16 @@ const EventRsvpActions = () => {
         form.reset({ status: rsvp.status });
     }, [rsvp, form]);
 
-    const onSubmit = async (data: CreateRsvpInput) => {
+    const onSubmit = async (data: CreateRSVPInput) => {
         if (!event) return;
 
         if (rsvp) {
-            await updateRsvpMutation({
+            await updateRSVPMutation({
                 eventId: event.id,
                 status: data.status,
             });
         } else {
-            await createRsvpMutation({
+            await createRSVPMutation({
                 eventId: event.id,
                 status: data.status,
             });
@@ -86,11 +86,11 @@ const EventRsvpActions = () => {
     return (
         <>
             <div className="flex items-center gap-3">
-                {isRsvpLoading ? (
+                {isRSVPLoading ? (
                     <Spinner />
                 ) : rsvp ? (
                     <div className="flex items-center gap-2">
-                        <RsvpBadge status={rsvp.status}>{badgeText}</RsvpBadge>
+                        <RSVPBadge status={rsvp.status}>{badgeText}</RSVPBadge>
                         {isUpcoming && (
                             <Button
                                 variant="ghost"

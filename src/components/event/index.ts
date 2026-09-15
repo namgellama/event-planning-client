@@ -1,7 +1,7 @@
 export { default as EventCard } from "./event-card";
-export { default as EventDetailContent } from "./event-detail-content";
-export { default as EventDetailFooter } from "./event-detail-footer";
-export { default as EventDetailHeader } from "./event-detail-header";
+export { default as EventDetailsContent } from "./event-details-content";
+export { default as EventDetailsFooter } from "./event-details-footer";
+export { default as EventDetailsHeader } from "./event-details-header";
 export { default as EventForm } from "./event-form";
 export { default as EventListContent } from "./event-list-content";
 export { default as EventListHeader } from "./event-list-header";

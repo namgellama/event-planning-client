@@ -9,7 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { formatDate } from "@/utils/format-date";
 import { getInitials } from "@/utils/get-initials";
 
-const UserProfilePage = () => {
+const ProfilePage = () => {
     const { user } = useAuth();
     const [isEnableOpen, setIsEnableOpen] = useState(false);
     const [isDisableOpen, setIsDisableOpen] = useState(false);
@@ -140,4 +140,4 @@ const UserProfilePage = () => {
     );
 };
 
-export default UserProfilePage;
+export default ProfilePage;

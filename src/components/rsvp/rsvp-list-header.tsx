@@ -1,10 +1,10 @@
 import { useQueryStates } from "nuqs";
 
-import type { RsvpSortBy } from "@/apis/rsvp.api";
+import type { RSVPSortBy } from "@/apis/rsvp.api";
 import { SearchInput, SortControls } from "@/components/shared";
 import { Card, CardContent } from "@/components/ui/card";
 import type { SortOrder } from "@/types/request";
-import { RsvpStatusFilter } from ".";
+import { RSVPStatusFilter } from ".";
 import { rsvpQueryState } from "./rsvp-list-content";
 
 const sortByItems = [
@@ -12,13 +12,13 @@ const sortByItems = [
     { label: "Updated Date", value: "updatedAt" },
 ];
 
-const RsvpListHeader = () => {
+const RSVPListHeader = () => {
     const [{ search, sortBy, sortOrder }, setQuery] =
         useQueryStates(rsvpQueryState);
 
     const handleSortBy = (value: string | null) => {
         if (!value) return;
-        setQuery({ sortBy: value as RsvpSortBy, page: 1 });
+        setQuery({ sortBy: value as RSVPSortBy, page: 1 });
     };
 
     const handleSortOrder = () => {
@@ -40,7 +40,7 @@ const RsvpListHeader = () => {
                     className="flex-1 w-full h-10"
                     onReset={() => setQuery({ search: "" })}
                 />
-                <RsvpStatusFilter />
+                <RSVPStatusFilter />
                 <SortControls
                     items={sortByItems}
                     sortBy={sortBy}
@@ -53,4 +53,4 @@ const RsvpListHeader = () => {
     );
 };
 
-export default RsvpListHeader;
+export default RSVPListHeader;

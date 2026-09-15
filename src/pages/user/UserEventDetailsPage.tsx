@@ -2,14 +2,14 @@ import { useParams } from "react-router";
 
 import { useFetchEvent } from "@/apis/event.api";
 import {
-    EventDetailContent,
-    EventDetailFooter,
-    EventDetailHeader,
+    EventDetailsContent,
+    EventDetailsFooter,
+    EventDetailsHeader,
 } from "@/components/event";
 import { CenteredSpinner, ErrorState } from "@/components/shared";
 import { Separator } from "@/components/ui/separator";
 
-const UserEventDetailPage = () => {
+const UserEventDetailsPage = () => {
     const { id } = useParams();
 
     const { event, isLoading, error, refetch } = useFetchEvent(id);
@@ -39,12 +39,12 @@ const UserEventDetailPage = () => {
 
     return (
         <div className="mx-auto max-w-4xl py-12">
-            <EventDetailHeader event={event} />
+            <EventDetailsHeader event={event} />
             <Separator className="my-4" />
-            <EventDetailContent event={event} />
-            <EventDetailFooter event={event} />
+            <EventDetailsContent event={event} />
+            <EventDetailsFooter event={event} />
         </div>
     );
 };
 
-export default UserEventDetailPage;
+export default UserEventDetailsPage;
