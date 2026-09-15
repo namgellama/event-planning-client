@@ -12,10 +12,7 @@ import type { PaginatedResponse } from "@/types/pagination";
 import type { ListQueryParams } from "@/types/request";
 import type { ApiResponse } from "@/types/response";
 import type { RSVPStatus } from "@/types/rsvp";
-import type {
-    CreateEventInput,
-    UpdateEventInput,
-} from "@/validations/event.validation";
+import type { CreateEventInput } from "@/validations/event.validation";
 import api, { handleApiError, type ApiError } from ".";
 
 export type EventSortBy = "createdAt" | "date" | "title" | "popularity";
@@ -146,7 +143,7 @@ export const useUpdateEvent = () => {
         data,
         eventId,
     }: {
-        data: UpdateEventInput;
+        data: CreateEventInput;
         eventId: string;
     }) => {
         const response = await api.patch<ApiResponse<EventWithTagIds>>(
@@ -160,7 +157,7 @@ export const useUpdateEvent = () => {
         useMutation<
             ApiResponse<EventWithTagIds>,
             ApiError,
-            { data: UpdateEventInput; eventId: string }
+            { data: CreateEventInput; eventId: string }
         >({
             mutationFn: updateEvent,
             onSuccess: ({ message, data }) => {

@@ -6,8 +6,15 @@ import AdminRoute from "./layouts/AdminRoute";
 import AppLayout from "./layouts/AppLayout";
 import ProtectedRoute from "./layouts/ProtectedRoute";
 
+// Shared public route
 const RegisterPage = lazy(() => import("./pages/shared/RegisterPage"));
 const LoginPage = lazy(() => import("./pages/shared/LoginPage"));
+
+const UserEventListPage = lazy(() => import("./pages/user/UserEventListPage"));
+const UserEventDetailsPage = lazy(
+    () => import("./pages/user/UserEventDetailsPage"),
+);
+const ProfilePage = lazy(() => import("./pages/shared/ProfilePage"));
 
 const AdminEventListPage = lazy(
     () => import("./pages/admin/AdminEventListPage"),
@@ -22,32 +29,28 @@ const AdminEditEventPage = lazy(
 const AdminTagListPage = lazy(() => import("./pages/admin/AdminTagListPage"));
 const AdminRsvpListPage = lazy(() => import("./pages/admin/AdminRsvpListPage"));
 
-const UserEventListPage = lazy(() => import("./pages/user/UserEventListPage"));
-const UserEventDetailsPage = lazy(
-    () => import("./pages/user/UserEventDetailsPage"),
-);
-const UserProfilePage = lazy(() => import("./pages/user/UserProfilePage"));
-
 function App() {
     return (
         <Suspense fallback={<CenteredSpinner />}>
             <Routes>
-                {/* Shared routes */}
+                {/* Public routes */}
                 <Route path="/" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/login" element={<LoginPage />} />
 
                 <Route element={<ProtectedRoute />}>
                     <Route element={<AppLayout />}>
-                        {/* User routes */}
+                        {/* User protected routes */}
                         <Route path="/events" element={<UserEventListPage />} />
                         <Route
                             path="/events/:id"
                             element={<UserEventDetailsPage />}
                         />
-                        <Route path="/profile" element={<UserProfilePage />} />
 
-                        {/* Admin routes */}
+                        {/* Shared protected route */}
+                        <Route path="/profile" element={<ProfilePage />} />
+
+                        {/* Admin protected routes */}
                         <Route element={<AdminRoute />}>
                             <Route
                                 path="/admin/events"

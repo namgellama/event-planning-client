@@ -1,11 +1,7 @@
 import { Tags } from "lucide-react";
-import type {
-    FieldValues,
-    Path,
-    SubmitHandler,
-    UseFormReturn,
-} from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
 import { useNavigate } from "react-router";
+import type z from "zod";
 
 import { useFetchAllTags } from "@/apis/tag.api";
 import {
@@ -19,23 +15,18 @@ import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
 import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/spinner";
+import type {
+    CreateEventInput,
+    createEventSchema,
+} from "@/validations/event.validation";
 
-interface EventFormFields {
-    title?: unknown;
-    description?: unknown;
-    date?: unknown;
-    location?: unknown;
-    type?: unknown;
-    tags?: unknown;
-}
-
-interface Props<
-    TFieldValues extends FieldValues & EventFormFields,
-    TContext = any,
-    TTransformedValues extends FieldValues = TFieldValues,
-> {
-    form: UseFormReturn<TFieldValues, TContext, TTransformedValues>;
-    onSubmit: SubmitHandler<TTransformedValues>;
+interface Props {
+    form: UseFormReturn<
+        z.input<typeof createEventSchema>,
+        any,
+        z.output<typeof createEventSchema>
+    >;
+    onSubmit: (data: CreateEventInput) => void;
     isLoading: boolean;
     buttonText: string;
 }
@@ -43,16 +34,7 @@ interface Props<
 const eventTypes = ["Public", "Private"];
 const eventStatuses = ["Upcoming", "Completed"];
 
-const EventForm = <
-    TFieldValues extends FieldValues & EventFormFields,
-    TContext = any,
-    TTransformedValues extends FieldValues = TFieldValues,
->({
-    form,
-    onSubmit,
-    isLoading,
-    buttonText,
-}: Props<TFieldValues, TContext, TTransformedValues>) => {
+const EventForm = ({ form, onSubmit, isLoading, buttonText }: Props) => {
     const { tags } = useFetchAllTags({ limit: 100 });
     const navigate = useNavigate();
 
@@ -81,15 +63,11 @@ const EventForm = <
                 </div>
 
                 <FieldGroup className="gap-5">
-                    <FormInput
-                        form={form}
-                        name={"title" as Path<TFieldValues>}
-                        label="Title"
-                    />
+                    <FormInput form={form} name="title" label="Title" />
 
                     <FormMarkdownEditor
                         form={form}
-                        name={"description" as Path<TFieldValues>}
+                        name="description"
                         label="Description"
                     />
                 </FieldGroup>
@@ -109,7 +87,7 @@ const EventForm = <
                 <FieldGroup className="gap-5">
                     <FormDateTimePicker
                         form={form}
-                        name={"date" as Path<TFieldValues>}
+                        name="date"
                         label="Date"
                         disabled={{ before: today }}
                     />
@@ -117,13 +95,13 @@ const EventForm = <
                     <div className="grid gap-5 sm:grid-cols-2">
                         <FormInput
                             form={form}
-                            name={"location" as Path<TFieldValues>}
+                            name="location"
                             label="Location"
                         />
 
                         <FormSelect
                             form={form}
-                            name={"type" as Path<TFieldValues>}
+                            name="type"
                             label="Visibility"
                             orientation="vertical"
                             data={eventTypes.map((type) => ({
@@ -155,14 +133,14 @@ const EventForm = <
 
                 <FormMultipleCombobox
                     form={form}
-                    name={"tags" as Path<TFieldValues>}
+                    name="tags"
                     label="Event tags"
                     data={data}
                 />
 
                 <FormSelect
                     form={form}
-                    name={"status" as Path<TFieldValues>}
+                    name="status"
                     label="Status"
                     orientation="vertical"
                     data={eventStatuses.map((type) => ({

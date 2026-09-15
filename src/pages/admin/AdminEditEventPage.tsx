@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
+import type z from "zod";
 
 import { useFetchEvent, useUpdateEvent } from "@/apis/event.api";
 import { EventForm } from "@/components/event";
@@ -8,8 +9,8 @@ import { CenteredSpinner, ErrorState } from "@/components/shared";
 import EventFormLayout from "@/layouts/EventFormLayout";
 import type { EventItem } from "@/types/event";
 import {
-    updateEventSchema,
-    type UpdateEventInput,
+    createEventSchema,
+    type CreateEventInput,
 } from "@/validations/event.validation";
 
 const AdminEditEventPage = () => {
@@ -46,8 +47,12 @@ const AdminEditEventPage = () => {
 export default AdminEditEventPage;
 
 const EditEventForm = ({ event }: { event: EventItem }) => {
-    const form = useForm<UpdateEventInput>({
-        resolver: zodResolver(updateEventSchema),
+    const form = useForm<
+        z.input<typeof createEventSchema>,
+        any,
+        z.output<typeof createEventSchema>
+    >({
+        resolver: zodResolver(createEventSchema),
         defaultValues: {
             title: event.title,
             description: event.description ?? "",
@@ -64,7 +69,7 @@ const EditEventForm = ({ event }: { event: EventItem }) => {
 
     const navigate = useNavigate();
 
-    async function onSubmit(data: UpdateEventInput) {
+    async function onSubmit(data: CreateEventInput) {
         const response = await updateEventMutation({ data, eventId: event.id });
         navigate(`/admin/events/${response.data.id}`);
     }
