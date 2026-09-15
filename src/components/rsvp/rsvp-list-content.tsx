@@ -7,7 +7,7 @@ import {
 } from "nuqs";
 import { useParams } from "react-router";
 
-import { useFetchAllRsvps, type RsvpSortBy } from "@/apis/rsvp.api";
+import { useFetchAllRSVPs, type RSVPSortBy } from "@/apis/rsvp.api";
 import {
     EmptyState,
     ErrorState,
@@ -38,7 +38,7 @@ export const rsvpQueryState = {
         "no",
         "maybe",
     ]).withDefault("all"),
-    sortBy: parseAsStringEnum<RsvpSortBy>([
+    sortBy: parseAsStringEnum<RSVPSortBy>([
         "createdAt",
         "updatedAt",
     ]).withDefault("createdAt"),
@@ -53,7 +53,7 @@ const RsvpListContent = () => {
     const [{ page, limit, status, search, sortBy, sortOrder }] =
         useQueryStates(rsvpQueryState);
 
-    const { rsvps, isLoading, error, refetch } = useFetchAllRsvps(
+    const { rsvps, isLoading, error, refetch } = useFetchAllRSVPs(
         {
             page,
             limit,

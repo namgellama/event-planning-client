@@ -8,20 +8,20 @@ import type { ApiResponse } from "@/types/response";
 import type { RSVP, RSVPListItem, RSVPStatus } from "@/types/rsvp";
 import api, { handleApiError, type ApiError } from ".";
 
-export type RsvpSortBy = "createdAt" | "updatedAt";
+export type RSVPSortBy = "createdAt" | "updatedAt";
 
-export type RsvpListQueryParams = ListQueryParams & {
+export type RSVPListQueryParams = ListQueryParams & {
     status?: RSVPStatus | "all";
-    sortBy?: RsvpSortBy;
+    sortBy?: RSVPSortBy;
 };
 
-export const useFetchAllRsvps = (
-    query: RsvpListQueryParams,
+export const useFetchAllRSVPs = (
+    query: RSVPListQueryParams,
     eventId: string | undefined,
 ) => {
     const { page = 1, limit = 10, status, search, sortBy, sortOrder } = query;
 
-    const fetchAllRsvps = async () => {
+    const fetchAllRSVPs = async () => {
         const response = await api.get<
             ApiResponse<PaginatedResponse<RSVPListItem>>
         >(`/events/${eventId}/rsvps`, {
@@ -47,7 +47,7 @@ export const useFetchAllRsvps = (
         ApiError,
         PaginatedResponse<RSVPListItem>
     >({
-        queryFn: fetchAllRsvps,
+        queryFn: fetchAllRSVPs,
         queryKey: [
             "rsvps",
             eventId,
@@ -65,10 +65,10 @@ export const useFetchAllRsvps = (
     return { rsvps, isLoading, error, refetch };
 };
 
-export const useFetchMyRsvp = (eventId: string | undefined) => {
+export const useFetchMyRSVP = (eventId: string | undefined) => {
     const { user } = useAuth();
 
-    const fetchEvent = async () => {
+    const fetchMyRSVP = async () => {
         const response = await api.get<ApiResponse<RSVP | null>>(
             `/events/${eventId}/rsvps/me`,
         );
@@ -81,7 +81,7 @@ export const useFetchMyRsvp = (eventId: string | undefined) => {
         error,
         refetch,
     } = useQuery<ApiResponse<RSVP | null>, ApiError, RSVP | null>({
-        queryFn: fetchEvent,
+        queryFn: fetchMyRSVP,
         queryKey: ["rsvps", eventId, user?.id],
         select: ({ data }) => data,
         enabled: !!eventId,
@@ -90,10 +90,10 @@ export const useFetchMyRsvp = (eventId: string | undefined) => {
     return { rsvp, isLoading, error, refetch };
 };
 
-export const useCreateRsvp = () => {
+export const useCreateRSVP = () => {
     const queryClient = useQueryClient();
 
-    const createRsvp = async ({
+    const createRSVP = async ({
         eventId,
         status,
     }: {
@@ -107,32 +107,32 @@ export const useCreateRsvp = () => {
         return response.data;
     };
 
-    const { mutateAsync: createRsvpMutation, isPending: isLoading } =
+    const { mutateAsync: createRSVPMutation, isPending: isLoading } =
         useMutation<
             ApiResponse<RSVP>,
             ApiError,
             { eventId: string; status: RSVPStatus }
         >({
-            mutationFn: createRsvp,
+            mutationFn: createRSVP,
             onSuccess: ({ message }) => {
-                toast.success(message ?? "Rsvp created successfully");
+                toast.success(message ?? "RSVP created successfully");
                 queryClient.invalidateQueries({ queryKey: ["rsvps"] });
             },
             onError: (error) => {
                 handleApiError(
                     error,
-                    "Unable to create rsvp. Please try again",
+                    "Unable to create RSVP. Please try again",
                 );
             },
         });
 
-    return { createRsvpMutation, isLoading };
+    return { createRSVPMutation, isLoading };
 };
 
-export const useUpdateRsvp = () => {
+export const useUpdateRSVP = () => {
     const queryClient = useQueryClient();
 
-    const updateRsvp = async ({
+    const updateRSVP = async ({
         eventId,
         status,
     }: {
@@ -146,15 +146,15 @@ export const useUpdateRsvp = () => {
         return response.data;
     };
 
-    const { mutateAsync: updateRsvpMutation, isPending: isLoading } =
+    const { mutateAsync: updateRSVPMutation, isPending: isLoading } =
         useMutation<
             ApiResponse<RSVP>,
             ApiError,
             { eventId: string; status: RSVPStatus }
         >({
-            mutationFn: updateRsvp,
+            mutationFn: updateRSVP,
             onSuccess: ({ message, data }) => {
-                toast.success(message ?? "Rsvp updated successfully");
+                toast.success(message ?? "RSVP updated successfully");
                 queryClient.setQueryData(
                     ["rsvps", data.eventId, data.userId],
                     data,
@@ -164,10 +164,10 @@ export const useUpdateRsvp = () => {
             onError: (error) => {
                 handleApiError(
                     error,
-                    "Unable to update rsvp. Please try again",
+                    "Unable to update RSVP. Please try again",
                 );
             },
         });
 
-    return { updateRsvpMutation, isLoading };
+    return { updateRSVPMutation, isLoading };
 };
