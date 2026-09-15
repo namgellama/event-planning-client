@@ -1,6 +1,6 @@
 import type { EventItem } from "@/types/event";
 
-const EventDetailFooter = ({ event }: { event: EventItem }) => {
+const EventDetailsFooter = ({ event }: { event: EventItem }) => {
     return (
         <div className="mt-10 text-xs">
             Last updated{" "}
@@ -13,4 +13,4 @@ const EventDetailFooter = ({ event }: { event: EventItem }) => {
     );
 };
 
-export default EventDetailFooter;
+export default EventDetailsFooter;

@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import type { EventItem } from "@/types/event";
 import { EventRsvpActions, EventStatusBadge, EventTypeBadge } from ".";
 
-const EventDetailHeader = ({ event }: { event: EventItem }) => {
+const EventDetailsHeader = ({ event }: { event: EventItem }) => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const { deleteEventMutation, isLoading } = useDeleteEvent();
@@ -65,4 +65,4 @@ const EventDetailHeader = ({ event }: { event: EventItem }) => {
     );
 };
 
-export default EventDetailHeader;
+export default EventDetailsHeader;

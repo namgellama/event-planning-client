@@ -5,13 +5,13 @@ import { useAuth } from "@/contexts/AuthContext";
 import type { PaginatedResponse } from "@/types/pagination";
 import type { ListQueryParams } from "@/types/request";
 import type { ApiResponse } from "@/types/response";
-import type { Rsvp, RsvpListItem, RsvpStatus } from "@/types/rsvp";
+import type { RSVP, RSVPListItem, RSVPStatus } from "@/types/rsvp";
 import api, { handleApiError, type ApiError } from ".";
 
 export type RsvpSortBy = "createdAt" | "updatedAt";
 
 export type RsvpListQueryParams = ListQueryParams & {
-    status?: RsvpStatus | "all";
+    status?: RSVPStatus | "all";
     sortBy?: RsvpSortBy;
 };
 
@@ -23,7 +23,7 @@ export const useFetchAllRsvps = (
 
     const fetchAllRsvps = async () => {
         const response = await api.get<
-            ApiResponse<PaginatedResponse<RsvpListItem>>
+            ApiResponse<PaginatedResponse<RSVPListItem>>
         >(`/events/${eventId}/rsvps`, {
             params: {
                 page,
@@ -43,9 +43,9 @@ export const useFetchAllRsvps = (
         error,
         refetch,
     } = useQuery<
-        ApiResponse<PaginatedResponse<RsvpListItem>>,
+        ApiResponse<PaginatedResponse<RSVPListItem>>,
         ApiError,
-        PaginatedResponse<RsvpListItem>
+        PaginatedResponse<RSVPListItem>
     >({
         queryFn: fetchAllRsvps,
         queryKey: [
@@ -69,7 +69,7 @@ export const useFetchMyRsvp = (eventId: string | undefined) => {
     const { user } = useAuth();
 
     const fetchEvent = async () => {
-        const response = await api.get<ApiResponse<Rsvp | null>>(
+        const response = await api.get<ApiResponse<RSVP | null>>(
             `/events/${eventId}/rsvps/me`,
         );
         return response.data;
@@ -80,7 +80,7 @@ export const useFetchMyRsvp = (eventId: string | undefined) => {
         isLoading,
         error,
         refetch,
-    } = useQuery<ApiResponse<Rsvp | null>, ApiError, Rsvp | null>({
+    } = useQuery<ApiResponse<RSVP | null>, ApiError, RSVP | null>({
         queryFn: fetchEvent,
         queryKey: ["rsvps", eventId, user?.id],
         select: ({ data }) => data,
@@ -98,9 +98,9 @@ export const useCreateRsvp = () => {
         status,
     }: {
         eventId: string;
-        status: RsvpStatus;
+        status: RSVPStatus;
     }) => {
-        const response = await api.post<ApiResponse<Rsvp>>(
+        const response = await api.post<ApiResponse<RSVP>>(
             `/events/${eventId}/rsvps`,
             { status },
         );
@@ -109,9 +109,9 @@ export const useCreateRsvp = () => {
 
     const { mutateAsync: createRsvpMutation, isPending: isLoading } =
         useMutation<
-            ApiResponse<Rsvp>,
+            ApiResponse<RSVP>,
             ApiError,
-            { eventId: string; status: RsvpStatus }
+            { eventId: string; status: RSVPStatus }
         >({
             mutationFn: createRsvp,
             onSuccess: ({ message }) => {
@@ -137,9 +137,9 @@ export const useUpdateRsvp = () => {
         status,
     }: {
         eventId: string;
-        status: RsvpStatus;
+        status: RSVPStatus;
     }) => {
-        const response = await api.patch<ApiResponse<Rsvp>>(
+        const response = await api.patch<ApiResponse<RSVP>>(
             `/events/${eventId}/rsvps`,
             { status },
         );
@@ -148,9 +148,9 @@ export const useUpdateRsvp = () => {
 
     const { mutateAsync: updateRsvpMutation, isPending: isLoading } =
         useMutation<
-            ApiResponse<Rsvp>,
+            ApiResponse<RSVP>,
             ApiError,
-            { eventId: string; status: RsvpStatus }
+            { eventId: string; status: RSVPStatus }
         >({
             mutationFn: updateRsvp,
             onSuccess: ({ message, data }) => {

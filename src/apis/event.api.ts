@@ -11,7 +11,7 @@ import type {
 import type { PaginatedResponse } from "@/types/pagination";
 import type { ListQueryParams } from "@/types/request";
 import type { ApiResponse } from "@/types/response";
-import type { RsvpStatus } from "@/types/rsvp";
+import type { RSVPStatus } from "@/types/rsvp";
 import type {
     CreateEventInput,
     UpdateEventInput,
@@ -23,7 +23,7 @@ export type EventSortBy = "createdAt" | "date" | "title" | "popularity";
 export type EventListQueryParams = ListQueryParams & {
     type?: EventType | "all";
     status?: EventStatus | "all";
-    rsvpStatus: RsvpStatus | "all";
+    rsvpStatus: RSVPStatus | "all";
     tags?: string[];
     sortBy?: EventSortBy;
 };

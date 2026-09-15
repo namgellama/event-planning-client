@@ -5,7 +5,7 @@ import type { EventItem } from "@/types/event";
 import { formatDate } from "@/utils/format-date";
 import { EventTagBadge } from ".";
 
-const EventDetailContent = ({ event }: { event: EventItem }) => {
+const EventDetailsContent = ({ event }: { event: EventItem }) => {
     const { day, month, full, time } = formatDate(event.date);
 
     return (
@@ -74,4 +74,4 @@ const EventDetailContent = ({ event }: { event: EventItem }) => {
     );
 };
 
-export default EventDetailContent;
+export default EventDetailsContent;

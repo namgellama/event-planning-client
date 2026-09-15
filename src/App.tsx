@@ -10,15 +10,15 @@ const LandingPage = lazy(() => import("./pages/LandingPage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
 const EventListPage = lazy(() => import("./pages/EventListPage"));
-const EventDetailPage = lazy(() => import("./pages/EventDetailPage"));
+const EventDetailsPage = lazy(() => import("./pages/EventDetailsPage"));
 const NewEventPage = lazy(() => import("./pages/NewEventPage"));
 const EditEventPage = lazy(() => import("./pages/EditEventPage"));
 const TagListPage = lazy(() => import("./pages/TagListPage"));
 const RsvpListPage = lazy(() => import("./pages/RsvpListPage"));
 
 const UserEventsPage = lazy(() => import("./pages/user/UserEventsPage"));
-const UserEventDetailPage = lazy(
-    () => import("./pages/user/UserEventDetailPage"),
+const UserEventDetailsPage = lazy(
+    () => import("./pages/user/UserEventDetailsPage"),
 );
 const UserProfilePage = lazy(() => import("./pages/user/UserProfilePage"));
 
@@ -38,7 +38,7 @@ function App() {
                             />
                             <Route
                                 path="/admin/events/:id"
-                                element={<EventDetailPage />}
+                                element={<EventDetailsPage />}
                             />
                             <Route
                                 path="/admin/events/new"
@@ -61,7 +61,7 @@ function App() {
                         <Route path="/events" element={<UserEventsPage />} />
                         <Route
                             path="/events/:id"
-                            element={<UserEventDetailPage />}
+                            element={<UserEventDetailsPage />}
                         />
                         <Route path="/profile" element={<UserProfilePage />} />
                     </Route>

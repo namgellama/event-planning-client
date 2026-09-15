@@ -25,14 +25,14 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import type { SortOrder } from "@/types/request";
-import type { RsvpStatus } from "@/types/rsvp";
+import type { RSVPStatus } from "@/types/rsvp";
 import { formatDate } from "@/utils/format-date";
 
 export const rsvpQueryState = {
     page: parseAsInteger.withDefault(1),
     limit: parseAsInteger.withDefault(10),
     search: parseAsString.withDefault(""),
-    status: parseAsStringEnum<RsvpStatus | "all">([
+    status: parseAsStringEnum<RSVPStatus | "all">([
         "all",
         "yes",
         "no",
